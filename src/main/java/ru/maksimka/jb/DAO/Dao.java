@@ -1,6 +1,5 @@
-package ru.maksimka.jborn.DAO;
+package ru.maksimka.jb.DAO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface Dao<DOMAIN, ID> {

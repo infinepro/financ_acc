@@ -1,6 +1,6 @@
-package ru.maksimka.jborn.view;
+package ru.maksimka.jb.view;
 
-import ru.maksimka.jborn.service.UserVerification;
+import ru.maksimka.jb.service.UserVerification;
 
 import java.io.BufferedReader;
 import java.io.IOException;

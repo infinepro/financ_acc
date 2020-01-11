@@ -1,4 +1,4 @@
-package ru.maksimka.jborn.service;
+package ru.maksimka.jb.service;
 
 //cashing password in MD5
 

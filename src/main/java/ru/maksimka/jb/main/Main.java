@@ -1,9 +1,6 @@
-package ru.maksimka.jborn.main;
+package ru.maksimka.jb.main;
 
-import ru.maksimka.jborn.view.MainView;
-
-
-import java.sql.SQLException;
+import ru.maksimka.jb.view.MainView;
 
 public class Main {
     public static void main(String[] args) {

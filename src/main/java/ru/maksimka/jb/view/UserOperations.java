@@ -1,11 +1,10 @@
-package ru.maksimka.jborn.view;
+package ru.maksimka.jb.view;
 
-import ru.maksimka.jborn.service.AccountService;
+import ru.maksimka.jb.service.AccountService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 
 class UserOperations {
 

@@ -1,9 +1,8 @@
-package ru.maksimka.jborn.DAO;
+package ru.maksimka.jb.DAO;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 

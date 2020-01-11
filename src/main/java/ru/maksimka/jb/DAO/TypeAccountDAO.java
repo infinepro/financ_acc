@@ -1,6 +1,5 @@
-package ru.maksimka.jborn.DAO;
+package ru.maksimka.jb.DAO;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

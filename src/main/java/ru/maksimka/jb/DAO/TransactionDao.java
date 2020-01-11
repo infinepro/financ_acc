@@ -1,6 +1,6 @@
-package ru.maksimka.jborn.DAO;
+package ru.maksimka.jb.DAO;
 
-import ru.maksimka.jborn.DAO.Domain.Transaction;
+import ru.maksimka.jb.DAO.Domain.Transaction;
 
 import java.util.List;
 

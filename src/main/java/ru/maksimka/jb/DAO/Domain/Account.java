@@ -1,4 +1,4 @@
-package ru.maksimka.jborn.DAO.Domain;
+package ru.maksimka.jb.DAO.Domain;
 
 public class Account {
     private Integer id;

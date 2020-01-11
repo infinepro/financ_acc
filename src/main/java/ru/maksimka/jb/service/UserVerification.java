@@ -1,11 +1,9 @@
-package ru.maksimka.jborn.service;
+package ru.maksimka.jb.service;
 
-import ru.maksimka.jborn.DAO.Domain.User;
-import ru.maksimka.jborn.DAO.UserDao;
+import ru.maksimka.jb.DAO.Domain.User;
+import ru.maksimka.jb.DAO.UserDao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserVerification {
 

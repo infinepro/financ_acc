@@ -1,14 +1,12 @@
-package ru.maksimka.jborn.service;
+package ru.maksimka.jb.service;
 
-import ru.maksimka.jborn.DAO.AccountDao;
-import ru.maksimka.jborn.DAO.Domain.Account;
-import ru.maksimka.jborn.DAO.TypeAccountDAO;
+import ru.maksimka.jb.DAO.AccountDao;
+import ru.maksimka.jb.DAO.Domain.Account;
+import ru.maksimka.jb.DAO.TypeAccountDAO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

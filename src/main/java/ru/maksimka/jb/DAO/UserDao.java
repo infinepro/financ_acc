@@ -1,6 +1,6 @@
-package ru.maksimka.jborn.DAO;
+package ru.maksimka.jb.DAO;
 
-import ru.maksimka.jborn.DAO.Domain.User;
+import ru.maksimka.jb.DAO.Domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

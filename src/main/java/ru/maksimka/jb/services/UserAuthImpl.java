@@ -9,7 +9,7 @@ public class UserAuthImpl implements UserAuth<String, Integer> {
 
     private UserDAO userDao;
 
-    public UserAuthImpl(){
+    public UserAuthImpl() {
         userDao = new UserDAO();
     }
 
@@ -19,32 +19,25 @@ public class UserAuthImpl implements UserAuth<String, Integer> {
         try {
             user = userDao.findBy(login);
             if (user != null) {
-                if (user.getPassword() == password){
+                if (user.getPassword() == password) {
                     return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
     @Override
     public boolean registerUser(String login, String password, String email) {
-        try {
-            User user = userDao.findBy(login);
-            if (user == null) {
-                user = new User();
-                user.setEmail(email);
-                user.setName(login);
-                user.setPassword(password);
-                userDao.insert(user);
-                return true;
-            } else return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+
+        User user = new User();
+        user.setEmail(email);
+        user.setName(login);
+        user.setPassword(password);
+        userDao.insert(user);
+        return true;
+
     }
 }

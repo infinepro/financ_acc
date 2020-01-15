@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ViewService {
 
-    boolean ifSignIn = false;
+    private boolean ifSignIn = false;
     private String login;
     private String password;
 
@@ -29,7 +29,7 @@ public class ViewService {
 
             System.out.print("Введите логин: ");
             this.login = new BufferedReader(new InputStreamReader(System.in)).readLine();
-            System.out.println("\nВведите пароль: ");
+            System.out.print("\nВведите пароль: ");
             this.password = new BufferedReader(new InputStreamReader(System.in)).readLine();
         }
 
@@ -101,9 +101,9 @@ public class ViewService {
         while (true) {
             System.out.print("Введите логин: ");
             String login = new BufferedReader(new InputStreamReader(System.in)).readLine();
-            System.out.print("\nВведите свой email: ");
+            System.out.print("\nВведите email: ");
             String email = new BufferedReader(new InputStreamReader(System.in)).readLine();
-            System.out.println("\nВведите пароль: ");
+            System.out.print("\nВведите пароль: ");
             String password = new BufferedReader(new InputStreamReader(System.in)).readLine();
             UserAuth userAuth = new UserAuthImpl();
 

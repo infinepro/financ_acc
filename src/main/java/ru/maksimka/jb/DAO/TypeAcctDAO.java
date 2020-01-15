@@ -26,29 +26,28 @@ public class TypeAcctDAO implements DAO<String, Integer> {
         return "";
     }
 
-    @Override
-    public List<String> findByAll() throws Exception {
+    public List<String> findByAll(){
         try (Connection connection = DAOFactory.getConnection()) {
-
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT * FROM names_accounts");
-
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<String> listTypeAccounts = new ArrayList<>();
-
+            List<String> listTypeAccts = new ArrayList<>();
             while (resultSet.next()) {
-               listTypeAccounts.add(resultSet.getString("category_account"));
+                listTypeAccts.add(resultSet.getString("category_account"));
             }
-            return listTypeAccounts;
+            return listTypeAccts;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override
-    public boolean insert(String s) throws Exception {
+    public boolean insert(String type) {
         try(Connection connection = DAOFactory.getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO names_accounts(category_account) VALUES (?)");
-            preparedStatement.setString(1, s);
+            preparedStatement.setString(1, type);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {

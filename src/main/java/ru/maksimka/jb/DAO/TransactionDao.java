@@ -1,16 +1,33 @@
 package ru.maksimka.jb.DAO;
 
-import ru.maksimka.jb.DAO.Domain.Transaction;
+import ru.maksimka.jb.containers.Transaction;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class TransactionDao implements Dao<Transaction, Integer> {
+public class TransactionDAO implements DAO<Transaction, Integer> {
     @Override
     public Transaction findBy(Integer integer) {
         return null;
     }
 
-    @Override
+    public boolean addNewTypeTransaction(String type){
+        try (Connection connection = DAOFactory.getConnection()){
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO category_transaction (name_category) VALUES (?) ");
+            ps.setString(1, type);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public List<Transaction> findByAll() {
         return null;
     }

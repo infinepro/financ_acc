@@ -3,25 +3,12 @@ package ru.maksimka.jb.DTO;
 import ru.maksimka.jb.containers.User;
 
 public class AcctDTO {
-    private int id;
     private String nameAcct;
     private int balance;
-    // private User owner;
 
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
+    public AcctDTO(String nameAcct, int balance) {
+        this.nameAcct = nameAcct;
         this.balance = balance;
-    }
-
-
-    public AcctDTO(int id, int balance) {
-        this.id = id;
-        this.balance = balance;
-
-
     }
 
     public String getNameAcct() {
@@ -30,6 +17,14 @@ public class AcctDTO {
 
     public void setNameAcct(String nameAcct) {
         this.nameAcct = nameAcct;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     @Override

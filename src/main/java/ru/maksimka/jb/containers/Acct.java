@@ -2,19 +2,17 @@ package ru.maksimka.jb.containers;
 
 public class Acct {
     private Integer id;
+
+    public Acct(String userName, Integer typeAcct, Integer balance) {
+        this.id = id;
+        this.userName = userName;
+        this.typeAcct = typeAcct;
+        this.balance = balance;
+    }
+
     private String userName;
-    private Integer idCategoryAccount;
+    private Integer typeAcct;
     private Integer balance;
-
-    public String getTypeAccount() {
-        return typeAccount;
-    }
-
-    public void setTypeAccount(String typeAccount) {
-        this.typeAccount = typeAccount;
-    }
-
-    private String typeAccount;
 
     public Integer getId() {
         return id;
@@ -32,12 +30,12 @@ public class Acct {
         this.userName = userName;
     }
 
-    public Integer getIdCategoryAccount() {
-        return this.idCategoryAccount;
+    public Integer getTypeAcct() {
+        return typeAcct;
     }
 
-    public void setIdCategoryAccount(Integer accName ) {
-        this.idCategoryAccount = accName;
+    public void setTypeAcct(Integer typeAcct) {
+        this.typeAcct = typeAcct;
     }
 
     public Integer getBalance() {
@@ -47,15 +45,4 @@ public class Acct {
     public void setBalance(Integer balance) {
         this.balance = balance;
     }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String date;
-
 }

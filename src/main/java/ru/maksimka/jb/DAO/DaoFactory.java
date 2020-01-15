@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DaoFactory {
+public class DAOFactory {
 
     private static DataSource dataSource;
 

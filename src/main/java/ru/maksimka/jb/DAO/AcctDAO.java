@@ -25,10 +25,10 @@ public class AcctDAO implements DAO<Acct, String> {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(
                             "SELECT * FROM accounts " +
-                                    "JOIN names_accounts na on accounts.id_category_account = na.id WHERE name = ?");
+                                    "JOIN names_accounts na on accounts.id_category_account = na.id WHERE user_name = ?");
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet != null) {
+            if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
                     acct = new AcctDTO( resultSet.getString("category_account"),
                                         resultSet.getInt("balance"));

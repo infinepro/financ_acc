@@ -47,7 +47,7 @@ public class ViewService {
                 case 1: {
                     List<AcctDTO> accts = operations.getAllAcct();
                     for (AcctDTO acctDTO : accts) {
-                        System.out.println(acctDTO);
+                        System.out.println(acctDTO + " руб.");
                     }
                     break;
                 }
@@ -76,8 +76,8 @@ public class ViewService {
                     System.out.println("Введите имя нового типа транзакции: ");
                     String nameType = new BufferedReader(new InputStreamReader(System.in)).readLine();
                     if (operations.addNewTypeTransaction(nameType)) {
-                        System.out.println("Новый тип счета создан");
-                    } else System.out.println("Новый тип счета не добавлен, свяжитесь с админом!");
+                        System.out.println("Новый тип транзакции создан");
+                    } else System.out.println("Новый тип транзакции не добавлен, свяжитесь с админом!");
                     break;
                 }
 

@@ -19,13 +19,15 @@ public class UserAuthImpl implements UserAuth<String, Integer> {
         try {
             user = userDao.findBy(login);
             if (user != null) {
-                if (user.getPassword() == password) {
+                if (user.getPassword().equals(password)) {
                     return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+
         return false;
     }
 

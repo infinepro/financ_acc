@@ -65,12 +65,12 @@ public class UserOperationsImpl implements UserOperations<String, Integer> {
         List<AcctDTO> listAcct = new ArrayList<>();
         AcctDAO acctDAO = new AcctDAO();
         try {
-            acctDAO.findByAll(name);
+            listAcct = (ArrayList<AcctDTO>)acctDAO.findByAll(name);
+            return listAcct;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        return listAcct;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class UserOperationsImpl implements UserOperations<String, Integer> {
         List<String> listTypeAccts = new ArrayList<String>();
         try (Connection connection = DAOFactory.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(
-                    "SELECT category_accounts FROM name_accounts");
+                    "SELECT category_account FROM names_accounts");
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 listTypeAccts.add(rs.getString("category_account"));

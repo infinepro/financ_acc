@@ -23,7 +23,7 @@ public class UserDAO implements DAO<User, String> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.isBeforeFirst()) {
                 System.out.println("Пользователь не найден, неверный логин");
-                return new User();
+                return null;
             }
 
             if (resultSet.next()) {
@@ -32,28 +32,31 @@ public class UserDAO implements DAO<User, String> {
                 user.setEmail(resultSet.getString("email"));
                 user.setName(resultSet.getString("name"));
                 user.setPassword(resultSet.getString("password"));
+                return user;
             }
         }
         return null;
     }
-
 
     public List<User> findByAll() {
         return null;
     }
 
     @Override
-    public boolean insert(User user) throws SQLException {
+    public boolean insert(User user){
         User tmpUser = user;
         try (Connection connection = DAOFactory.getConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(
                             "INSERT INTO users (name, password, email) VALUES  (?, ?, ?) ");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getEmail());
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.setString(1, tmpUser.getName());
+            preparedStatement.setString(2, tmpUser.getPassword());
+            preparedStatement.setString(3, tmpUser.getEmail());
+            preparedStatement.execute();
             return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

@@ -23,10 +23,8 @@ public class UserDAO implements DAO<User, String> {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.isBeforeFirst()) {
-                throw new UserNotFoundException("Пользователь не найден, неверный логин");
-            }
-
-            if (resultSet.next()) {
+                throw new UserNotFoundException();
+            } else  {
                 user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setEmail(resultSet.getString("email"));
@@ -35,7 +33,6 @@ public class UserDAO implements DAO<User, String> {
                 return user;
             }
         }
-        return null;
     }
 
     public List<User> findByAll() {

@@ -21,12 +21,13 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class UserAuthImplTest {
 
-    
+
     UserAuth subj;
     User testUser;
     UserDAO userDao;
     String login;
     String password;
+    String email;
 
     @Before
     public void setUp() throws Exception {
@@ -37,30 +38,51 @@ public class UserAuthImplTest {
         subj = new UserAuthImpl(userDao);
         login = "login";
         password = "password";
+        email = "123@mail.ru";
     }
 
     @Test
-    public void authUser_if_login_found() throws Exception {
+    public void authUser_if_login_found_and_password_ok() throws Exception {
         when(userDao.findBy(login)).thenReturn(testUser);
         assertTrue(subj.authUser(login, password));
     }
 
     @Test(expected = WrongUserPasswordException.class)
-    public void authUser_if_wrong_password() throws Exception{
+    public void authUser_if_login_found_and_wrong_password() throws Exception{
         testUser.setPassword("wrong password");
         when(userDao.findBy(login)).thenReturn(testUser);
         assertTrue(subj.authUser(login, password));
     }
 
-    @Test(expected = UserNotFoundException.class)
+    @Test//(expected = UserNotFoundException.class)
     public void authUser_if_login_not_found() throws Exception{
         testUser.setName("wrong name");
-        when(userDao.findBy(login)).thenReturn(null);
-        assertTrue(subj.authUser(login, password));
+        when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
+        assertFalse(subj.authUser(login, password));
     }
 
     @Test
-    public void registerUser() {
+    public void registerUser_if_login_is_busy() {
+        try {
+            when(userDao.findBy("login")).thenReturn(testUser);
+            assertFalse(subj.registerUser(login, password, email));
+        } catch (Exception e) {
+            System.out.println("ТЕСТ registerUser_if_login_is_busy провалился");
+        }
 
+
+    }
+
+    @Test
+    public void registerUser_if_all_right() {
+        try {
+            when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
+            when(userDao.insert(anyObject())).thenReturn(true);
+            subj.registerUser(login, password, email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

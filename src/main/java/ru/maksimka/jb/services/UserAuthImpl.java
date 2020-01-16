@@ -15,7 +15,7 @@ public class UserAuthImpl implements UserAuth<String, Integer> {
         this.userDao = new UserDAO();
     }
 
-    public UserAuthImpl (UserDAO userDao) {
+    public UserAuthImpl(UserDAO userDao) {
         this.userDao = userDao;
     }
 
@@ -23,12 +23,13 @@ public class UserAuthImpl implements UserAuth<String, Integer> {
     public boolean authUser(String login, String password) throws WrongUserPasswordException, UserNotFoundException {
         try {
             User user = userDao.findBy(login);
-            if (user != null) {
-                if (user.getPassword().equals(password)) {
-                    return true;
-                } else throw new WrongUserPasswordException("Неправильный пароль");
-            } else throw new UserNotFoundException("Не найден пользователь с таким логином");
+            if (user.getPassword().equals(password)) {
+                return true;
+            } else
+                throw new WrongUserPasswordException("Неправильный пароль");
         } catch (SQLException e) {
+            return false;
+        } catch (UserNotFoundException e) {
             return false;
         }
     }
@@ -40,8 +41,13 @@ public class UserAuthImpl implements UserAuth<String, Integer> {
         user.setEmail(email);
         user.setName(login);
         user.setPassword(password);
-        userDao.insert(user);
-        return true;
-
+        try {
+            userDao.findBy(login);
+        } catch (UserNotFoundException e) {
+            return userDao.insert(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

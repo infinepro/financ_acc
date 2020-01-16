@@ -99,7 +99,8 @@ public class ViewService {
             System.out.println("Попробуйте ещё раз");
             ifRegistered();
         } catch (UserNotFoundException e) {
-            System.out.println("Попробуйте ещё раз");
+            System.out.println("Пользователь не найден, попробуйте ещё раз\n" +
+                    "Попробуйте ещё раз");
             ifRegistered();
         }
     }

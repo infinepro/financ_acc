@@ -37,7 +37,7 @@ public class User {
     public String toString() {
         return "User {\n \tid = '" + id + "' \n\t" +
                 "name = '" + name + "' \n\t" +
-                "email = '" + email + "'  }";
+                "password = '" + password + "'  }";
     }
 
     public String getPassword() {

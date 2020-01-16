@@ -6,6 +6,7 @@ import ru.maksimka.jb.DTO.TransactionsDTO;
 import ru.maksimka.jb.containers.Acct;
 import ru.maksimka.jb.containers.Transaction;
 import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.exceptions.UserNotFoundException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +24,7 @@ public class UserOperationsImpl implements UserOperations<String, Integer> {
         User user = null;
         try {
             user = userDAO.findBy(login);
-        } catch (SQLException e) {
+        } catch (SQLException  | UserNotFoundException e) {
             e.printStackTrace();
         }
         if (user != null){

@@ -1,6 +1,7 @@
 package ru.maksimka.jb.DAO;
 
 import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.exceptions.UserNotFoundException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +14,8 @@ public class UserDAO implements DAO<User, String> {
     private static UserDAO userDao;
 
     @Override
-    public User findBy(String name) throws SQLException {
-        User user = null;
+    public User findBy(String name) throws SQLException, UserNotFoundException {
+        User user;
         try (Connection connection = DAOFactory.getConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(
@@ -22,8 +23,7 @@ public class UserDAO implements DAO<User, String> {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.isBeforeFirst()) {
-                System.out.println("Пользователь не найден, неверный логин");
-                return null;
+                throw new UserNotFoundException("Пользователь не найден, неверный логин");
             }
 
             if (resultSet.next()) {

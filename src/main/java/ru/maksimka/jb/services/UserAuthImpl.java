@@ -2,33 +2,35 @@ package ru.maksimka.jb.services;
 
 import ru.maksimka.jb.DAO.UserDAO;
 import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.exceptions.UserNotFoundException;
+import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.sql.SQLException;
 
 public class UserAuthImpl implements UserAuth<String, Integer> {
 
-    private UserDAO userDao;
+    private final UserDAO userDao;
 
     public UserAuthImpl() {
-        userDao = new UserDAO();
+        this.userDao = new UserDAO();
+    }
+
+    public UserAuthImpl (UserDAO userDao) {
+        this.userDao = userDao;
     }
 
     @Override
-    public boolean authUser(String login, String password) {
-        User user;
+    public boolean authUser(String login, String password) throws WrongUserPasswordException, UserNotFoundException {
         try {
-            user = userDao.findBy(login);
+            User user = userDao.findBy(login);
             if (user != null) {
                 if (user.getPassword().equals(password)) {
                     return true;
-                }
-            }
+                } else throw new WrongUserPasswordException("Неправильный пароль");
+            } else throw new UserNotFoundException("Не найден пользователь с таким логином");
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
-
-        return false;
     }
 
     @Override

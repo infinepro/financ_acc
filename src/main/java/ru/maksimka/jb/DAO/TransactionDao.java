@@ -9,7 +9,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class TransactionDAO implements DAO<Transaction, Integer> {
-    @Override
+
+
     public Transaction findBy(Integer integer) {
         return null;
     }
@@ -35,6 +36,23 @@ public class TransactionDAO implements DAO<Transaction, Integer> {
     @Override
     public boolean insert(Transaction transaction) {
         return false;
+    }
+
+    public boolean insert(Transaction transaction, Connection conn) {
+        Connection connection = conn;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO transactions (uniq_account_id, sum, date, category) VALUES (?, ?, CURRENT_DATE, ?)");
+            ps.setInt(1, transaction.getUniq_account_id());
+            ps.setInt(2, transaction.getSum());
+            ps.setInt(3, transaction.getCategory());
+            ps.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override

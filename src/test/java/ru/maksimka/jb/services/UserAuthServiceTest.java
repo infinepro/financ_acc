@@ -1,15 +1,12 @@
 package ru.maksimka.jb.services;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import ru.maksimka.jb.DAO.DAO;
 import ru.maksimka.jb.DAO.UserDAO;
 import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.exceptions.LoginBusyException;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
@@ -19,7 +16,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserAuthImplTest {
+public class UserAuthServiceTest {
 
 
     UserAuth subj;
@@ -35,7 +32,7 @@ public class UserAuthImplTest {
         testUser.setPassword("password");
         testUser.setName("login");
         userDao = mock(UserDAO.class);
-        subj = new UserAuthImpl(userDao);
+        subj = new UserAuthService(userDao);
         login = "login";
         password = "password";
         email = "123@mail.ru";
@@ -78,10 +75,12 @@ public class UserAuthImplTest {
         try {
             when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
             when(userDao.insert(anyObject())).thenReturn(true);
-            subj.registerUser(login, password, email);
+            assertTrue(subj.registerUser(login, password, email));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        } catch (LoginBusyException e) {
             e.printStackTrace();
         }
     }

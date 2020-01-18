@@ -13,7 +13,7 @@ public class UserDAO implements DAO<User, String> {
 
     private static UserDAO userDao;
 
-    @Override
+
     public User findBy(String name) throws SQLException, UserNotFoundException {
         User user;
         try (Connection connection = DAOFactory.getConnection()) {
@@ -24,13 +24,16 @@ public class UserDAO implements DAO<User, String> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.isBeforeFirst()) {
                 throw new UserNotFoundException();
-            } else  {
-                user = new User();
-                user.setId(resultSet.getInt("id"));
-                user.setEmail(resultSet.getString("email"));
-                user.setName(resultSet.getString("name"));
-                user.setPassword(resultSet.getString("password"));
-                return user;
+            } else {
+                while (resultSet.next()) {
+                    user = new User();
+                    user.setId(resultSet.getInt("id"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setName(resultSet.getString("name"));
+                    user.setPassword(resultSet.getString("password"));
+                    return user;
+                }
+                return null;
             }
         }
     }
@@ -40,7 +43,7 @@ public class UserDAO implements DAO<User, String> {
     }
 
     @Override
-    public boolean insert(User user){
+    public boolean insert(User user) {
         User tmpUser = user;
         try (Connection connection = DAOFactory.getConnection()) {
             PreparedStatement preparedStatement =

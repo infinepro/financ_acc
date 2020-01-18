@@ -2,17 +2,17 @@ package ru.maksimka.jb.containers;
 
 public class Acct {
     private Integer id;
+    private String userName;
+    private Integer typeAcct;
+    private Integer balance;
 
-    public Acct(String userName, Integer typeAcct, Integer balance) {
-        this.id = id;
+    public Acct(){}
+
+    public Acct(String userName, Integer balance, Integer typeAcct) {
         this.userName = userName;
         this.typeAcct = typeAcct;
         this.balance = balance;
     }
-
-    private String userName;
-    private Integer typeAcct;
-    private Integer balance;
 
     public Integer getId() {
         return id;

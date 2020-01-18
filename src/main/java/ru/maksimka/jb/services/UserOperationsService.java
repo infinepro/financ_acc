@@ -15,11 +15,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserOperationsImpl implements UserOperations<String, Integer> {
+public class UserOperationsService implements UserOperations<String, Integer> {
 
     private String name;
 
-    public UserOperationsImpl (String login) {
+    public UserOperationsService(String login) {
         UserDAO userDAO = new UserDAO();
         User user = null;
         try {

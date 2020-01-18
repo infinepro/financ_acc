@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TypeAcctDAO implements DAO<String, Integer> {
-    @Override
+
     public String findBy(Integer parameter) throws SQLException {
 
         try (Connection connection = DAOFactory.getConnection()) {

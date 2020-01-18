@@ -3,9 +3,9 @@ package ru.maksimka.jb.containers;
 public class Transaction {
     private Integer id;
     private Integer uniq_account_id;
-    private String sum;
+    private Integer sum;
     private String date;
-    private String category;
+    private Integer category;
 
     public Integer getId() {
 
@@ -24,11 +24,11 @@ public class Transaction {
         this.uniq_account_id = uniq_account_id;
     }
 
-    public String getSum() {
+    public Integer getSum() {
         return sum;
     }
 
-    public void setSum(String sum) {
+    public void setSum(Integer sum) {
         this.sum = sum;
     }
 
@@ -40,11 +40,11 @@ public class Transaction {
         this.date = date;
     }
 
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 }

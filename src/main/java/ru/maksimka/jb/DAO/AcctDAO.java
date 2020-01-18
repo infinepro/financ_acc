@@ -12,12 +12,34 @@ import java.util.List;
 
 public class AcctDAO implements DAO<Acct, String> {
 
-    @Override
-    public Acct findBy(String id) {
+   public Acct findBy(Integer id) {
+        try {
+            Connection connection = DAOFactory.getConnection();
+            PreparedStatement ps = connection.prepareStatement("" +
+                    "SELECT * FROM accounts WHERE id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.isBeforeFirst()) {
+                while (rs.next()) {
+                    Acct acct = new Acct();
+                    acct.setBalance(rs.getInt("balance"));
+                    acct.setId(rs.getInt("id"));
+                    acct.setTypeAcct(rs.getInt("id_category_account"));
+                    acct.setUserName(rs.getString("user_name"));
+                    return acct;
+                }
+            } else return null;
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public List<AcctDTO> findByAll(String login) throws Exception {
+   public List<AcctDTO> findByAll(String login) throws Exception {
         List<AcctDTO> acctList = new ArrayList<>();
         AcctDTO acct;
 
@@ -30,8 +52,9 @@ public class AcctDAO implements DAO<Acct, String> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
-                    acct = new AcctDTO( resultSet.getString("category_account"),
-                                        resultSet.getInt("balance"));
+                    acct = new AcctDTO(resultSet.getString("category_account"),
+                            resultSet.getInt("balance"));
+                    acct.setId(resultSet.getInt("id"));
                     acctList.add(acct);
                 }
             }
@@ -48,18 +71,42 @@ public class AcctDAO implements DAO<Acct, String> {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO accounts(user_name, id_category_account, balance, date) VALUES (?,?,?, CURRENT_DATE )");
             preparedStatement.setString(1, acct.getUserName());
-            preparedStatement.setInt(2, acct.getId());
+            preparedStatement.setInt(2, acct.getTypeAcct());
             preparedStatement.setInt(3, acct.getBalance());
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean update(Acct acct) {
-        return false;
+        try (Connection connection = DAOFactory.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE accounts SET balance = ? WHERE id = ?");
+            preparedStatement.setInt(1, acct.getBalance());
+            preparedStatement.setInt(2, acct.getId());
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean update(Acct acct, Connection conn) {
+        Connection connection = conn ;
+       try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE accounts SET balance = ? WHERE id = ?");
+            preparedStatement.setInt(1, acct.getBalance());
+            preparedStatement.setInt(2, acct.getId());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override

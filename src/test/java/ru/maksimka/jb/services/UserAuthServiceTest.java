@@ -19,15 +19,15 @@ import static org.mockito.Mockito.*;
 public class UserAuthServiceTest {
 
 
-    UserAuth subj;
-    User testUser;
-    UserDAO userDao;
-    String login;
-    String password;
-    String email;
+    private UserAuth subj;
+    private User testUser;
+    private UserDAO userDao;
+    private String login;
+    private String password;
+    private String email;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         testUser = new User();
         testUser.setPassword("password");
         testUser.setName("login");
@@ -45,14 +45,14 @@ public class UserAuthServiceTest {
     }
 
     @Test(expected = WrongUserPasswordException.class)
-    public void authUser_if_login_found_and_wrong_password() throws Exception{
+    public void authUser_if_login_found_and_wrong_password() throws Exception {
         testUser.setPassword("wrong password");
         when(userDao.findBy(login)).thenReturn(testUser);
         assertTrue(subj.authUser(login, password));
     }
 
     @Test//(expected = UserNotFoundException.class)
-    public void authUser_if_login_not_found() throws Exception{
+    public void authUser_if_login_not_found() throws Exception {
         testUser.setName("wrong name");
         when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
         assertFalse(subj.authUser(login, password));

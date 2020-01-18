@@ -1,7 +1,5 @@
 package ru.maksimka.jb.DAO;
 
-import java.util.List;
-
 public interface DAO<DOMAIN, ID> {
     //DOMAIN findBy(ID parameter) throws Exception;
     // List<DOMAIN> findByAll() throws Exception;

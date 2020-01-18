@@ -26,8 +26,9 @@ public class CreateTransactionService {
     }
 
     public void createTransaction(Integer fromAcctId, Integer toAcctId, Integer sum) throws TransactionFailException {
+
         Connection connection = null;
-        int typeTransaction = 6;
+
         try {
             connection = DAOFactory.getConnection();
             connection.setAutoCommit(false);
@@ -47,12 +48,12 @@ public class CreateTransactionService {
             }
 
             Transaction transactionTo =  new Transaction();
-            transactionTo.setCategory(typeTransaction);
+            transactionTo.setCategory(0);
             transactionTo.setSum(+sum);
             transactionTo.setUniq_account_id(toAcctId);
 
             Transaction transactionFrom =  new Transaction();
-            transactionFrom.setCategory(5);
+            transactionFrom.setCategory(0);
             transactionFrom.setSum(-sum);
             transactionFrom.setUniq_account_id(fromAcctId);
 
@@ -73,6 +74,13 @@ public class CreateTransactionService {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }
+        } finally {
+            try {
+                assert connection != null;
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }

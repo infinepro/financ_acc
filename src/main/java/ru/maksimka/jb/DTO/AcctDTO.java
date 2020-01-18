@@ -7,12 +7,7 @@ public class AcctDTO {
     private String nameAcct;
     private int balance;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public AcctDTO() {
     }
 
     public AcctDTO(String nameAcct, int balance) {
@@ -20,20 +15,31 @@ public class AcctDTO {
         this.balance = balance;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public AcctDTO setId(int id) {
+        this.id = id;
+        return this;
+    }
+
     public String getNameAcct() {
         return nameAcct;
     }
 
-    public void setNameAcct(String nameAcct) {
+    public AcctDTO setNameAcct(String nameAcct) {
         this.nameAcct = nameAcct;
+        return this;
     }
 
     public int getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public AcctDTO setBalance(int balance) {
         this.balance = balance;
+        return this;
     }
 
     @Override

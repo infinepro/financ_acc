@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+    <changeSet id="1" author="maksimka">
+        <createTable tableName="users">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="accounts">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="user_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_category_account" type="INT" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <addPrimaryKey tableName="users" columnNames="name"/>
+        <addPrimaryKey tableName="accounts" columnNames="id"/>
+        <addForeignKeyConstraint baseTableName="accounts" baseColumnNames="user_name"
+                                 constraintName="accounts_user"
+                                 referencedTableName="users" referencedColumnNames="name"/>
+
+    </changeSet>
+    <changeSet id="2" author="maksimka">
+        <createTable tableName="names_accounts">
+            <column name="id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_account" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+
+        </createTable>
+        <addPrimaryKey tableName="names_accounts" columnNames="id"/>
+        <addForeignKeyConstraint baseTableName="accounts" baseColumnNames="id_category_account"
+                                 constraintName="accounts_name_accounts"
+                                 referencedTableName="names_accounts" referencedColumnNames="id"/>
+        <createTable tableName="category_transaction">
+            <column name="id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_category" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="transactions">
+            <column name="id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uniq_account_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sum" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATE"/>
+            <column name="category" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="category_transaction" columnNames="id"/>
+        <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="uniq_account_id"
+                                 constraintName="transaction_accounts"
+                                 referencedTableName="accounts" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="category"
+                                 constraintName="transaction_category_transactions"
+                                 referencedTableName="category_transaction" referencedColumnNames="id"/>
+
+    </changeSet>
+    <changeSet id="3" author="maksimka">
+        <addColumn tableName="accounts">
+            <column name="date" type="DATE"/>
+        </addColumn>
+    </changeSet>
+
+
+</databaseChangeLog>

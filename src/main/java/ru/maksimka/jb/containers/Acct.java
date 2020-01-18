@@ -18,31 +18,35 @@ public class Acct {
         return id;
     }
 
-    public void setId(Integer id) {
+    public Acct setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public Acct setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
     public Integer getTypeAcct() {
         return typeAcct;
     }
 
-    public void setTypeAcct(Integer typeAcct) {
+    public Acct setTypeAcct(Integer typeAcct) {
         this.typeAcct = typeAcct;
+        return this;
     }
 
     public Integer getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public Acct setBalance(Integer balance) {
         this.balance = balance;
+        return this;
     }
 }

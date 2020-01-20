@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class UserAuthServiceTest {
 
 
-    private UserAuth subj;
+    private UserAuthService subj;
     private User testUser;
     private UserDAO userDao;
     private String login;

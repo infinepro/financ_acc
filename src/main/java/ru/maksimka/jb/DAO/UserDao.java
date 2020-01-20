@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static ru.maksimka.jb.Main.context;
+
 
 
 @Service
@@ -18,9 +18,11 @@ public class UserDAO implements DAO<User, String> {
 
     private DataSource dataSource;
 
+    /*
     public UserDAO () {
         this.dataSource = context.getBean(DataSource.class);
     }
+    */
 
     //for test
     public UserDAO (DataSource dataSource) {
@@ -29,7 +31,7 @@ public class UserDAO implements DAO<User, String> {
 
     public User findBy(String name) throws SQLException, UserNotFoundException {
 
-        try (Connection connection = this.dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "SELECT * FROM users WHERE name = ? ");

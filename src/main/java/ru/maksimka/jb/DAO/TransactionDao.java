@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static ru.maksimka.jb.Main.context;
 
 
 @Service
@@ -16,9 +15,11 @@ public class TransactionDAO implements DAO<Transaction, Integer> {
 
     private DataSource dataSource;
 
+    /*
     public TransactionDAO () {
         this.dataSource = context.getBean(DataSource.class);
     }
+    */
 
     public TransactionDAO(DataSource dataSource) {
         this.dataSource = dataSource;

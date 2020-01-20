@@ -3,27 +3,26 @@ package ru.maksimka.jb.services;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DAO.AcctDAO;
 import ru.maksimka.jb.DAO.TransactionDAO;
-import ru.maksimka.jb.Main;
 import ru.maksimka.jb.containers.Acct;
 import ru.maksimka.jb.containers.Transaction;
 import ru.maksimka.jb.exceptions.TransactionFailException;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static ru.maksimka.jb.Main.context;
 
 @Service
 public class CreateTransactionService {
 
     private final AcctDAO acctDao;
     private final TransactionDAO transactionDAO;
+    private final DataSource dataSource;
 
-    public CreateTransactionService() {
-        acctDao = context.getBean(AcctDAO.class);
-        this.transactionDAO = context.getBean(TransactionDAO.class);
+    public CreateTransactionService(AcctDAO acctDAO, TransactionDAO transactionDAO, DataSource dataSource) {
+        this.acctDao = acctDAO;
+        this.transactionDAO = transactionDAO;
+        this.dataSource = dataSource;
     }
 
     public void createTransaction(Integer fromAcctId, Integer toAcctId, Integer sum) throws TransactionFailException {
@@ -31,7 +30,7 @@ public class CreateTransactionService {
         Connection connection = null;
 
         try {
-            connection = context.getBean(DataSource.class).getConnection();
+            connection = dataSource.getConnection();
             connection.setAutoCommit(false);
 
             Acct acctFrom = acctDao.findBy(fromAcctId);

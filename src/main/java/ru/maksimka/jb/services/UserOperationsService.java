@@ -17,16 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserOperationsService implements UserOperations<String, Integer> {
+public class UserOperationsService {
 
     private String name;
+    private UserDAO userDAO;
+    private AcctDAO acctDAO;
+    private TypeAcctDAO typeAcctDAO;
+    private TransactionDAO transactionDAO;
 
-    public UserOperationsService() {
-
+    public UserOperationsService(UserDAO userDAO, AcctDAO acctDAO,TypeAcctDAO typeAcctDAO, TransactionDAO transactionDAO) {
+        this.userDAO = userDAO;
+        this.acctDAO = acctDAO;
+        this.typeAcctDAO = typeAcctDAO;
+        this.transactionDAO = transactionDAO;
     }
 
     public void setLogin (String login) {
-        UserDAO userDAO = new UserDAO();
+
         User user = null;
         try {
             user = userDAO.findBy(login);
@@ -38,39 +45,29 @@ public class UserOperationsService implements UserOperations<String, Integer> {
         } else this.name = "";
     }
 
-    @Override
     public boolean addNewAcct(String name, Integer balance, Integer idCategory) {
-        AcctDAO acctDAO = new AcctDAO();
         Acct acct = new Acct(name, balance, idCategory);
         return acctDAO.insert(acct);
     }
 
-    @Override
     public boolean addNewTypeAcct(String type) {
-        TypeAcctDAO typeAcctDAO = new TypeAcctDAO();
         return typeAcctDAO.insert(type);
     }
 
-    @Override
     public boolean addNewTypeTransaction(String type) {
-        TransactionDAO transactionDAO = new TransactionDAO();
         return transactionDAO.addNewTypeTransaction(type);
     }
 
-    @Override
     public boolean addNewTransaction() {
         return false;
     }
 
-    @Override
     public List<TransactionsDTO> getAllTransactions() {
         return null;
     }
 
-    @Override
     public List<AcctDTO> getAllAcct() {
         List<AcctDTO> listAcct;
-        AcctDAO acctDAO = new AcctDAO();
         try {
             listAcct = acctDAO.findByAll(name);
             return listAcct;
@@ -80,7 +77,6 @@ public class UserOperationsService implements UserOperations<String, Integer> {
         }
     }
 
-    @Override
     public List<String> getAllTypeAccts(DataSource dataSource){
 
         List<String> listTypeAccts = new ArrayList<>();

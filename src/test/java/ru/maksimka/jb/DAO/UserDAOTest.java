@@ -13,10 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
+
 import ru.maksimka.jb.containers.User;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 
@@ -34,18 +31,18 @@ public class UserDAOTest {
     private String testName;
     private User user;
 
-    @Bean("dataSourceH2")
-    public DataSource dataSourceHdb(Environment env){
+
+    public DataSource getDataSourceHdb(){
         HikariDataSource ds = new HikariDataSource();
-        ds.setJdbcUrl(env.getProperty("jdbcUrl","jdbc:h2:mem:testDB"));
-        ds.setUsername(env.getProperty("jdbcUsername","test"));
-        ds.setPassword(env.getProperty("jdbcPassword",""));
+        ds.setJdbcUrl(System.getProperty("jdbcUrl","jdbc:h2:mem:testDB"));
+        ds.setUsername(System.getProperty("jdbcUsername","test"));
+        ds.setPassword(System.getProperty("jdbcPassword",""));
 
         return ds;
     }
 
-    @Bean
-    public Liquibase liquibase(DataSource dataSource) throws Exception{
+
+    public Liquibase getliquibase(DataSource dataSource) throws Exception{
         DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
         Liquibase liquibase = new Liquibase(
@@ -59,11 +56,16 @@ public class UserDAOTest {
 
     @Before
     public void setUp(){
-        ApplicationContext contextTest = new AnnotationConfigApplicationContext("ru.maksimka.jb");
 
-        subj = new UserDAO(contextTest.getBean(DataSource.class, "dataSourceH2" ));
+        try {
+            getliquibase(getDataSourceHdb());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        try (Connection connection = contextTest.getBean(DataSource.class, "dataSourceH2").getConnection()) {
+        subj = new UserDAO(getDataSourceHdb());
+
+        try (Connection connection = getDataSourceHdb().getConnection()) {
             PreparedStatement testStatement =
                     connection.prepareStatement("" +
                             "INSERT INTO users(name, password, email) VALUES (?, ?, ?)");

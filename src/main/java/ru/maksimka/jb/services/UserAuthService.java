@@ -9,10 +9,8 @@ import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.sql.SQLException;
 
-import static ru.maksimka.jb.Main.context;
-
 @Service
-public class UserAuthService implements UserAuth<String, Integer> {
+public class UserAuthService {
 
     private final UserDAO userDao;
 
@@ -20,11 +18,12 @@ public class UserAuthService implements UserAuth<String, Integer> {
         this.userDao = userDao;
     }
 
+    /*
     public UserAuthService() {
         this.userDao = context.getBean(UserDAO.class);
     }
+    */
 
-    @Override
     public boolean authUser(String login, String password) throws WrongUserPasswordException{
 
         try {
@@ -42,7 +41,6 @@ public class UserAuthService implements UserAuth<String, Integer> {
         }
     }
 
-    @Override
     public boolean registerUser(String login, String password, String email) throws LoginBusyException {
 
         User user = new User();

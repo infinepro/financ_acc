@@ -3,8 +3,6 @@ package ru.maksimka.jb;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.maksimka.jb.DAO.DaoConfiguration;
-import ru.maksimka.jb.services.ServiceConfiguration;
 import ru.maksimka.jb.view.ViewService;
 
 import java.io.BufferedReader;
@@ -13,7 +11,7 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    public final static ApplicationContext context = new AnnotationConfigApplicationContext("ru.maksimka.jb");
+   // public final static ApplicationContext context = new AnnotationConfigApplicationContext("ru.maksimka.jb");
 
     public static final String line = "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
                                        "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";

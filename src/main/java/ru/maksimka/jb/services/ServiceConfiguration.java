@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan
-@Import({UserAuth.class, UserOperations.class,CreateTransactionService.class})
+@Import({UserAuthService.class, UserOperationsService.class,CreateTransactionService.class})
 @Configuration
 public class ServiceConfiguration {
 

@@ -12,16 +12,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.maksimka.jb.Main.context;
 
 @Service
 public class AcctDAO implements DAO<Acct, String> {
 
     private DataSource dataSource;
 
+    /*
     public AcctDAO() {
         this.dataSource = context.getBean(DataSource.class);
     }
+    */
 
     public AcctDAO(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -29,7 +30,7 @@ public class AcctDAO implements DAO<Acct, String> {
 
     public Acct findBy(Integer id) {
 
-        try (Connection connection = this.dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement("" +
                             "SELECT * FROM accounts WHERE id = ?");

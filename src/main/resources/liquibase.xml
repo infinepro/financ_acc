@@ -97,5 +97,14 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="4" author="maksimka">
+        <loadData encoding="UTF-8" file="std_data_name_accounts.csv" tableName="names_accounts" separator=";">
+            <column name="category_account" type="STRING"/>
+
+        </loadData>
+
+    </changeSet>
+
+
 
 </databaseChangeLog>

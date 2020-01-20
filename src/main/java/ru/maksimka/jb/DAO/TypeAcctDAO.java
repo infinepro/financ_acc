@@ -1,16 +1,34 @@
 package ru.maksimka.jb.DAO;
 
+import org.springframework.stereotype.Service;
+
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import static ru.maksimka.jb.Main.context;
 
+
+@Service
 public class TypeAcctDAO implements DAO<String, Integer> {
+
+    private DataSource dataSource;
+
+    public TypeAcctDAO(){
+        dataSource = context.getBean(DataSource.class);
+    }
+
+    //for tests
+    public TypeAcctDAO (DataSource dataSource) {
+        this.dataSource = context.getBean(DataSource.class);
+    }
 
     @Override
     public boolean insert(String type) {
 
-        try(Connection connection = DAOFactory.getConnection()){
+        try(Connection connection = this.dataSource.getConnection()){
             PreparedStatement preState =
                     connection.prepareStatement(
                     "INSERT INTO names_accounts(category_account) VALUES (?)");

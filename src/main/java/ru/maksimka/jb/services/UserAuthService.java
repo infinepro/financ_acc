@@ -1,5 +1,6 @@
 package ru.maksimka.jb.services;
 
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DAO.UserDAO;
 import ru.maksimka.jb.containers.User;
 import ru.maksimka.jb.exceptions.LoginBusyException;
@@ -8,27 +9,30 @@ import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.sql.SQLException;
 
+import static ru.maksimka.jb.Main.context;
+
+@Service
 public class UserAuthService implements UserAuth<String, Integer> {
 
     private final UserDAO userDao;
-
-    public UserAuthService() {
-        this.userDao = new UserDAO();
-    }
 
     public UserAuthService(UserDAO userDao) {
         this.userDao = userDao;
     }
 
+    public UserAuthService() {
+        this.userDao = context.getBean(UserDAO.class);
+    }
+
     @Override
-    public boolean authUser(String login, String password) throws WrongUserPasswordException, UserNotFoundException {
+    public boolean authUser(String login, String password) throws WrongUserPasswordException{
+
         try {
             User user = userDao.findBy(login);
             if (user != null) {
                 if (user.getPassword().equals(password)) {
                     return true;
-                } else
-                    throw new WrongUserPasswordException("Неправильный пароль");
+                } else throw new WrongUserPasswordException("Неправильный пароль");
             } else return false;
         } catch (SQLException e) {
             return false;

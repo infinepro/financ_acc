@@ -1,28 +1,29 @@
 package ru.maksimka.jb.services;
 
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DAO.AcctDAO;
-import ru.maksimka.jb.DAO.DAOFactory;
 import ru.maksimka.jb.DAO.TransactionDAO;
+import ru.maksimka.jb.Main;
 import ru.maksimka.jb.containers.Acct;
 import ru.maksimka.jb.containers.Transaction;
 import ru.maksimka.jb.exceptions.TransactionFailException;
 
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static ru.maksimka.jb.Main.context;
+
+@Service
 public class CreateTransactionService {
 
     private final AcctDAO acctDao;
     private final TransactionDAO transactionDAO;
 
     public CreateTransactionService() {
-        acctDao = new AcctDAO();
-        this.transactionDAO = new TransactionDAO();
-    }
-
-    public CreateTransactionService(AcctDAO acctDao) {
-        this.acctDao = acctDao;
-        this.transactionDAO = new TransactionDAO();
+        acctDao = context.getBean(AcctDAO.class);
+        this.transactionDAO = context.getBean(TransactionDAO.class);
     }
 
     public void createTransaction(Integer fromAcctId, Integer toAcctId, Integer sum) throws TransactionFailException {
@@ -30,7 +31,7 @@ public class CreateTransactionService {
         Connection connection = null;
 
         try {
-            connection = DAOFactory.getConnection();
+            connection = context.getBean(DataSource.class).getConnection();
             connection.setAutoCommit(false);
 
             Acct acctFrom = acctDao.findBy(fromAcctId);
@@ -47,12 +48,12 @@ public class CreateTransactionService {
                 throw new TransactionFailException("Не найден счет для пополнения " + toAcctId);
             }
 
-            Transaction transactionTo =  new Transaction();
+            Transaction transactionTo = new Transaction();
             transactionTo.setCategory(0);
             transactionTo.setSum(+sum);
             transactionTo.setUniq_account_id(toAcctId);
 
-            Transaction transactionFrom =  new Transaction();
+            Transaction transactionFrom = new Transaction();
             transactionFrom.setCategory(0);
             transactionFrom.setSum(-sum);
             transactionFrom.setUniq_account_id(fromAcctId);

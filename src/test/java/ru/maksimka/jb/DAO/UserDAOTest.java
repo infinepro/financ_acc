@@ -1,13 +1,26 @@
 package ru.maksimka.jb.DAO;
 
 
+import com.zaxxer.hikari.HikariDataSource;
+import liquibase.Contexts;
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseConnection;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import ru.maksimka.jb.containers.User;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -21,14 +34,36 @@ public class UserDAOTest {
     private String testName;
     private User user;
 
+    @Bean("dataSourceH2")
+    public DataSource dataSourceHdb(Environment env){
+        HikariDataSource ds = new HikariDataSource();
+        ds.setJdbcUrl(env.getProperty("jdbcUrl","jdbc:h2:mem:testDB"));
+        ds.setUsername(env.getProperty("jdbcUsername","test"));
+        ds.setPassword(env.getProperty("jdbcPassword",""));
+
+        return ds;
+    }
+
+    @Bean
+    public Liquibase liquibase(DataSource dataSource) throws Exception{
+        DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
+        Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
+        Liquibase liquibase = new Liquibase(
+                "liquibase.xml",
+                new ClassLoaderResourceAccessor(),
+                database);
+
+        liquibase.update(new Contexts());
+        return liquibase;
+    }
+
     @Before
     public void setUp(){
-        System.setProperty("jdbcUrl", "jdbc:h2:mem:testDB");
-        System.setProperty("jdbcUsername", "test");
-        System.setProperty("jdbcPassword","");
+        ApplicationContext contextTest = new AnnotationConfigApplicationContext("ru.maksimka.jb");
 
-        subj = new UserDAO();
-        try (Connection connection = DAOFactory.getConnection()) {
+        subj = new UserDAO(contextTest.getBean(DataSource.class, "dataSourceH2" ));
+
+        try (Connection connection = contextTest.getBean(DataSource.class, "dataSourceH2").getConnection()) {
             PreparedStatement testStatement =
                     connection.prepareStatement("" +
                             "INSERT INTO users(name, password, email) VALUES (?, ?, ?)");

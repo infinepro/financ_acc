@@ -1,8 +1,10 @@
 package ru.maksimka.jb.DAO;
 
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DTO.AcctDTO;
 import ru.maksimka.jb.containers.Acct;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,11 +12,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.maksimka.jb.Main.context;
+
+@Service
 public class AcctDAO implements DAO<Acct, String> {
+
+    private DataSource dataSource;
+
+    public AcctDAO() {
+        this.dataSource = context.getBean(DataSource.class);
+    }
+
+    public AcctDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Acct findBy(Integer id) {
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement("" +
                             "SELECT * FROM accounts WHERE id = ?");
@@ -38,7 +53,7 @@ public class AcctDAO implements DAO<Acct, String> {
 
         List<AcctDTO> acctList = new ArrayList<>();
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "SELECT * FROM accounts " +
@@ -64,7 +79,7 @@ public class AcctDAO implements DAO<Acct, String> {
     @Override
     public boolean insert(Acct acct) {
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "INSERT INTO accounts(user_name, id_category_account, balance, date) VALUES (?,?,?, CURRENT_DATE )");
@@ -82,7 +97,7 @@ public class AcctDAO implements DAO<Acct, String> {
     @Override
     public boolean update(Acct acct) {
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "UPDATE accounts SET balance = ? WHERE id = ?");
@@ -96,6 +111,7 @@ public class AcctDAO implements DAO<Acct, String> {
         }
     }
 
+    //for transaction from to
     public boolean update(Acct acct, Connection connection) {
 
         try {

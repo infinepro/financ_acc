@@ -1,13 +1,14 @@
 package ru.maksimka.jb.services;
 
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DAO.*;
 import ru.maksimka.jb.DTO.AcctDTO;
 import ru.maksimka.jb.DTO.TransactionsDTO;
 import ru.maksimka.jb.containers.Acct;
-import ru.maksimka.jb.containers.Transaction;
 import ru.maksimka.jb.containers.User;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,11 +16,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class UserOperationsService implements UserOperations<String, Integer> {
 
     private String name;
 
-    public UserOperationsService(String login) {
+    public UserOperationsService() {
+
+    }
+
+    public void setLogin (String login) {
         UserDAO userDAO = new UserDAO();
         User user = null;
         try {
@@ -63,10 +69,10 @@ public class UserOperationsService implements UserOperations<String, Integer> {
 
     @Override
     public List<AcctDTO> getAllAcct() {
-        List<AcctDTO> listAcct = new ArrayList<>();
+        List<AcctDTO> listAcct;
         AcctDAO acctDAO = new AcctDAO();
         try {
-            listAcct = (ArrayList<AcctDTO>)acctDAO.findByAll(name);
+            listAcct = acctDAO.findByAll(name);
             return listAcct;
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,10 +81,10 @@ public class UserOperationsService implements UserOperations<String, Integer> {
     }
 
     @Override
-    public List<String> getAllTypeAccts(){
-        TypeAcctDAO typeAcctDAO = new TypeAcctDAO();
-        List<String> listTypeAccts = new ArrayList<String>();
-        try (Connection connection = DAOFactory.getConnection()) {
+    public List<String> getAllTypeAccts(DataSource dataSource){
+
+        List<String> listTypeAccts = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(
                     "SELECT category_account FROM names_accounts");
             ResultSet rs = ps.executeQuery();

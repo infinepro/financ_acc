@@ -1,18 +1,35 @@
 package ru.maksimka.jb.DAO;
 
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.containers.User;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static ru.maksimka.jb.Main.context;
+
+
+@Service
 public class UserDAO implements DAO<User, String> {
+
+    private DataSource dataSource;
+
+    public UserDAO () {
+        this.dataSource = context.getBean(DataSource.class);
+    }
+
+    //for test
+    public UserDAO (DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public User findBy(String name) throws SQLException, UserNotFoundException {
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "SELECT * FROM users WHERE name = ? ");
@@ -34,7 +51,7 @@ public class UserDAO implements DAO<User, String> {
     @Override
     public boolean insert(User user) {
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             try {
                 if (findBy(user.getName()) != null) {
                     return false;

@@ -1,41 +1,60 @@
 package ru.maksimka.jb.view;
 
+import ru.maksimka.jb.DAO.TransactionDAO;
 import ru.maksimka.jb.DTO.AcctDTO;
 import ru.maksimka.jb.Main;
-import ru.maksimka.jb.exceptions.LoginBusyException;
-import ru.maksimka.jb.exceptions.TransactionFailException;
-import ru.maksimka.jb.exceptions.UserNotFoundException;
-import ru.maksimka.jb.exceptions.WrongUserPasswordException;
+import ru.maksimka.jb.exceptions.*;
 import ru.maksimka.jb.services.*;
 
+import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import static ru.maksimka.jb.Main.context;
+
 public class ViewService {
 
-    private boolean ifSignIn = false;
-    private String login;
-    private String password;
+    private boolean ifSignIn;
+  //  private ApplicationContext context;
+    private UserAuth userAuth;
+    private CreateTransactionService transactionService;
+    private UserOperations operations;
+
+    public ViewService() {
+        this.ifSignIn = false;
+        this.userAuth = context.getBean(UserAuthService.class);
+        this.transactionService = context.getBean(CreateTransactionService.class);
+        this.operations = context.getBean(UserOperationsService.class);
+    }
 
     public void ifRegistered() throws IOException {
 
-        UserAuth userAuth = new UserAuthService();
+        String login = null;
+        String password = null;
 
         if (!ifSignIn) {
 
             System.out.printf("%-25s", "\tВведите логин  >>> ");
-            this.login = new BufferedReader(new InputStreamReader(System.in)).readLine();
+            login = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
             System.out.printf("%-25s", "\tВведите пароль >>> ");
-            this.password = new BufferedReader(new InputStreamReader(System.in)).readLine();
+            password = new BufferedReader(new InputStreamReader(System.in)).readLine();
         }
 
         try {
-            if (userAuth.authUser(login, password)) {
+            if (login == null || login.isEmpty()) {
+                throw new EmptyDataAccesException("Пустой логин недопустим");
+            }
+
+            if ( password ==null || password.isEmpty()) {
+                throw new EmptyDataAccesException("Пустой пароль недопустим");
+            }
+
+            if (this.userAuth.authUser(login, password)) {
                 ifSignIn = true;
-                UserOperations operations = new UserOperationsService(login);
+                this.operations.setLogin(login);
 
                 System.out.print(Main.line + "\n\tДоступ к вашим операциям открыт\n" + Main.line + "" +
                         "\n\tВы можете использовть одну из четырёх операций: \n" +
@@ -89,7 +108,7 @@ public class ViewService {
                     //Create new acct
                     case 2: {
                         System.out.println(Main.line);
-                        List<String> listTypeAccts = operations.getAllTypeAccts();
+                        List<String> listTypeAccts = this.operations.getAllTypeAccts(context.getBean(DataSource.class));
 
                         for (int i = 0; i < listTypeAccts.size(); i++) {
                             System.out.println("\t" + " (" + (i + 1) + ") " + listTypeAccts.get(i));
@@ -111,7 +130,7 @@ public class ViewService {
                             break;
                         }
 
-                        if (operations.addNewAcct(login, balance, numberAcct)) {
+                        if (this.operations.addNewAcct(login, balance, numberAcct)) {
                             System.out.println(Main.line + "\n\tСчёт успешно создан!");
                         } else {
                             System.out.println(Main.line + "\n\tСчёт не добавлен, свяжитесь с админом!");
@@ -126,7 +145,7 @@ public class ViewService {
                         System.out.print("\tВведите имя нового типа транзакции >>> ");
                         String nameType = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
-                        if (operations.addNewTypeTransaction(nameType)) {
+                        if (this.operations.addNewTypeTransaction(nameType)) {
                             System.out.println(Main.line);
                             System.out.println("\tНовый тип транзакции создан");
                         } else {
@@ -143,7 +162,7 @@ public class ViewService {
                         System.out.print("\tВведите имя нового типа счета >>> ");
                         String nameType = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
-                        if (operations.addNewTypeAcct(nameType)) {
+                        if (this.operations.addNewTypeAcct(nameType)) {
                             System.out.println(Main.line);
                             System.out.println("\tНовый тип счета создан");
                         } else {
@@ -204,9 +223,9 @@ public class ViewService {
                                 throw new NumberFormatException("Нехватает средств на счете");
                             }
 
-                            transactionService = new CreateTransactionService();
+                            transactionService = context.getBean(CreateTransactionService.class);
                             try {
-                                transactionService.createTransaction(accts.get(fromAcct-1).getId(), accts.get(toAcct-1).getId(), sum);
+                                transactionService.createTransaction(accts.get(fromAcct - 1).getId(), accts.get(toAcct - 1).getId(), sum);
                             } catch (TransactionFailException e) {
                                 e.printStackTrace();
                             }
@@ -221,7 +240,8 @@ public class ViewService {
                         break;
                     }
 
-                    default: break;
+                    default:
+                        break;
                 }
 
                 ifRegistered();
@@ -231,9 +251,11 @@ public class ViewService {
             System.out.println(Main.line);
             ifRegistered();
         } catch (UserNotFoundException e) {
-            System.out.println(Main.line);
             System.out.println("\tПользователь не найден, попробуйте ещё раз\n" +
                     "\tПопробуйте ещё раз");
+            ifRegistered();
+        } catch (EmptyDataAccesException e) {
+            System.out.println(Main.line);
             ifRegistered();
         }
     }
@@ -249,7 +271,6 @@ public class ViewService {
 
             System.out.printf("%-25s", "\tВведите пароль >>> ");
             String password = new BufferedReader(new InputStreamReader(System.in)).readLine();
-            UserAuth userAuth = new UserAuthService();
 
             try {
                 if (userAuth.registerUser(login, password, email)) {

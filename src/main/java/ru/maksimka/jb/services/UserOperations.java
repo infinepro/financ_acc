@@ -3,6 +3,7 @@ package ru.maksimka.jb.services;
 import ru.maksimka.jb.DTO.AcctDTO;
 import ru.maksimka.jb.DTO.TransactionsDTO;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 public interface UserOperations<S, I> {
@@ -13,6 +14,7 @@ public interface UserOperations<S, I> {
     boolean addNewTransaction();
     List<TransactionsDTO> getAllTransactions();
     List<AcctDTO> getAllAcct();
-    List<String> getAllTypeAccts();
+    List<String> getAllTypeAccts(DataSource dataSource);
+    void setLogin(S login);
 
 }

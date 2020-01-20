@@ -1,7 +1,5 @@
 package ru.maksimka.jb.DTO;
 
-import ru.maksimka.jb.containers.User;
-
 public class AcctDTO {
     private int id;
     private String nameAcct;

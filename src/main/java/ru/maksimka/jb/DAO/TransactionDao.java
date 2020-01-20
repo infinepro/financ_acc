@@ -1,16 +1,32 @@
 package ru.maksimka.jb.DAO;
 
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.containers.Transaction;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import static ru.maksimka.jb.Main.context;
+
+
+@Service
 public class TransactionDAO implements DAO<Transaction, Integer> {
+
+    private DataSource dataSource;
+
+    public TransactionDAO () {
+        this.dataSource = context.getBean(DataSource.class);
+    }
+
+    public TransactionDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public boolean addNewTypeTransaction(String type) {
 
-        try (Connection connection = DAOFactory.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "INSERT INTO category_transaction (name_category) VALUES (?) ");
@@ -28,6 +44,7 @@ public class TransactionDAO implements DAO<Transaction, Integer> {
         return false;
     }
 
+    //for transaction from to
     public boolean insert(Transaction transaction, Connection connection) {
 
         try {

@@ -1,8 +1,5 @@
 package ru.maksimka.jb;
 
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.maksimka.jb.view.ViewService;
 
 import java.io.BufferedReader;
@@ -11,15 +8,12 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-   // public final static ApplicationContext context = new AnnotationConfigApplicationContext("ru.maksimka.jb");
-
-    public static final String line = "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
-                                       "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";
-
     public static void main(String[] args) {
 
-        System.out.print("\tПриветствую вас !\n"  + line + "\n" +
-                             "\tВы уже зарегистрированы? (да/нет) >>>  ");
+        System.out.print("\tПриветствую вас !\n" +
+                "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
+                "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" + "\n" +
+                "\tВы уже зарегистрированы? (да/нет) >>>  ");
         ViewService viewService;
         try {
             String tmp = new BufferedReader(new InputStreamReader(System.in)).readLine();
@@ -27,7 +21,7 @@ public class Main {
             if (tmp.equals("нет") || tmp.equals("Нет") || tmp.equals("НЕТ")) {
                 viewService.ifNotRegistered();
             } else if (tmp.equals("да") || tmp.equals("Да") || tmp.equals("ДА")) {
-                while(true) {
+                while (true) {
                     viewService.ifRegistered();
                 }
             } else {

@@ -3,7 +3,6 @@ package ru.maksimka.jb.view;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.maksimka.jb.DTO.AcctDTO;
-import ru.maksimka.jb.Main;
 import ru.maksimka.jb.exceptions.*;
 import ru.maksimka.jb.services.*;
 
@@ -15,6 +14,14 @@ import java.util.List;
 
 
 public class ViewService {
+
+    private final String line = "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
+            "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";
+    public String getLine(){
+        return "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
+                "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";
+    }
+
 
     private String login;
     private String password;
@@ -58,7 +65,7 @@ public class ViewService {
                 ifSignIn = true;
                 operations.setLogin(login);
 
-                System.out.print(Main.line + "\n\tДоступ к вашим операциям открыт\n" + Main.line + "" +
+                System.out.print(line + "\n\tДоступ к вашим операциям открыт\n" + line + "" +
                         "\n\tВы можете использовть одну из четырёх операций: \n" +
                         "\t\t0 - Выход из программы\n" +
                         "\t\t1 - Отобразить ваши счета\n" +
@@ -90,7 +97,7 @@ public class ViewService {
 
                     //View your acct
                     case 1: {
-                        System.out.println(Main.line);
+                        System.out.println(line);
                         List<AcctDTO> accts = operations.getAllAcct();
 
                         if (accts.isEmpty()) {
@@ -109,7 +116,7 @@ public class ViewService {
 
                     //Create new acct
                     case 2: {
-                        System.out.println(Main.line);
+                        System.out.println(line);
                         List<String> listTypeAccts = operations.getAllTypeAccts(context.getBean(DataSource.class));
 
                         for (int i = 0; i < listTypeAccts.size(); i++) {
@@ -133,9 +140,9 @@ public class ViewService {
                         }
 
                         if (operations.addNewAcct(login, balance, numberAcct)) {
-                            System.out.println(Main.line + "\n\tСчёт успешно создан!");
+                            System.out.println(line + "\n\tСчёт успешно создан!");
                         } else {
-                            System.out.println(Main.line + "\n\tСчёт не добавлен, свяжитесь с админом!");
+                            System.out.println(line + "\n\tСчёт не добавлен, свяжитесь с админом!");
                         }
 
                         break;
@@ -143,15 +150,15 @@ public class ViewService {
 
                     //add new category transaction
                     case 3: {
-                        System.out.println(Main.line);
+                        System.out.println(line);
                         System.out.print("\tВведите имя нового типа транзакции >>> ");
                         String nameType = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
                         if (operations.addNewTypeTransaction(nameType)) {
-                            System.out.println(Main.line);
+                            System.out.println(line);
                             System.out.println("\tНовый тип транзакции создан");
                         } else {
-                            System.out.println(Main.line);
+                            System.out.println(line);
                             System.err.println("\tНовый тип транзакции не добавлен, свяжитесь с админом!");
                         }
 
@@ -160,15 +167,15 @@ public class ViewService {
 
                     //add new name acct's
                     case 4: {
-                        System.out.println(Main.line);
+                        System.out.println(line);
                         System.out.print("\tВведите имя нового типа счета >>> ");
                         String nameType = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
                         if (operations.addNewTypeAcct(nameType)) {
-                            System.out.println(Main.line);
+                            System.out.println(line);
                             System.out.println("\tНовый тип счета создан");
                         } else {
-                            System.out.println(Main.line);
+                            System.out.println(line);
                             System.err.println("\tНовый тип счета не добавлен, свяжитесь с админом!");
                         }
 
@@ -182,7 +189,7 @@ public class ViewService {
                         int sum;
                         //CreateTransactionService transactionService;
 
-                        System.out.println(Main.line);
+                        System.out.println(line);
                         List<AcctDTO> accts = operations.getAllAcct();
 
                         if (accts.isEmpty()) {
@@ -225,7 +232,6 @@ public class ViewService {
                                 throw new NumberFormatException("Нехватает средств на счете");
                             }
 
-                            //transactionService = context.getBean(CreateTransactionService.class);
                             try {
                                 transactionService.createTransaction(accts.get(fromAcct - 1).getId(), accts.get(toAcct - 1).getId(), sum);
                             } catch (TransactionFailException e) {
@@ -233,11 +239,11 @@ public class ViewService {
                             }
 
                         } catch (NumberFormatException e) {
-                            System.out.println(Main.line);
+                            System.out.println(line);
                             System.err.println("\tНекорректное значение");
                             break;
                         }
-                        System.out.println(Main.line);
+                        System.out.println(line);
                         System.out.println("\tТранзакция выполнена");
                         break;
                     }
@@ -250,7 +256,7 @@ public class ViewService {
             }
 
         } catch (WrongUserPasswordException e) {
-            System.out.println(Main.line);
+            System.out.println(line);
             ifRegistered();
         }
         /*
@@ -262,14 +268,14 @@ public class ViewService {
         */
 
         catch (EmptyDataAccesException e) {
-            System.out.println(Main.line);
+            System.out.println(line);
             ifRegistered();
         }
     }
 
     public void ifNotRegistered() throws IOException {
         while (true) {
-            System.out.println(Main.line);
+            System.out.println(line);
             System.out.printf("%-25s", "\tВведите логин  >>> ");
             String login = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
@@ -281,7 +287,7 @@ public class ViewService {
 
             try {
                 if (userAuth.registerUser(login, password, email)) {
-                    System.out.println(Main.line + "\n" + "\tВы успешно зарегистрировались, можете войти в стистему");
+                    System.out.println(line + "\n" + "\tВы успешно зарегистрировались, можете войти в стистему");
                     ifRegistered();
                 }
             } catch (LoginBusyException e) {

@@ -18,12 +18,6 @@ public class UserAuthService {
         this.userDao = userDao;
     }
 
-    /*
-    public UserAuthService() {
-        this.userDao = context.getBean(UserDAO.class);
-    }
-    */
-
     public boolean authUser(String login, String password) throws WrongUserPasswordException{
 
         try {

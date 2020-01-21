@@ -1,5 +1,6 @@
 package ru.maksimka.jb.services;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DAO.*;
 import ru.maksimka.jb.DTO.AcctDTO;
@@ -18,6 +19,8 @@ import java.util.List;
 
 @Service
 public class UserOperationsService {
+
+
 
     private String name;
     private UserDAO userDAO;

@@ -18,12 +18,6 @@ public class AcctDAO implements DAO<Acct, String> {
 
     private DataSource dataSource;
 
-    /*
-    public AcctDAO() {
-        this.dataSource = context.getBean(DataSource.class);
-    }
-    */
-
     public AcctDAO(DataSource dataSource) {
         this.dataSource = dataSource;
     }

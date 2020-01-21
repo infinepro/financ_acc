@@ -12,12 +12,7 @@ import java.sql.SQLException;
 public class TypeAcctDAO implements DAO<String, Integer> {
 
     private DataSource dataSource;
-    /*
-    public TypeAcctDAO(){
-        dataSource = context.getBean(DataSource.class);
-    }
-    */
-    //for tests
+
     public TypeAcctDAO (DataSource dataSource) {
         this.dataSource = dataSource;
     }

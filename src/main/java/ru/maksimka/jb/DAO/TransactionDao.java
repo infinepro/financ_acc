@@ -15,12 +15,6 @@ public class TransactionDAO implements DAO<Transaction, Integer> {
 
     private DataSource dataSource;
 
-    /*
-    public TransactionDAO () {
-        this.dataSource = context.getBean(DataSource.class);
-    }
-    */
-
     public TransactionDAO(DataSource dataSource) {
         this.dataSource = dataSource;
     }

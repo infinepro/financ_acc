@@ -18,13 +18,6 @@ public class UserDAO implements DAO<User, String> {
 
     private DataSource dataSource;
 
-    /*
-    public UserDAO () {
-        this.dataSource = context.getBean(DataSource.class);
-    }
-    */
-
-    //for test
     public UserDAO (DataSource dataSource) {
         this.dataSource = dataSource;
     }

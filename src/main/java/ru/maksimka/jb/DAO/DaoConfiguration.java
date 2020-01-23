@@ -22,6 +22,12 @@ public class DaoConfiguration {
 
     @Bean
     public DataSource dataSource(Environment env){
+
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         HikariDataSource ds = new HikariDataSource();
         ds.setJdbcUrl(env.getProperty("jdbcUrl","jdbc:postgresql://localhost:5432/postgres"));
         ds.setUsername(env.getProperty("jdbcUsername","postgres"));

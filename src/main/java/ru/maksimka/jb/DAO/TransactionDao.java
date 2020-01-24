@@ -1,7 +1,7 @@
 package ru.maksimka.jb.DAO;
 
 import org.springframework.stereotype.Service;
-import ru.maksimka.jb.containers.Transaction;
+import ru.maksimka.jb.DTO.TransactionDTO;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 
 @Service
-public class TransactionDAO implements DAO<Transaction, Integer> {
+public class TransactionDAO implements DAO<TransactionDTO, Integer> {
 
     private DataSource dataSource;
 
@@ -35,20 +35,20 @@ public class TransactionDAO implements DAO<Transaction, Integer> {
     }
 
     @Override
-    public boolean insert(Transaction transaction) {
+    public boolean insert(TransactionDTO transactionDTO) {
         return false;
     }
 
     //for transaction from to
-    public boolean insert(Transaction transaction, Connection connection) {
+    public boolean insert(TransactionDTO transactionDTO, Connection connection) {
 
         try {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "INSERT INTO transactions (uniq_account_id, sum, date, category) VALUES (?, ?, CURRENT_DATE, ?)");
-            preState.setInt(1, transaction.getUniq_account_id());
-            preState.setInt(2, transaction.getSum());
-            preState.setInt(3, transaction.getCategory());
+            preState.setInt(1, transactionDTO.getUniq_account_id());
+            preState.setBigDecimal(2, transactionDTO.getSum());
+            preState.setInt(3, transactionDTO.getCategory());
             preState.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -57,7 +57,7 @@ public class TransactionDAO implements DAO<Transaction, Integer> {
     }
 
     @Override
-    public boolean update(Transaction transaction) {
+    public boolean update(TransactionDTO transactionDTO) {
         return false;
     }
 

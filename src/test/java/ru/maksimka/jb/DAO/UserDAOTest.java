@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.DTO.UserDTO;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 
 import javax.sql.DataSource;
@@ -29,7 +29,7 @@ public class UserDAOTest {
 
     private UserDAO subj;
     private String testName;
-    private User user;
+    private UserDTO userDTO;
 
 
     public DataSource getDataSourceHdb(){
@@ -101,17 +101,17 @@ public class UserDAOTest {
 
     @Test
     public void insert_if_ok() {
-        assertTrue(subj.insert(new User().
-                setName("ok_name").
-                setPassword("ok_password").
-                setEmail("ok_email")));
+        assertTrue(subj.insert(new UserDTO()
+                .withName("ok_name")
+                .withPassword("ok_password")
+                .withEmail("ok_email")));
     }
 
     @Test
     public void insert_if_login_is_busy(){
-        assertFalse(subj.insert(new User().
-                setName("test_name").
-                setPassword("ok_password").
-                setEmail("ok_email")));
+        assertFalse(subj.insert(new UserDTO()
+                .withName("test_name")
+                .withPassword("ok_password")
+                .withEmail("ok_email")));
     }
 }

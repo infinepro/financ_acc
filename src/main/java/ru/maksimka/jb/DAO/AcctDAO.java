@@ -2,7 +2,6 @@ package ru.maksimka.jb.DAO;
 
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DTO.AcctDTO;
-import ru.maksimka.jb.containers.Acct;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,7 +13,7 @@ import java.util.List;
 
 
 @Service
-public class AcctDAO implements DAO<Acct, String> {
+public class AcctDAO implements DAO<AcctDTO, String> {
 
     private DataSource dataSource;
 
@@ -22,7 +21,7 @@ public class AcctDAO implements DAO<Acct, String> {
         this.dataSource = dataSource;
     }
 
-    public Acct findBy(Integer id) {
+    public AcctDTO findBy(Integer id) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
@@ -32,11 +31,11 @@ public class AcctDAO implements DAO<Acct, String> {
             ResultSet resultSet = preState.executeQuery();
 
             if (resultSet.next()) {
-                return new Acct()
-                        .setBalance(resultSet.getInt("balance"))
-                        .setId(resultSet.getInt("id"))
-                        .setTypeAcct(resultSet.getInt("id_category_account"))
-                        .setUserName(resultSet.getString("user_name"));
+                return new AcctDTO()
+                        .withBalance(resultSet.getBigDecimal("balance"))
+                        .withId(resultSet.getInt("id"))
+                        .withTypeAcctId(resultSet.getInt("id_category_account"))
+                        .withUserName(resultSet.getString("user_name"));
             } else return null;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,9 +58,9 @@ public class AcctDAO implements DAO<Acct, String> {
             if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
                     acctList.add(new AcctDTO()
-                            .setNameAcct(resultSet.getString("category_account"))
-                            .setBalance(resultSet.getInt("balance"))
-                            .setId(resultSet.getInt("id")));
+                            .withNameAcct(resultSet.getString("category_account"))
+                            .withBalance(resultSet.getBigDecimal("balance"))
+                            .withId(resultSet.getInt("id")));
                 }
             }
             return acctList;
@@ -72,15 +71,15 @@ public class AcctDAO implements DAO<Acct, String> {
     }
 
     @Override
-    public boolean insert(Acct acct) {
+    public boolean insert(AcctDTO acct) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "INSERT INTO accounts(user_name, id_category_account, balance, date) VALUES (?,?,?, CURRENT_DATE )");
             preState.setString(1, acct.getUserName());
-            preState.setInt(2, acct.getTypeAcct());
-            preState.setInt(3, acct.getBalance());
+            preState.setInt(2, acct.getTypeAcctId());
+            preState.setBigDecimal(3, acct.getBalance());
             preState.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -90,13 +89,13 @@ public class AcctDAO implements DAO<Acct, String> {
     }
 
     @Override
-    public boolean update(Acct acct) {
+    public boolean update(AcctDTO acct) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "UPDATE accounts SET balance = ? WHERE id = ?");
-            preState.setInt(1, acct.getBalance());
+            preState.setBigDecimal(1, acct.getBalance());
             preState.setInt(2, acct.getId());
             preState.execute();
             return true;
@@ -107,13 +106,13 @@ public class AcctDAO implements DAO<Acct, String> {
     }
 
     //for transaction from to
-    public boolean update(Acct acct, Connection connection) {
+    public boolean update(AcctDTO acct, Connection connection) {
 
         try {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "UPDATE accounts SET balance = ? WHERE id = ?");
-            preState.setInt(1, acct.getBalance());
+            preState.setBigDecimal(1, acct.getBalance());
             preState.setInt(2, acct.getId());
             preState.executeUpdate();
             return true;

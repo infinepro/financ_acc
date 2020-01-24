@@ -1,7 +1,7 @@
 package ru.maksimka.jb.DAO;
 
 import org.springframework.stereotype.Service;
-import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.DTO.UserDTO;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 
 import javax.sql.DataSource;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 
 @Service
-public class UserDAO implements DAO<User, String> {
+public class UserDAO implements DAO<UserDTO, String> {
 
     private DataSource dataSource;
 
@@ -22,7 +22,7 @@ public class UserDAO implements DAO<User, String> {
         this.dataSource = dataSource;
     }
 
-    public User findBy(String name) throws SQLException, UserNotFoundException {
+    public UserDTO findBy(String name) throws SQLException, UserNotFoundException {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preState =
@@ -32,11 +32,11 @@ public class UserDAO implements DAO<User, String> {
             ResultSet resultSet = preState.executeQuery();
 
             if (resultSet.next()) {
-                return new User()
-                        .setId(resultSet.getInt("id"))
-                        .setEmail(resultSet.getString("email"))
-                        .setName(resultSet.getString("name"))
-                        .setPassword(resultSet.getString("password"));
+                return new UserDTO()
+                        .withId(resultSet.getInt("id"))
+                        .withEmail(resultSet.getString("email"))
+                        .withName(resultSet.getString("name"))
+                        .withPassword(resultSet.getString("password"));
             } else {
                 throw new UserNotFoundException();
             }
@@ -44,11 +44,11 @@ public class UserDAO implements DAO<User, String> {
     }
 
     @Override
-    public boolean insert(User user) {
+    public boolean insert(UserDTO userDTO) {
 
         try (Connection connection = this.dataSource.getConnection()) {
             try {
-                if (findBy(user.getName()) != null) {
+                if (findBy(userDTO.getName()) != null) {
                     return false;
                 }
             } catch (UserNotFoundException e) {
@@ -58,9 +58,9 @@ public class UserDAO implements DAO<User, String> {
             PreparedStatement preState =
                     connection.prepareStatement(
                             "INSERT INTO users (name, password, email) VALUES  (?, ?, ?) ");
-            preState.setString(1, user.getName());
-            preState.setString(2, user.getPassword());
-            preState.setString(3, user.getEmail());
+            preState.setString(1, userDTO.getName());
+            preState.setString(2, userDTO.getPassword());
+            preState.setString(3, userDTO.getEmail());
             preState.execute();
             return true;
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class UserDAO implements DAO<User, String> {
     }
 
     @Override
-    public boolean update(User user) {
+    public boolean update(UserDTO userDTO) {
         return false;
     }
 

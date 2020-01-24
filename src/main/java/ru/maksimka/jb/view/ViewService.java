@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -17,10 +18,6 @@ public class ViewService {
 
     private final String line = "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
             "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";
-    public String getLine(){
-        return "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
-                "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";
-    }
 
 
     private String login;
@@ -125,13 +122,13 @@ public class ViewService {
 
                         System.out.printf("%-35s", "\n\tКакой счёт хотите добавить >>>");
                         Integer numberAcct;
-                        Integer balance;
+                        BigDecimal balance;
 
                         try {
                             numberAcct = Integer.parseInt(
                                     new BufferedReader(new InputStreamReader(System.in)).readLine());
                             System.out.printf("%-34s", "\tТекущий баланс счёта       >>>");
-                            balance = Integer.parseInt(
+                            balance = new BigDecimal(
                                     new BufferedReader(new InputStreamReader(System.in)).readLine());
                         } catch (NumberFormatException e) {
                             System.err.println("\tНеправильный формат ввода");
@@ -186,7 +183,7 @@ public class ViewService {
                     case 5: {
                         int fromAcct;
                         int toAcct;
-                        int sum;
+                        BigDecimal sum;
                         //CreateTransactionService transactionService;
 
                         System.out.println(line);
@@ -226,9 +223,9 @@ public class ViewService {
                             }
 
                             System.out.print("\tСумма транзакции >>>  ");
-                            sum = Integer.parseInt(
+                            sum = new BigDecimal(
                                     new BufferedReader(new InputStreamReader(System.in)).readLine());
-                            if (sum > accts.get(fromAcct - 1).getBalance()) {
+                            if (sum.compareTo(accts.get(fromAcct - 1).getBalance()) == 1) {
                                 throw new NumberFormatException("Нехватает средств на счете");
                             }
 
@@ -259,13 +256,6 @@ public class ViewService {
             System.out.println(line);
             ifRegistered();
         }
-        /*
-        catch (UserNotFoundException e) {
-            System.out.println("\tПользователь не найден, попробуйте ещё раз\n" +
-                    "\tПопробуйте ещё раз");
-            ifRegistered();
-        }
-        */
 
         catch (EmptyDataAccesException e) {
             System.out.println(line);

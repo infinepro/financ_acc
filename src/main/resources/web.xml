@@ -5,12 +5,12 @@
          version="2.5">
     
     <servlet>
-        <servlet-name>AuthServlet</servlet-name>
-        <servlet-class>ru.maksimka.jb.web.AuthServlet</servlet-class>
+        <servlet-name>MainServlet</servlet-name>
+        <servlet-class>ru.maksimka.jb.web.MainServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AuthServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <url-pattern>/**</url-pattern>
     </servlet-mapping>
 
 

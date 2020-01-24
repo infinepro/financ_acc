@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import ru.maksimka.jb.DAO.UserDAO;
-import ru.maksimka.jb.containers.User;
+import ru.maksimka.jb.DTO.UserDTO;
 import ru.maksimka.jb.exceptions.LoginBusyException;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
@@ -20,7 +20,7 @@ public class UserAuthServiceTest {
 
 
     private UserAuthService subj;
-    private User testUser;
+    private UserDTO testUserDTO;
     private UserDAO userDao;
     private String login;
     private String password;
@@ -28,9 +28,9 @@ public class UserAuthServiceTest {
 
     @Before
     public void setUp() {
-        testUser = new User();
-        testUser.setPassword("password");
-        testUser.setName("login");
+        testUserDTO = new UserDTO();
+        testUserDTO.setPassword("password");
+        testUserDTO.setName("login");
         userDao = mock(UserDAO.class);
         subj = new UserAuthService(userDao);
         login = "login";
@@ -40,20 +40,20 @@ public class UserAuthServiceTest {
 
     @Test
     public void authUser_if_login_found_and_password_ok() throws Exception {
-        when(userDao.findBy(login)).thenReturn(testUser);
+        when(userDao.findBy(login)).thenReturn(testUserDTO);
         assertTrue(subj.authUser(login, password));
     }
 
     @Test(expected = WrongUserPasswordException.class)
     public void authUser_if_login_found_and_wrong_password() throws Exception {
-        testUser.setPassword("wrong password");
-        when(userDao.findBy(login)).thenReturn(testUser);
+        testUserDTO.setPassword("wrong password");
+        when(userDao.findBy(login)).thenReturn(testUserDTO);
         assertTrue(subj.authUser(login, password));
     }
 
     @Test//(expected = UserNotFoundException.class)
     public void authUser_if_login_not_found() throws Exception {
-        testUser.setName("wrong name");
+        testUserDTO.setName("wrong name");
         when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
         assertFalse(subj.authUser(login, password));
     }
@@ -61,7 +61,7 @@ public class UserAuthServiceTest {
     @Test
     public void registerUser_if_login_is_busy() {
         try {
-            when(userDao.findBy("login")).thenReturn(testUser);
+            when(userDao.findBy("login")).thenReturn(testUserDTO);
             assertFalse(subj.registerUser(login, password, email));
         } catch (Exception e) {
             System.out.println("ТЕСТ registerUser_if_login_is_busy провалился");

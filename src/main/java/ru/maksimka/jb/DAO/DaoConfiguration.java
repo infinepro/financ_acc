@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 
@@ -22,6 +21,7 @@ import javax.sql.DataSource;
 public class DaoConfiguration {
 
     @Bean
+    //@Scope(value = "prototype")
     public DataSource dataSource(){
 
         try {

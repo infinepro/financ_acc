@@ -2,7 +2,6 @@ package ru.maksimka.jb.services;
 
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.DAO.AcctDAO;
-import ru.maksimka.jb.DAO.DaoConfiguration;
 import ru.maksimka.jb.DAO.TransactionDAO;
 import ru.maksimka.jb.DTO.AcctDTO;
 import ru.maksimka.jb.DTO.TransactionDTO;
@@ -29,11 +28,9 @@ public class CreateTransactionService {
 
     public void createTransaction(Integer fromAcctId, Integer toAcctId, BigDecimal sum) throws TransactionFailException {
 
-        DaoConfiguration daoConfiguration = new DaoConfiguration();
         Connection connection = null;
 
         try {
-
 
             AcctDTO acctFrom = acctDao.findBy(fromAcctId);
             if (acctFrom == null) {
@@ -53,12 +50,12 @@ public class CreateTransactionService {
             connection.setAutoCommit(false);
 
             TransactionDTO transactionDTOTo = new TransactionDTO()
-                    .withCategory(0)
+                    .withCategory(1)
                     .withSum(sum)
                     .withUniq_account_id(toAcctId);
 
             TransactionDTO transactionDTOFrom = new TransactionDTO()
-                    .withCategory(0)
+                    .withCategory(1)
                     .withSum(sum.negate())
                     .withUniq_account_id(toAcctId);
 
@@ -74,20 +71,13 @@ public class CreateTransactionService {
             connection.close();
 
         } catch (SQLException e) {
+            e.printStackTrace();
             if (connection != null) {
                 try {
                     connection.rollback();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-            }
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
     }

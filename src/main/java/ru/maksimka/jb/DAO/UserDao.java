@@ -61,7 +61,7 @@ public class UserDAO implements DAO<UserDTO, String> {
             preState.setString(1, userDTO.getName());
             preState.setString(2, userDTO.getPassword());
             preState.setString(3, userDTO.getEmail());
-            preState.execute();
+            preState.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

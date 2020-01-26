@@ -1,6 +1,7 @@
 package ru.maksimka.jb.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.maksimka.jb.SpringContext;
 import ru.maksimka.jb.web.controllers.Controller;
 import ru.maksimka.jb.web.controllers.LoginController;
 import ru.maksimka.jb.web.controllers.RegistrationController;
@@ -16,37 +17,22 @@ import java.util.Map;
 
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-
+import static ru.maksimka.jb.SpringContext.*;
 
 public class MainServlet extends HttpServlet {
-    private Map<String, Controller> controllers;
     private ObjectMapper om;
-
-    /*MainServlet() {
-        controllers = new HashMap<>();
-        controllers.put("/login", new LoginController());
-        om = new ObjectMapper();
-    }
-
-     */
 
     @Override
     public void init() throws ServletException {
         super.init();
-        controllers = new HashMap<>();
-        controllers.put("/login", new LoginController());
-        controllers.put("/registration", new RegistrationController());
         om = new ObjectMapper();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String url = req.getRequestURI();
-        Controller controller = controllers.get(url);
+        Controller controller = getContext().getBean(url, Controller.class);
         System.out.println(url);
-
-
-        //resp.setCharacterEncoding("UTF-8");
 
         if (controller == null) {
             resp.setStatus(SC_NOT_FOUND);

@@ -1,5 +1,6 @@
 package ru.maksimka.jb.web.controllers;
 
+import org.springframework.stereotype.Component;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 import ru.maksimka.jb.services.UserAuthService;
 import ru.maksimka.jb.web.json.LoginRequest;
@@ -7,6 +8,7 @@ import ru.maksimka.jb.web.json.LoginResponse;
 
 import static ru.maksimka.jb.SpringContext.*;
 
+@Component("/login")
 public class LoginController implements Controller<LoginRequest, LoginResponse>{
     @Override
     public LoginResponse execute(LoginRequest request) {

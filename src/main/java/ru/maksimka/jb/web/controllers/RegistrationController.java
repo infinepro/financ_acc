@@ -1,13 +1,30 @@
 package ru.maksimka.jb.web.controllers;
 
-public class RegistrationController implements Controller{
+import ru.maksimka.jb.exceptions.LoginBusyException;
+import ru.maksimka.jb.services.UserAuthService;
+import ru.maksimka.jb.web.json.RegistrationRequest;
+import ru.maksimka.jb.web.json.RegistrationResponse;
+
+import static ru.maksimka.jb.SpringContext.*;
+
+public class RegistrationController implements Controller<RegistrationRequest, RegistrationResponse> {
     @Override
-    public Object execute(Object request) {
-        return null;
+    public RegistrationResponse execute(RegistrationRequest request) {
+        UserAuthService userAuthService = getContext().getBean(UserAuthService.class);
+        try {
+            RegistrationResponse response = new RegistrationResponse().withUserId(
+                    userAuthService.registerUser(request.getLogin(), request.getPassword(), request.getEmail()));
+
+            if (response.getUserId() != -1) {
+                return response.withSuccess(true);
+            } else return response.withSuccess(false);
+        } catch (LoginBusyException e) {
+            return new RegistrationResponse().withSuccess(false);
+        }
     }
 
     @Override
     public Class getRequestClass() {
-        return null;
+        return RegistrationRequest.class;
     }
 }

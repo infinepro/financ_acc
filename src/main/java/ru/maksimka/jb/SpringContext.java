@@ -3,7 +3,7 @@ package ru.maksimka.jb;
         import org.springframework.context.ApplicationContext;
         import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class ContextSinglton {
+public class SpringContext {
 
     private static ApplicationContext context;
 

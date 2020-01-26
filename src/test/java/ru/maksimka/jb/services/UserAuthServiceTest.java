@@ -41,28 +41,28 @@ public class UserAuthServiceTest {
     @Test
     public void authUser_if_login_found_and_password_ok() throws Exception {
         when(userDao.findBy(login)).thenReturn(testUserDTO);
-        assertTrue(subj.authUser(login, password));
+        assertNotEquals(subj.authUser(login, password), new Integer(-1));
     }
 
     @Test(expected = WrongUserPasswordException.class)
     public void authUser_if_login_found_and_wrong_password() throws Exception {
         testUserDTO.setPassword("wrong password");
         when(userDao.findBy(login)).thenReturn(testUserDTO);
-        assertTrue(subj.authUser(login, password));
+        assertNotEquals(subj.authUser(login, password), new Integer(-1));
     }
 
     @Test//(expected = UserNotFoundException.class)
     public void authUser_if_login_not_found() throws Exception {
         testUserDTO.setName("wrong name");
         when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
-        assertFalse(subj.authUser(login, password));
+        assertEquals(subj.authUser(login, password), new Integer(-1));
     }
 
     @Test
     public void registerUser_if_login_is_busy() {
         try {
             when(userDao.findBy("login")).thenReturn(testUserDTO);
-            assertFalse(subj.registerUser(login, password, email));
+            assertFalse(subj.registerUser(login, password, email) != -1);
         } catch (Exception e) {
             System.out.println("ТЕСТ registerUser_if_login_is_busy провалился");
         }
@@ -75,7 +75,7 @@ public class UserAuthServiceTest {
         try {
             when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
             when(userDao.insert(anyObject())).thenReturn(true);
-            assertTrue(subj.registerUser(login, password, email));
+            assertTrue(subj.registerUser(login, password, email) != -1);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (UserNotFoundException e) {

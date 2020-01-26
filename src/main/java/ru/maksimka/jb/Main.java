@@ -1,6 +1,6 @@
 package ru.maksimka.jb;
 
-import ru.maksimka.jb.view.ViewService;
+import ru.maksimka.jb.view.ViewConsoleService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,15 +14,15 @@ public class Main {
                 "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
                 "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" + "\n" +
                 "\tВы уже зарегистрированы? (да/нет) >>>  ");
-        ViewService viewService;
+        ViewConsoleService viewConsoleService;
         try {
             String tmp = new BufferedReader(new InputStreamReader(System.in)).readLine();
-            viewService = new ViewService();
+            viewConsoleService = new ViewConsoleService();
             if (tmp.equals("нет") || tmp.equals("Нет") || tmp.equals("НЕТ")) {
-                viewService.ifNotRegistered();
+                viewConsoleService.ifNotRegistered();
             } else if (tmp.equals("да") || tmp.equals("Да") || tmp.equals("ДА")) {
                 while (true) {
-                    viewService.ifRegistered();
+                    viewConsoleService.ifRegistered();
                 }
             } else {
                 System.err.println("Некорректный ввод");

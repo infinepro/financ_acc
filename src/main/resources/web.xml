@@ -9,8 +9,8 @@
         <servlet-class>ru.maksimka.jb.web.MainServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AuthServlet</servlet-name>
-        <url-pattern>/**</url-pattern>
+        <servlet-name>MainServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
 

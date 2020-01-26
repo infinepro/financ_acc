@@ -18,40 +18,47 @@ public class UserAuthService {
         this.userDao = userDao;
     }
 
-    public boolean authUser(String login, String password) throws WrongUserPasswordException{
+    public Integer authUser(String login, String password) throws WrongUserPasswordException {
 
         try {
             UserDTO userDTO = userDao.findBy(login);
             if (userDTO != null) {
                 if (userDTO.getPassword().equals(password)) {
-                    return true;
+                    return userDTO.getId();
                 } else throw new WrongUserPasswordException("Неправильный пароль");
-            } else return false;
+            } else return -1;
         } catch (SQLException e) {
-            return false;
+            return -1;
         } catch (UserNotFoundException e) {
             System.err.println("Неправильный логин");
-            return false;
+            return -1;
         }
     }
 
-    public boolean registerUser(String login, String password, String email) throws LoginBusyException {
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail(email);
-        userDTO.setName(login);
-        userDTO.setPassword(password);
+    public Integer registerUser(String login, String password, String email) throws LoginBusyException {
+
+        UserDTO userDTO = new UserDTO()
+                .withName(login)
+                .withPassword(password)
+                .withEmail(email);
+
         try {
             try {
                 if (userDao.findBy(login) != null) {
                     throw new LoginBusyException("\n\tЛогин занят, придумайте другой");
                 }
             } catch (UserNotFoundException e) {
-                return userDao.insert(userDTO);
+                if (userDao.insert(userDTO)) {
+                    return userDao.findBy(login).getId();
+                }
+                return -1;
             }
-        } catch (SQLException e) {
+
+        } catch (SQLException | UserNotFoundException e) {
             e.printStackTrace();
+            return -1;
         }
-        return false;
+        return -1;
     }
 }

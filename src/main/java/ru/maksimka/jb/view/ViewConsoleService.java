@@ -3,6 +3,7 @@ package ru.maksimka.jb.view;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.maksimka.jb.DTO.AcctDTO;
+import ru.maksimka.jb.SpringContext;
 import ru.maksimka.jb.exceptions.*;
 import ru.maksimka.jb.services.*;
 
@@ -13,8 +14,10 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static ru.maksimka.jb.SpringContext.*;
 
-public class ViewService {
+
+public class ViewConsoleService {
 
     private final String line = "|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|" +
             "-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|";
@@ -28,10 +31,10 @@ public class ViewService {
     private CreateTransactionService transactionService;
     private UserOperationsService operations;
 
-    public ViewService() {
+    public ViewConsoleService() {
         this.login = "";
         this.login = "";
-        this.context = new AnnotationConfigApplicationContext("ru.maksimka.jb");
+        this.context = getContext();
         this.ifSignIn = false;
         this.userAuth = context.getBean(UserAuthService.class);
         this.transactionService = context.getBean(CreateTransactionService.class);
@@ -58,7 +61,7 @@ public class ViewService {
                 throw new EmptyDataAccesException("Пустой пароль недопустим");
             }
 
-            if (ifSignIn || userAuth.authUser(login, password)) {
+            if (ifSignIn || userAuth.authUser(login, password) != -1) {
                 ifSignIn = true;
                 operations.setLogin(login);
 
@@ -276,7 +279,7 @@ public class ViewService {
             String password = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
             try {
-                if (userAuth.registerUser(login, password, email)) {
+                if (userAuth.registerUser(login, password, email) != -1) {
                     System.out.println(line + "\n" + "\tВы успешно зарегистрировались, можете войти в стистему");
                     ifRegistered();
                 }

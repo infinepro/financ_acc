@@ -2,7 +2,6 @@ package ru.maksimka.jb.web.controllers;
 
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
-import ru.maksimka.jb.services.UserAuthService;
 import ru.maksimka.jb.web.json.LoginRequest;
 import ru.maksimka.jb.web.json.LoginResponse;
 

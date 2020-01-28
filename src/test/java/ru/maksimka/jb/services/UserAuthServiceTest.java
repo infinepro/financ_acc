@@ -4,13 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import ru.maksimka.jb.DAO.UserDAO;
-import ru.maksimka.jb.DTO.UserDTO;
+import ru.maksimka.jb.dao.implementations.UserDao;
+import ru.maksimka.jb.entities.UserDataSet;
 import ru.maksimka.jb.exceptions.LoginBusyException;
 import ru.maksimka.jb.exceptions.UserNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
-
-import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -20,18 +18,18 @@ public class UserAuthServiceTest {
 
 
     private UserAuthService subj;
-    private UserDTO testUserDTO;
-    private UserDAO userDao;
+    private UserDataSet testUserDataSet;
+    private UserDao userDao;
     private String login;
     private String password;
     private String email;
 
     @Before
     public void setUp() {
-        testUserDTO = new UserDTO();
-        testUserDTO.setPassword("password");
-        testUserDTO.setName("login");
-        userDao = mock(UserDAO.class);
+        testUserDataSet = new UserDataSet();
+        testUserDataSet.setPassword("password");
+        testUserDataSet.setName("login");
+        userDao = mock(UserDao.class);
         subj = new UserAuthService(userDao);
         login = "login";
         password = "password";
@@ -40,20 +38,20 @@ public class UserAuthServiceTest {
 
     @Test
     public void authUser_if_login_found_and_password_ok() throws Exception {
-        when(userDao.findBy(login)).thenReturn(testUserDTO);
+        when(userDao.findBy(login)).thenReturn(testUserDataSet);
         assertNotEquals(subj.authUser(login, password), new Integer(-1));
     }
 
     @Test(expected = WrongUserPasswordException.class)
     public void authUser_if_login_found_and_wrong_password() throws Exception {
-        testUserDTO.setPassword("wrong password");
-        when(userDao.findBy(login)).thenReturn(testUserDTO);
+        testUserDataSet.setPassword("wrong password");
+        when(userDao.findBy(login)).thenReturn(testUserDataSet);
         assertNotEquals(subj.authUser(login, password), new Integer(-1));
     }
 
     @Test//(expected = UserNotFoundException.class)
     public void authUser_if_login_not_found() throws Exception {
-        testUserDTO.setName("wrong name");
+        testUserDataSet.setName("wrong name");
         when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
         assertEquals(subj.authUser(login, password), new Integer(-1));
     }
@@ -61,7 +59,7 @@ public class UserAuthServiceTest {
     @Test
     public void registerUser_if_login_is_busy() {
         try {
-            when(userDao.findBy("login")).thenReturn(testUserDTO);
+            when(userDao.findBy("login")).thenReturn(testUserDataSet);
             assertFalse(subj.registerUser(login, password, email) != -1);
         } catch (Exception e) {
             System.out.println("ТЕСТ registerUser_if_login_is_busy провалился");
@@ -76,11 +74,7 @@ public class UserAuthServiceTest {
             when(userDao.findBy(login)).thenThrow(UserNotFoundException.class);
             when(userDao.insert(anyObject())).thenReturn(true);
             assertTrue(subj.registerUser(login, password, email) != -1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        } catch (LoginBusyException e) {
+        } catch (UserNotFoundException | LoginBusyException e) {
             e.printStackTrace();
         }
     }

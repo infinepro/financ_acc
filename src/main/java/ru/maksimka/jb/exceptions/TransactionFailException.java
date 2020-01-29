@@ -1,13 +1,13 @@
 package ru.maksimka.jb.exceptions;
 
-import ru.maksimka.jb.Main;
+public class TransactionFailException extends MyExceptions{
+    protected String message;
 
-public class TransactionFailException extends Exception{
-    public TransactionFailException (String message) {
-        System.err.println("\t" + message);
+    public void showMessage (){
+        System.err.println("\t" + this.message);
     }
 
-    public TransactionFailException() {
-
+    public TransactionFailException(String message) {
+        this.message = message;
     }
 }

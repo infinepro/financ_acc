@@ -11,7 +11,7 @@ import java.util.List;
 public class AccountDao implements Dao<AccountEntity, String> {
 
     @Override//NOT IMPLEMENTED
-    public AccountEntity findById(String accountName) throws Exception {
+    public AccountEntity findBy(String accountName) throws Exception {
         return null;
     }
 

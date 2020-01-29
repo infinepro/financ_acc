@@ -1,12 +1,18 @@
 package ru.maksimka.jb.exceptions;
 
-import ru.maksimka.jb.Main;
-
-public class CommandNodFoundException extends Exception{
-    public CommandNodFoundException() {
-    }
+public class CommandNodFoundException extends MyExceptions{
 
     public CommandNodFoundException(String message) {
-        System.err.println("\t" + message);
+        this.message = message;
     }
+
+    protected String message;
+
+    public void showMessage (){
+        System.err.println("\t" + this.message);
+    }
+
+
+
+
 }

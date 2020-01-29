@@ -1,13 +1,13 @@
 package ru.maksimka.jb.exceptions;
 
-import ru.maksimka.jb.Main;
+public class UserNotFoundException extends MyExceptions {
+    protected String message;
 
-public class UserNotFoundException extends Exception {
-    public UserNotFoundException() {
+    public void showMessage (){
+        System.err.println("\t" + this.message);
     }
 
     public UserNotFoundException(String message) {
-        System.err.println("\t" + message);
+        this.message = message;
     }
-
 }

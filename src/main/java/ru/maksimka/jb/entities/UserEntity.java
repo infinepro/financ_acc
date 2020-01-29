@@ -18,10 +18,10 @@ public class UserEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name" ,unique = true, nullable = false)
     private String name;
 
     @Column(name = "password")
@@ -30,13 +30,16 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<AccountEntity> accountsList;
 
     @Override
     public String toString() {
-        return "User {\n \tid = '" + id + "' \n\t" +
-                "name = '" + name + "' \n\t" +
-                "password = '" + password + "'  }";
+        return "UserEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

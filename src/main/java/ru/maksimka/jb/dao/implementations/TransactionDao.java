@@ -11,7 +11,7 @@ import java.util.List;
 public class TransactionDao implements Dao<TransactionEntity, Object> {
 
     @Override//NOT IMPLEMENTED
-    public TransactionEntity findById(Object o) throws Exception {
+    public TransactionEntity findBy(Object o) throws Exception {
         return null;
     }
 

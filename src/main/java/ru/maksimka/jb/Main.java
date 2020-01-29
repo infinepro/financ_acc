@@ -2,8 +2,8 @@ package ru.maksimka.jb;
 
 import ru.maksimka.jb.dao.implementations.UserDao;
 import ru.maksimka.jb.entities.UserEntity;
-import ru.maksimka.jb.exceptions.LoginIsBusyException;
-import ru.maksimka.jb.exceptions.UserNotFoundException;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import static ru.maksimka.jb.SpringContext.*;
 
@@ -19,9 +19,9 @@ public class Main {
         UserDao userDao = getContext().getBean(UserDao.class);
 
         try {
-            userDao.delete("test");
+            userDao.insert(user);
 
-        } catch (UserNotFoundException e) {
+        } catch ( AlreadyExistsException e) {
             e.printStackTrace();
         }
 

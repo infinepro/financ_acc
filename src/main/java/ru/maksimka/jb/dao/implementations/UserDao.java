@@ -1,19 +1,17 @@
 package ru.maksimka.jb.dao.implementations;
 
+import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.UserEntity;
-import ru.maksimka.jb.exceptions.LoginIsBusyException;
-import ru.maksimka.jb.exceptions.UserNotFoundException;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 import java.util.List;
-
-import static ru.maksimka.jb.SpringContext.getContext;
 
 @Service
 public class UserDao implements Dao<UserEntity, String> {
@@ -25,7 +23,7 @@ public class UserDao implements Dao<UserEntity, String> {
     }
 
     @Override
-    public List<UserEntity> findByAll() throws Exception {
+    public List<UserEntity> findByAll() {
         return em.createQuery("SELECT a FROM UserEntity a").getResultList();
     }
 
@@ -43,13 +41,10 @@ public class UserDao implements Dao<UserEntity, String> {
     }
 
     @Override
-    public UserEntity insert(UserEntity userEntity) throws LoginIsBusyException {
-        //if login is busy
+    public UserEntity insert(UserEntity userEntity) throws AlreadyExistsException {
         if (findBy(userEntity.getName()) != null) {
-            throw new LoginIsBusyException("логин занят другим пользователем, insert failed");
+            throw new AlreadyExistsException("логин занят другим пользователем, insert failed");
         }
-        //insert
-        EntityManager em = getContext().getBean(EntityManager.class);
         em.getTransaction().begin();
         em.persist(userEntity);
         em.getTransaction().commit();
@@ -57,13 +52,11 @@ public class UserDao implements Dao<UserEntity, String> {
     }
 
     @Override
-    public UserEntity update(UserEntity userEntity) throws UserNotFoundException {
-        //if login is busy
+    public UserEntity update(@NotNull UserEntity userEntity) throws RecordNotFoundException {
         UserEntity userEntityOld = findBy(userEntity.getName());
         if (userEntityOld == null) {
-            throw new UserNotFoundException("пользователь не найден, update failed");
+            throw new RecordNotFoundException("пользователь не найден, update failed");
         }
-        //update
         userEntityOld.setPassword(userEntity.getPassword());
         userEntityOld.setEmail(userEntity.getEmail());
         em.getTransaction().begin();
@@ -73,11 +66,11 @@ public class UserDao implements Dao<UserEntity, String> {
     }
 
     @Override
-    public boolean delete(String login) throws UserNotFoundException {
+    public boolean delete(String login) throws RecordNotFoundException {
         UserEntity userEntityOld = em.merge(findBy(login));
 
         if (userEntityOld == null) {
-            throw new UserNotFoundException("пользователь не найден, delete failed");
+            throw new RecordNotFoundException("пользователь не найден, delete failed");
         }
         em.getTransaction().begin();
         em.remove(userEntityOld);

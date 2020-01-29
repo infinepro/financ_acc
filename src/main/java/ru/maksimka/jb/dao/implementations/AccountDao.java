@@ -1,38 +1,77 @@
 package ru.maksimka.jb.dao.implementations;
 
+import com.sun.istack.NotNull;
+import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.AccountEntity;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 
 @Service
-public class AccountDao implements Dao<AccountEntity, String> {
+public class AccountDao implements Dao<AccountEntity, Integer> {
 
-    @Override//NOT IMPLEMENTED
-    public AccountEntity findBy(String accountName) throws Exception {
-        return null;
+    private EntityManager em;
+
+    public AccountDao(EntityManager em) {
+        this.em = em;
     }
 
-    @Override//NOT IMPLEMENTED
-    public List<AccountEntity> findByAll() throws Exception {
-        return null;
+    @Override
+    @Nullable
+    public AccountEntity findBy(Integer id) {
+        try {
+            return (AccountEntity) em.createQuery(
+                    "SELECT a FROM AccountEntity a WHERE a.id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
-    @Override//NOT IMPLEMENTED
-    public AccountEntity insert(AccountEntity accountEntity) throws Exception {
-        return null;
+    @Override
+    public List<AccountEntity> findByAll() {
+        return em.createQuery("SELECT a FROM AccountEntity a").getResultList();
     }
 
-    @Override//NOT IMPLEMENTED
-    public AccountEntity update(AccountEntity accountEntity) throws Exception {
-        return null;
+    @Override
+    public AccountEntity insert(@NotNull AccountEntity accountEntity) {
+        em.getTransaction().begin();
+        em.persist(accountEntity);
+        em.getTransaction().commit();
+        return accountEntity;
     }
 
-    @Override//NOT IMPLEMENTED
-    public boolean delete(String accountName) throws Exception {
-        return false;
+    @Override
+    public AccountEntity update(AccountEntity accountEntity) throws RecordNotFoundException {
+        AccountEntity accountEntityOld = findBy(accountEntity.getId());
+        if (accountEntityOld == null) {
+            throw new RecordNotFoundException("счет не найден, update failed");
+        }
+        accountEntityOld.setAccountName(accountEntity.getAccountName());
+        accountEntityOld.setBalance(accountEntity.getBalance());
+        em.getTransaction().begin();
+        em.merge(accountEntityOld);
+        em.getTransaction().commit();
+        return accountEntityOld;
+    }
+
+    @Override
+    public boolean delete(Integer id) throws RecordNotFoundException {
+        AccountEntity accountEntityOld = em.merge(findBy(id));
+
+        if (accountEntityOld == null) {
+            throw new RecordNotFoundException("счет не найден, delete failed");
+        }
+        em.getTransaction().begin();
+        em.remove(accountEntityOld);
+        em.getTransaction().commit();
+        return true;
     }
 }
 

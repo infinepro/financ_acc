@@ -1,13 +1,13 @@
 package ru.maksimka.jb.exceptions;
 
-public class LoginIsBusyException extends MyExceptions {
+public class RecordNotFoundException extends MyExceptions {
     protected String message;
 
     public void showMessage (){
         System.err.println("\t" + this.message);
     }
 
-    public LoginIsBusyException(String message) {
+    public RecordNotFoundException(String message) {
         this.message = message;
     }
 }

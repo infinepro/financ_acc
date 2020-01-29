@@ -3,36 +3,81 @@ package ru.maksimka.jb.dao.implementations;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.AccountNamesEntity;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 
 @Service
-public class AccountNamesDao implements Dao<AccountNamesEntity, String> {
+public class AccountNamesDao implements Dao<AccountNamesEntity, Integer> {
 
-    @Override//NOT IMPLEMENTED
-    public AccountNamesEntity findBy(String accountName) throws Exception {
-        return null;
+    private EntityManager em;
+
+    public AccountNamesDao(EntityManager em) {
+        this.em = em;
     }
 
-    @Override//NOT IMPLEMENTED
-    public List<AccountNamesEntity> findByAll() throws Exception {
-        return null;
+    @Override
+    public AccountNamesEntity findBy(Integer id) {
+        try {
+            return (AccountNamesEntity) em.createQuery(
+                    "SELECT a FROM AccountNamesEntity a WHERE a.id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
-    @Override//NOT IMPLEMENTED
-    public AccountNamesEntity insert(AccountNamesEntity accountNamesEntity) throws Exception {
-        return null;
+    @Override
+    public List<AccountNamesEntity> findByAll() {
+        return em.createQuery("SELECT a FROM AccountNamesEntity a").getResultList();
     }
 
-    @Override//NOT IMPLEMENTED
-    public AccountNamesEntity update(AccountNamesEntity accountNamesEntity) throws Exception {
-        return null;
+    @Override
+    public AccountNamesEntity insert(AccountNamesEntity accountNamesEntity) throws AlreadyExistsException  {
+
+        List<AccountNamesEntity> list;
+        list = findByAll();
+        for (AccountNamesEntity ac : list) {
+            if (ac.getAccountName().equals(accountNamesEntity.getAccountName())) {
+                throw new AlreadyExistsException("счет с таким названием уже имеется в базе, insert failed");
+            }
+        }
+
+        em.getTransaction().begin();
+        em.persist(accountNamesEntity);
+        em.getTransaction().commit();
+        return accountNamesEntity;
     }
 
-    @Override//NOT IMPLEMENTED
-    public boolean delete(String accountName) throws Exception {
-        return false;
+    @Override
+    public AccountNamesEntity update(AccountNamesEntity accountNamesEntity) throws RecordNotFoundException {
+        AccountNamesEntity accountNamesEntityOld = findBy(accountNamesEntity.getId());
+        if (accountNamesEntityOld == null) {
+            throw new RecordNotFoundException("данный тип счета не найден, update failed");
+        }
+        accountNamesEntityOld.setAccountName(accountNamesEntityOld.getAccountName());
+        em.getTransaction().begin();
+        em.merge(accountNamesEntityOld);
+        em.getTransaction().commit();
+        return accountNamesEntityOld;
+    }
+
+    @Override
+    public boolean delete(Integer id) throws Exception {
+        AccountNamesEntity accountNamesEntityOld = em.merge(findBy(id));
+
+        if (accountNamesEntityOld == null) {
+            throw new RecordNotFoundException("данный тип счета не найден, delete failed");
+        }
+        em.getTransaction().begin();
+        em.remove(accountNamesEntityOld);
+        em.getTransaction().commit();
+        return true;
     }
 
 }

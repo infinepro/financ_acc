@@ -53,8 +53,9 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         if (accountEntityOld == null) {
             throw new RecordNotFoundException("счет не найден, update failed");
         }
-        accountEntityOld.setAccountName(accountEntity.getAccountName());
-        accountEntityOld.setBalance(accountEntity.getBalance());
+        accountEntityOld.withAccountName(accountEntity.getAccountName())
+                .withBalance(accountEntity.getBalance());
+
         em.getTransaction().begin();
         em.merge(accountEntityOld);
         em.getTransaction().commit();

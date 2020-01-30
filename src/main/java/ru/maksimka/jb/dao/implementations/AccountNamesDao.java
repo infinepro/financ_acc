@@ -1,5 +1,6 @@
 package ru.maksimka.jb.dao.implementations;
 
+import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.AccountNamesEntity;
@@ -21,6 +22,7 @@ public class AccountNamesDao implements Dao<AccountNamesEntity, Integer> {
     }
 
     @Override
+    @Nullable
     public AccountNamesEntity findBy(Integer id) {
         try {
             return (AccountNamesEntity) em.createQuery(
@@ -60,7 +62,8 @@ public class AccountNamesDao implements Dao<AccountNamesEntity, Integer> {
         if (accountNamesEntityOld == null) {
             throw new RecordNotFoundException("данный тип счета не найден, update failed");
         }
-        accountNamesEntityOld.setAccountName(accountNamesEntityOld.getAccountName());
+        accountNamesEntityOld.withAccountName(accountNamesEntityOld.getAccountName());
+
         em.getTransaction().begin();
         em.merge(accountNamesEntityOld);
         em.getTransaction().commit();

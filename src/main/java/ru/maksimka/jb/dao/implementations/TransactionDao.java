@@ -1,37 +1,82 @@
 package ru.maksimka.jb.dao.implementations;
 
+import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.TransactionEntity;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 
 @Service
-public class TransactionDao implements Dao<TransactionEntity, Object> {
+public class TransactionDao implements Dao<TransactionEntity, Integer> {
 
-    @Override//NOT IMPLEMENTED
-    public TransactionEntity findBy(Object o) throws Exception {
-        return null;
+    private EntityManager em;
+
+    public TransactionDao(EntityManager em) {
+        this.em = em;
     }
 
-    @Override//NOT IMPLEMENTED
-    public List<TransactionEntity> findByAll() throws Exception {
-        return null;
+    public List<TransactionEntity> findByDate(Integer id) {
+        return em.createQuery("SELECT a FROM TransactionEntity a WHERE a.date = :date").getResultList();
     }
 
-    @Override//NOT IMPLEMENTED
-    public TransactionEntity insert(TransactionEntity transactionEntity) throws Exception {
-        return null;
+    @Override
+    @Nullable
+    public TransactionEntity findBy(Integer id) {
+        try {
+            return (TransactionEntity) em.createQuery(
+                    "SELECT a FROM TransactionEntity a WHERE a.id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
-    @Override//NOT IMPLEMENTED
+    @Override
+    public List<TransactionEntity> findByAll() {
+        return em.createQuery("SELECT a FROM TransactionEntity a").getResultList();
+    }
+
+    @Override
+    public TransactionEntity insert(TransactionEntity transactionEntity) {
+        em.getTransaction().begin();
+        em.persist(transactionEntity);
+        em.getTransaction().commit();
+        return transactionEntity;
+    }
+
+    @Override
+
     public TransactionEntity update(TransactionEntity transactionEntity) throws Exception {
-        return null;
+        TransactionEntity transactionEntityOld = findBy(transactionEntity.getId());
+        if (transactionEntity == null) {
+            throw new RecordNotFoundException("транзакция не найдена, update failed");
+        }
+        transactionEntityOld.withSum(transactionEntity.getSum())
+                .withAccount(transactionEntity.getAccount())
+                .withTransactionCategory(transactionEntity.getTransactionCategory());
+
+        em.getTransaction().begin();
+        em.merge(transactionEntityOld);
+        em.getTransaction().commit();
+        return transactionEntityOld;
     }
 
-    @Override//NOT IMPLEMENTED
-    public boolean delete(Object parameter) throws Exception {
-        return false;
+    @Override
+    public boolean delete(Integer id) throws Exception {
+        TransactionEntity transactionEntity = em.merge(findBy(id));
+
+        if (transactionEntity == null) {
+            throw new RecordNotFoundException("транзакция не найдена, delete failed");
+        }
+        em.getTransaction().begin();
+        em.remove(transactionEntity);
+        em.getTransaction().commit();
+        return true;
     }
 }

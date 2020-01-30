@@ -57,8 +57,9 @@ public class UserDao implements Dao<UserEntity, String> {
         if (userEntityOld == null) {
             throw new RecordNotFoundException("пользователь не найден, update failed");
         }
-        userEntityOld.setPassword(userEntity.getPassword());
-        userEntityOld.setEmail(userEntity.getEmail());
+        userEntityOld.withPassword(userEntity.getPassword())
+                .withEmail(userEntity.getEmail());
+
         em.getTransaction().begin();
         em.merge(userEntityOld);
         em.getTransaction().commit();

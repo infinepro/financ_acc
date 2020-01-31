@@ -1,4 +1,4 @@
-package ru.maksimka.jb;
+package ru.maksimka.jb.configurations;
 
         import org.springframework.context.ApplicationContext;
         import org.springframework.context.annotation.AnnotationConfigApplicationContext;

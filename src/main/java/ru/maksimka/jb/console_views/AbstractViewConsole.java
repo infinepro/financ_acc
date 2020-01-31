@@ -11,6 +11,12 @@ import java.util.List;
 
 public abstract class AbstractViewConsole {
 
+    protected void printLine(){
+        System.out.println( "#########################################################\n" +
+                            "---------------------------------------------------------\n" +
+                            "#########################################################");
+    }
+
     protected void print(String s) {
         System.out.println(s);
     }

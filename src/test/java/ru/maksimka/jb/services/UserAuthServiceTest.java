@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import ru.maksimka.jb.dao.implementations.UserDao;
+import ru.maksimka.jb.dao.to_entity_converter_impl.UserDao;
 import ru.maksimka.jb.entities.UserDataSet;
 import ru.maksimka.jb.exceptions.LoginBusyException;
 import ru.maksimka.jb.exceptions.UserNotFoundException;

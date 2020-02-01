@@ -16,41 +16,26 @@ import static ru.maksimka.jb.services.AuthStatus.NOT_AUTH;
 public class UserService {
 
     private UserDao userDao;
-    private AuthStatus authStatus;
     //private AccountService accountService;
     //private TransactionService transactionService;
 
     public UserService(UserDao userDao) {
         this.userDao = userDao;
-        authStatus = NOT_AUTH;
     }
-
-    public AuthStatus getAuthStatus() {
-        return this.authStatus;
-    }
-
-    private void setAuthStatus(AuthStatus authStatus) {
-        this.authStatus = authStatus;
-    }
-
-    //private void initServices(){}
 
     public void registration(UserDto userDto) throws AlreadyExistsException {
         userDao.insert(new UserToEntityConverter().convert(userDto));
     }
 
-    public boolean signIn(UserDto userDto) throws RecordNotFoundException, WrongUserPasswordException {
+    public AuthStatus signIn(UserDto userDto) throws RecordNotFoundException, WrongUserPasswordException {
 
         UserEntity userEntity = userDao.findBy(userDto.getName());
         if (userEntity == null) {
-            setAuthStatus(NOT_AUTH);
             throw new RecordNotFoundException("такого логина несуществует");
         } else if (!userEntity.getPassword().equals(userDto.getPassword())) {
-            setAuthStatus(NOT_AUTH);
             throw new WrongUserPasswordException("неверный пароль или логин");
         } else {
-            setAuthStatus(AUTH);
-            return true;
+            return AuthStatus.AUTH;
         }
 
     }

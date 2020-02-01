@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -13,6 +14,9 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @With
+
+//spring
+@Component
 public class TransactionDto {
     private Integer id;
     private String accountName;

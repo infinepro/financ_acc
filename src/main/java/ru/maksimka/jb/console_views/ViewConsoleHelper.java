@@ -9,20 +9,19 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
 
-public abstract class AbstractViewConsole {
+public abstract class ViewConsoleHelper {
 
     protected void printLine(){
-        System.out.println( "#########################################################\n" +
-                            "---------------------------------------------------------\n" +
-                            "#########################################################");
+        System.out.println( "\n################################################" +
+                                "#####################################");
     }
 
     protected void print(String s) {
-        System.out.println(s);
+        System.out.print(s);
     }
 
     protected void printErr(String s) {
-        System.err.println(s);
+        System.err.print(s);
     }
 
     //NOT IMPL
@@ -35,7 +34,7 @@ public abstract class AbstractViewConsole {
     }
 
     protected String readStringFromConsole() throws IOException {
-        return new BufferedReader(new InputStreamReader(System.in)).readLine();
+        return (new BufferedReader(new InputStreamReader(System.in))).readLine();
     }
 
     protected BigDecimal readNumberFromConsole() throws NumberFormatException, IOException {

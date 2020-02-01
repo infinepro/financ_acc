@@ -1,12 +1,16 @@
 package ru.maksimka.jb.dto;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 //lombok
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @With
+
+//spring
+@Component
 public class UserDto {
 
     private Integer id;

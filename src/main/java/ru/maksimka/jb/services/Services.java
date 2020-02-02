@@ -1,6 +1,7 @@
 package ru.maksimka.jb.services;
 
 import ru.maksimka.jb.dto.AccountDto;
+import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
@@ -8,6 +9,7 @@ import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface Services {
 
@@ -25,6 +27,10 @@ public interface Services {
 
 
     //account operations
+    public List<AccountDto> getAllAccounts();
+
+    public List<AccountNameDto> getAllAccountNames();
+
     boolean addNewAccount( Integer accNameId, BigDecimal balance) throws NotAuthorizedException;
 
     boolean deleteAccount(Integer id);

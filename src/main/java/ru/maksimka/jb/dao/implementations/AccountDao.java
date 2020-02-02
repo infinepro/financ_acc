@@ -34,6 +34,10 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         }
     }
 
+    public List<AccountEntity> findByAllOnePerson(Integer ownerId) {
+        return em.createQuery("SELECT a FROM AccountEntity a WHERE a.owner.id = :ownerId").getResultList();
+    }
+
     @Override
     public List<AccountEntity> findByAll() {
         return em.createQuery("SELECT a FROM AccountEntity a").getResultList();

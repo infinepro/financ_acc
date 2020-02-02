@@ -1,6 +1,8 @@
 package ru.maksimka.jb.console_views;
 
+import ru.maksimka.jb.dao.implementations.AccountNamesDao;
 import ru.maksimka.jb.dto.AccountDto;
+import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionDto;
 
 import java.io.BufferedReader;
@@ -24,13 +26,20 @@ public abstract class ViewConsoleHelper {
         System.err.print(s);
     }
 
-    //NOT IMPL
     protected void printListUserAccounts(List<AccountDto> list) {
-
+        int count = 1;
+        for (AccountDto dto : list) {
+            System.out.printf(
+                    "%-4s%-30s%10s%5s%n", (count++ + "."), dto.getNameAccount(), dto.getBalance(), "руб.");
+        }
     }
 
-    protected void printListNameAccounts() {
-
+    protected void printListNameAccounts(List<AccountNameDto> list) {
+        int count = 1;
+        for (AccountNameDto dto : list) {
+            System.out.printf(
+                    "%-4s%-30s%n", ( "\t\t(" + count++ + ")"), dto.getAccountName());
+        }
     }
 
     protected void printListTransactions(List<TransactionDto> list) {

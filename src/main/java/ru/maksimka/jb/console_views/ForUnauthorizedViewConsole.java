@@ -131,7 +131,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
                 printLine();
                 print("\tВы успешно авторизовались");
                 printLine();
-                break;
+                getAuthView(getStatus());
 
             } catch (IOException e) {
                 printErr("\tнепредвиденная ошибка");

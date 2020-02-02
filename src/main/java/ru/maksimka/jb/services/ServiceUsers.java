@@ -2,11 +2,15 @@ package ru.maksimka.jb.services;
 
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.configurations.SpringContext;
+import ru.maksimka.jb.converters.Converter;
+import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
+import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.converters.to_entity_impl.UserToEntityConverter;
 import ru.maksimka.jb.dao.implementations.AccountDao;
 import ru.maksimka.jb.dao.implementations.AccountNamesDao;
 import ru.maksimka.jb.dao.implementations.UserDao;
 import ru.maksimka.jb.dto.AccountDto;
+import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionDto;
 import ru.maksimka.jb.dto.UserDto;
 import ru.maksimka.jb.entities.AccountEntity;
@@ -19,6 +23,7 @@ import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceUsers implements Services {
@@ -30,18 +35,14 @@ public class ServiceUsers implements Services {
     private UserEntity userEntity;
     private List<AccountEntity> list;
 
-    private ServiceTransactions serviceTransactions;
-    private ServiceAccounts serviceAccounts;
-
-    public ServiceUsers(UserDao userDao, AccountDao accountDao) {
+    public ServiceUsers(UserDao userDao, AccountDao accountDao, AccountNamesDao accountNamesDao) {
         this.userDao = userDao;
         this.accountDao = accountDao;
+        this.accountNamesDao = accountNamesDao;
     }
 
-    private void setUserEntity(UserEntity userEntity){
+    private void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
-        this.serviceAccounts = SpringContext.getContext().getBean(ServiceAccounts.class).setUserEntity(userEntity);
-        this.serviceTransactions = SpringContext.getContext().getBean(ServiceTransactions.class).setUserEntity(userEntity);
     }
 
     private void checkUserEntityForNull() throws NotAuthorizedException {
@@ -64,9 +65,9 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public boolean changeEmail(String newEmail) throws NotAuthorizedException{
+    public boolean changeEmail(String newEmail) throws NotAuthorizedException {
         checkUserEntityForNull();
-        userEntity.setPassword(newEmail);
+        userEntity.setEmail(newEmail);
         try {
             userDao.update(userEntity);
         } catch (RecordNotFoundException e) {
@@ -77,7 +78,7 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public void deleteUser() throws NotAuthorizedException{
+    public void deleteUser() throws NotAuthorizedException {
         checkUserEntityForNull();
         try {
             userDao.delete(userEntity.getName());
@@ -85,6 +86,23 @@ public class ServiceUsers implements Services {
             e.printStackTrace();
             return;
         }
+    }
+
+    @Override
+    public List<AccountDto> getAllAccounts() {
+        return accountDao.findByAllOnePerson(userEntity
+                .getId())
+                .stream()
+                .map(new AccountToDtoConverter()::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AccountNameDto> getAllAccountNames() {
+        return accountNamesDao.findByAll()
+                .stream()
+                .map(new AccountNameToDtoConverter()::convert)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -124,7 +142,6 @@ public class ServiceUsers implements Services {
     public boolean deleteTransaction(Integer id) {
         return false;
     }
-
 
 
     @Override

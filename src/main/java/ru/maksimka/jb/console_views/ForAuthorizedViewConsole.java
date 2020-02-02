@@ -1,10 +1,13 @@
 package ru.maksimka.jb.console_views;
 
 import org.springframework.stereotype.Component;
+import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.services.Services;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Component
 public class ForAuthorizedViewConsole extends ViewConsoleHelper {
@@ -60,10 +63,10 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
         printLine();
         print("\tВыберите доступные действия: \n");
-        print("\t\t>>> (0) ...назад \n");
-        print("\t\t>>> (1) Изменить пароль \n");
-        print("\t\t>>> (2) Изменить емаил \n");
-        print("\t\t>>> (3) Удалить пользователя \n");
+        print("\t\t> (0) ...назад \n");
+        print("\t\t> (1) Изменить пароль \n");
+        print("\t\t> (2) Изменить емаил \n");
+        print("\t\t> (3) Удалить пользователя \n");
         print("\t\t>>>>> ");
 
         try {
@@ -105,7 +108,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                         serviceUsers.deleteUser();
                     }
                     printLine();
-                    print("Пользователь удалён");
+                    print("\tПользователь удалён");
                     new WelcomeView().getWelcome();
                     break;
                 }
@@ -125,11 +128,11 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
         printLine();
         print("\tВыберите доступные действия: \n");
-        print("\t\t>>> (0) ...назад \n");
-        print("\t\t>>> (1) Добавить новый счет \n");
-        print("\t\t>>> (2) Добавить новый тип счёта \n");
-        print("\t\t>>> (3) Удалить счет \n");
-        print("\t\t>>> (4) Удалить тип счета\n");
+        print("\t\t> (0) ...назад \n");
+        print("\t\t> (1) Добавить новый счет \n");
+        print("\t\t> (2) Добавить новый тип счёта \n");
+        print("\t\t> (3) Удалить счет \n");
+        print("\t\t> (4) Удалить тип счета\n");
         print("\t\t>>>>> ");
 
         try {
@@ -140,7 +143,26 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 1: {
-                    serviceUsers
+                    printLine();
+                    print("\tВыберите из списка тип счета который хотите добавить:\n");
+                    List<AccountNameDto> list = serviceUsers.getAllAccountNames();
+                    printListNameAccounts(list);
+                    print("\t>>>>>  ");
+                    int resp = readNumberFromConsole();
+
+                    if ( resp >list.size() || resp <1) {
+                        throw new NumberFormatException("\tНеверный тип счета");
+                    }
+
+                    print("\tВведите стартовую сумму:\n");
+                    print("\t\t>>>>>  ");
+                    int sum = readNumberFromConsole();
+                    serviceUsers.addNewAccount(list.get(resp-1).getId(), new BigDecimal(sum) );
+                    printLine();
+                    print("\tНовый счёт успешно добавлен");
+                    getAccountOperations();
+                    break;
+
 
                 }
 
@@ -160,6 +182,9 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         } catch (IOException | NumberFormatException e) {
             printErr("\tНекорректный ввод");
             showUserOptions(this.serviceUsers);
+        } catch (NotAuthorizedException e) {
+            printErr("Ошибка сервера, программа закроется");
+            System.exit(1);
         }
 
 

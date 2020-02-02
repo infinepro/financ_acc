@@ -5,11 +5,11 @@ import ru.maksimka.jb.services.AuthStatus;
 
 import java.io.IOException;
 
-public class WelcomeViewHelper extends ViewConsoleHelper {
+public class WelcomeView extends ViewConsoleHelper {
 
     private ForUnauthorizedViewConsole forUnauthorizedViewConsole;
 
-    public WelcomeViewHelper() {
+    public WelcomeView() {
         this.forUnauthorizedViewConsole = SpringContext.getContext().getBean(ForUnauthorizedViewConsole.class);
     }
 

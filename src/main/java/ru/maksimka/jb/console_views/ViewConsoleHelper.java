@@ -11,9 +11,9 @@ import java.util.List;
 
 public abstract class ViewConsoleHelper {
 
-    protected void printLine(){
-        System.out.println( "\n################################################" +
-                                "#####################################");
+    protected void printLine() {
+        System.out.println("\n################################################" +
+                "#####################################");
     }
 
     protected void print(String s) {
@@ -25,7 +25,11 @@ public abstract class ViewConsoleHelper {
     }
 
     //NOT IMPL
-    protected void printListUserAccounts(List<AccountDto> list){
+    protected void printListUserAccounts(List<AccountDto> list) {
+
+    }
+
+    protected void printListNameAccounts() {
 
     }
 
@@ -33,11 +37,15 @@ public abstract class ViewConsoleHelper {
 
     }
 
+    protected int readNumberFromConsole() throws NumberFormatException, IOException {
+        return Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+    }
+
     protected String readStringFromConsole() throws IOException {
         return (new BufferedReader(new InputStreamReader(System.in))).readLine();
     }
 
-    protected BigDecimal readNumberFromConsole() throws NumberFormatException, IOException {
+    protected BigDecimal readSumFromConsole() throws NumberFormatException, IOException {
         return new BigDecimal(new BufferedReader(new InputStreamReader(System.in)).readLine());
     }
 }

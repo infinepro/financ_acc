@@ -1,4 +1,4 @@
 package ru.maksimka.jb.services;
 
-public class AccountService {
+public class EncryptionMD5 {
 }

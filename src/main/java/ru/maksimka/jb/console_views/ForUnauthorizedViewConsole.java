@@ -8,8 +8,9 @@ import ru.maksimka.jb.exceptions.NotValidDataException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 import ru.maksimka.jb.services.AuthStatus;
-import ru.maksimka.jb.services.UserService;
-import ru.maksimka.jb.services.ValidationInputData;
+import ru.maksimka.jb.services.ServiceUsers;
+import ru.maksimka.jb.services.Services;
+import ru.maksimka.jb.services.ValidationData;
 
 import java.io.IOException;
 
@@ -21,18 +22,20 @@ import static ru.maksimka.jb.services.AuthStatus.REGISTERED;
 public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
 
     private AuthStatus status;
-    private ValidationInputData valid;
+    private ValidationData valid;
+
     private UserDao userDao;
-    private UserService userService;
+    private UserDto userDto;
+    private Services serviceUsers;
     private ForAuthorizedViewConsole forAuthorizedViewConsole;
 
     //CONSTRUCTOR
 
-    protected ForUnauthorizedViewConsole(ValidationInputData valid, UserDao userDao, UserService userService) {
+    protected ForUnauthorizedViewConsole(ValidationData valid, UserDao userDao, Services serviceUsers) {
         this.status = AuthStatus.HAS_NO_STATUS;
         this.valid = valid;
         this.userDao = userDao;
-        this.userService = userService;
+        this.serviceUsers = serviceUsers;
     }
 
     private void setStatus(AuthStatus authStatus) {
@@ -55,26 +58,28 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
             getAuthView(getStatus());
         } else if (getStatus() == AUTH) {
             forAuthorizedViewConsole = getContext().getBean(ForAuthorizedViewConsole.class);
-            forAuthorizedViewConsole.showUserOptions();
+            forAuthorizedViewConsole.showUserOptions(this.serviceUsers);
         }
-
     }
 
     private void registration() {
-        UserDto userDto = getContext().getBean(UserDto.class);
-        ValidationInputData valid = getContext().getBean(ValidationInputData.class);
+        //UserDto userDto = getContext().getBean(UserDto.class);
+        ValidationData valid = getContext().getBean(ValidationData.class);
+        String login;
+        String email;
+        String password;
 
         try {
             while (true) {
                 printLine();
                 print("\tВведите логин\n");
                 print("\t>>>>>  ");
-                userDto.setName(readStringFromConsole());
+                login = readStringFromConsole();
 
                 print("\tВведите email\n");
                 print("\t>>>>>  ");
                 try {
-                    userDto.setEmail(valid.emailValidation(readStringFromConsole()));
+                    email = valid.emailValidation(readStringFromConsole());
                 } catch (NotValidDataException e) {
                     printErr("\tнекорректный email");
                     continue;
@@ -83,7 +88,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
                 print("\tВведите пароль\n");
                 print("\t>>>>>  ");
                 try {
-                    userDto.setPassword(valid.passwordValidation(readStringFromConsole()));
+                    password = valid.passwordValidation(readStringFromConsole());
                 } catch (NotValidDataException e) {
                     printErr("\tнекорректный password");
                     continue;
@@ -92,7 +97,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
             }
 
             try {
-                userService.registration(userDto);
+                serviceUsers.registration(login, email, password);
                 setStatus(REGISTERED);
                 printLine();
                 print("\tВы успешно зарегистрировались");
@@ -101,25 +106,27 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
                 registration();
             }
         } catch (IOException e) {
-            userDto = null;
             registration();
         }
     }
 
     private void signIn() {
-        UserDto userDto = getContext().getBean(UserDto.class);
+        this.userDto = getContext().getBean(UserDto.class);
+        String login;
+        String password;
 
         while (true) {
             try {
                 printLine();
                 print("\tВведите логин\n");
                 print("\t>>>>>  ");
-                userDto.setName(readStringFromConsole());
+                login = readStringFromConsole();
 
                 print("\tВведите пароль\n");
                 print("\t>>>>>  ");
-                userDto.setPassword(readStringFromConsole());
-                userService.signIn(userDto);
+                password = readStringFromConsole();
+                serviceUsers.signIn(login, password);
+
                 setStatus(AUTH);
                 printLine();
                 print("\tВы успешно авторизовались");

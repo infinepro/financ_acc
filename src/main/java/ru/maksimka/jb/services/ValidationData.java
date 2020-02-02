@@ -2,12 +2,11 @@ package ru.maksimka.jb.services;
 
 //TODO:
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import ru.maksimka.jb.exceptions.NotValidDataException;
 
 //VALIDATION EMAIL, PASSWORD, LOGIN
 @Component
-public class ValidationInputData {
+public class ValidationData {
 
     //NOT IMPL
     public String emailValidation(String s) throws NotValidDataException {

@@ -28,7 +28,7 @@ public interface Services {
 
 
     //account operations
-    public List<AccountDto> getAllAccounts();
+    public List<AccountDto> getAllAccounts() throws NotAuthorizedException;
 
     public List<AccountNameDto> getAllAccountNames();
 

@@ -6,6 +6,7 @@ import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.AccountEntity;
+import ru.maksimka.jb.entities.UserEntity;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
@@ -35,8 +36,8 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         }
     }
 
-    public List<AccountEntity> findByAllOnePerson(Integer ownerId) throws QueryException {
-        return em.createQuery("SELECT a FROM AccountEntity a WHERE a.owner.id = :ownerId").getResultList();
+    public List<AccountEntity> findByAllOnePerson(UserEntity owner) throws QueryException {
+        return em.createQuery("SELECT a FROM AccountEntity a WHERE a.owner = :owner").setParameter("owner", owner).getResultList();
     }
 
     @Override

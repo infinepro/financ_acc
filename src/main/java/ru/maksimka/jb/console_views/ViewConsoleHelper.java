@@ -29,7 +29,7 @@ public abstract class ViewConsoleHelper {
         int count = 1;
         for (AccountDto dto : list) {
             System.out.printf(
-                    "%-4s%-30s%10s%5s%n", (count++ + "."), dto.getNameAccount(), dto.getBalance(), "руб.");
+                    "%-4s%-30s%10s%5s%n", ("\t\t(" + count++ + ")"), dto.getNameAccount(), dto.getBalance(), "руб.");
         }
     }
 

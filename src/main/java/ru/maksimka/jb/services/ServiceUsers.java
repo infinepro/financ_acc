@@ -1,6 +1,5 @@
 package ru.maksimka.jb.services;
 
-import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
@@ -88,9 +87,9 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public List<AccountDto> getAllAccounts() throws QueryException {
-        return accountDao.findByAllOnePerson(userEntity
-                .getId())
+    public List<AccountDto> getAllAccounts() throws NotAuthorizedException {
+        checkUserEntityForNull();
+        return accountDao.findByAllOnePerson(this.userEntity)
                 .stream()
                 .map(new AccountToDtoConverter()::convert)
                 .collect(Collectors.toList());
@@ -117,10 +116,9 @@ public class ServiceUsers implements Services {
         return true;
     }
 
-
     @Override
     public void deleteAccount(Integer accountNameId) throws RecordNotFoundException {
-        accountNamesDao.delete(accountNameId);
+        accountDao.delete(accountNameId);
     }
 
     @Override

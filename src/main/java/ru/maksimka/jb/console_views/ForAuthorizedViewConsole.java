@@ -182,7 +182,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                     printLine();
                     //todo: not work
                     print("\tКакой счет хотите удалить?\n");
-                    print("\t>>>>>  ");
+
                     List<AccountDto> list;
                     try {
                         list = serviceUsers.getAllAccounts();
@@ -193,6 +193,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                         break;
                     }
                     printListUserAccounts(list);
+                    print("\t>>>>>  ");
                     int resp = readNumberFromConsole();
 
                     if (resp > list.size() || resp < 0) {

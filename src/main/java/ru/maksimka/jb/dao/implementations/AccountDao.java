@@ -2,6 +2,7 @@ package ru.maksimka.jb.dao.implementations;
 
 import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
+import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.AccountEntity;
@@ -34,7 +35,7 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         }
     }
 
-    public List<AccountEntity> findByAllOnePerson(Integer ownerId) {
+    public List<AccountEntity> findByAllOnePerson(Integer ownerId) throws QueryException {
         return em.createQuery("SELECT a FROM AccountEntity a WHERE a.owner.id = :ownerId").getResultList();
     }
 

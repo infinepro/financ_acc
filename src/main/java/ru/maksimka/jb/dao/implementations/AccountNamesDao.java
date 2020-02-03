@@ -71,7 +71,7 @@ public class AccountNamesDao implements Dao<AccountNamesEntity, Integer> {
     }
 
     @Override
-    public boolean delete(Integer id) throws Exception {
+    public boolean delete(Integer id) throws RecordNotFoundException {
         AccountNamesEntity accountNamesEntityOld = em.merge(findBy(id));
 
         if (accountNamesEntityOld == null) {

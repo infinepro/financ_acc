@@ -27,7 +27,7 @@ public class AccountNamesEntity {
     @Column(name = "account_name")
     private String accountName;
 
-    @OneToMany(mappedBy = "accountName", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountName", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<AccountEntity> listAccounts;
 
 

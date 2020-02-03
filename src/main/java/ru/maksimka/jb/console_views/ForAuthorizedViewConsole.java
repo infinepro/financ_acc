@@ -1,8 +1,12 @@
 package ru.maksimka.jb.console_views;
 
+import org.hibernate.QueryException;
 import org.springframework.stereotype.Component;
+import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.services.Services;
 
 import java.io.IOException;
@@ -55,8 +59,6 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
             printErr("\tНекорректный ввод");
             showUserOptions(this.serviceUsers);
         }
-
-
     }
 
     private void getSettingUser() {
@@ -67,7 +69,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\t\t> (1) Изменить пароль \n");
         print("\t\t> (2) Изменить емаил \n");
         print("\t\t> (3) Удалить пользователя \n");
-        print("\t\t>>>>> ");
+        print("\t>>>>> ");
 
         try {
             int answer = readNumberFromConsole();
@@ -77,14 +79,14 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 1: {
-                   printLine();
-                   print("\tВведите новый пароль");
-                   print("\t>>>>>  ");
-                   String newPassword = readStringFromConsole();
-                   serviceUsers.changePassword(newPassword);
-                   print("\tПароль успешно изменён");
-                   getSettingUser();
-                   break;
+                    printLine();
+                    print("\tВведите новый пароль");
+                    print("\t>>>>>  ");
+                    String newPassword = readStringFromConsole();
+                    serviceUsers.changePassword(newPassword);
+                    print("\tПароль успешно изменён");
+                    getSettingUser();
+                    break;
                 }
 
                 case 2: {
@@ -100,7 +102,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
                 case 3: {
                     printLine();
-                    print("\tВы уверены что хотите удалить пользователя и связанные с ним данные?");
+                    print("\tВы уверены что хотите удалить пользователя и связанные с ним данные?\n");
                     print("\t(1) - удалить пользователя");
                     print("\t>>>>>  ");
                     int resp = readNumberFromConsole();
@@ -113,7 +115,8 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                     break;
                 }
 
-                default: throw new NumberFormatException();
+                default:
+                    throw new NumberFormatException();
             }
 
         } catch (IOException | NumberFormatException e) {
@@ -133,7 +136,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\t\t> (2) Добавить новый тип счёта \n");
         print("\t\t> (3) Удалить счет \n");
         print("\t\t> (4) Удалить тип счета\n");
-        print("\t\t>>>>> ");
+        print("\t>>>>> ");
 
         try {
             int answer = readNumberFromConsole();
@@ -147,46 +150,94 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                     print("\tВыберите из списка тип счета который хотите добавить:\n");
                     List<AccountNameDto> list = serviceUsers.getAllAccountNames();
                     printListNameAccounts(list);
-                    print("\t>>>>>  ");
+                    print("\t\t>>>>>  ");
                     int resp = readNumberFromConsole();
 
-                    if ( resp >list.size() || resp <1) {
+                    if (resp > list.size() || resp < 1) {
                         throw new NumberFormatException("\tНеверный тип счета");
                     }
 
                     print("\tВведите стартовую сумму:\n");
                     print("\t\t>>>>>  ");
                     int sum = readNumberFromConsole();
-                    serviceUsers.addNewAccount(list.get(resp-1).getId(), new BigDecimal(sum) );
+                    serviceUsers.addNewAccount(list.get(resp - 1).getId(), new BigDecimal(sum));
                     printLine();
                     print("\tНовый счёт успешно добавлен");
                     getAccountOperations();
                     break;
-
-
                 }
 
                 case 2: {
-
+                    printLine();
+                    print("\tВведите новое наименование счёта:\n");
+                    print("\t>>>>>  ");
+                    String resp = readStringFromConsole();
+                    serviceUsers.addNewAccountName(resp);
+                    printLine();
+                    print("\tНовый тип счета создан\n");
+                    getAccountOperations();
                 }
 
                 case 3: {
-                    break;
+                    printLine();
+                    //todo: not work
+                    print("\tКакой счет хотите удалить?\n");
+                    print("\t>>>>>  ");
+                    List<AccountDto> list;
+                    try {
+                        list = serviceUsers.getAllAccounts();
+                    } catch (QueryException e) {
+                        printLine();
+                        printErr("\tУ вас нету счетов\n");
+                        getAccountOperations();
+                        break;
+                    }
+                    printListUserAccounts(list);
+                    int resp = readNumberFromConsole();
+
+                    if (resp > list.size() || resp < 0) {
+                        throw new NumberFormatException();
+                    }
+                    serviceUsers.deleteAccount(list.get(resp-1).getId());
+                    printLine();
+                    print("\tСчёт удалён");
+                    getAccountOperations();
                 }
 
                 case 4: {
+                    printLine();
+                    print("\tКакой тип наименования желаете удалить?\n");
+                    List<AccountNameDto> list = serviceUsers.getAllAccountNames();
+                    printListNameAccounts(list);
+                    print("\t>>>>>  ");
+                    int resp = readNumberFromConsole();
+
+                    if ( resp > list.size() || resp < 0 ) {
+                        throw new NumberFormatException();
+                    }
+
+                    serviceUsers.deleteAccountName(list.get(resp-1).getId());
+                    printLine();
+                    print("\tНаименование удалено\n");
+                    getAccountOperations();
+
 
                 }
             }
 
         } catch (IOException | NumberFormatException e) {
-            printErr("\tНекорректный ввод");
+            printErr("\tНекорректный ввод\n");
             showUserOptions(this.serviceUsers);
         } catch (NotAuthorizedException e) {
-            printErr("Ошибка сервера, программа закроется");
+            printErr("\tОшибка сервера, программа закроется\n");
             System.exit(1);
+        } catch (AlreadyExistsException e) {
+            printErr("\tНаименование уже существует, придумайте другое\n");
+            showUserOptions(this.serviceUsers);
+        } catch (RecordNotFoundException e) {
+            printErr("\tСчёт не найден, ошибка сервера\n");
+            showUserOptions(this.serviceUsers);
         }
-
 
 
     }

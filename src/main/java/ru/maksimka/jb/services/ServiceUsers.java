@@ -1,8 +1,7 @@
 package ru.maksimka.jb.services;
 
+import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
-import ru.maksimka.jb.configurations.SpringContext;
-import ru.maksimka.jb.converters.Converter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.converters.to_entity_impl.UserToEntityConverter;
@@ -89,7 +88,7 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public List<AccountDto> getAllAccounts() {
+    public List<AccountDto> getAllAccounts() throws QueryException {
         return accountDao.findByAllOnePerson(userEntity
                 .getId())
                 .stream()
@@ -118,27 +117,29 @@ public class ServiceUsers implements Services {
         return true;
     }
 
+
     @Override
-    public boolean deleteAccount(Integer id) {
-        return false;
+    public void deleteAccount(Integer accountNameId) throws RecordNotFoundException {
+        accountNamesDao.delete(accountNameId);
     }
 
     @Override
-    public boolean addNewAccountName(String accountName) {
-        return false;
+    public void addNewAccountName(String accountName) throws AlreadyExistsException {
+        AccountNamesEntity accountNamesEntity = new AccountNamesEntity().withAccountName(accountName);
+        accountNamesDao.insert(accountNamesEntity);
     }
 
     @Override
-    public boolean deleteAccountName(String accountName) {
-        return false;
+    public void deleteAccountName(Integer accountNameId) throws RecordNotFoundException {
+       accountNamesDao.delete(accountNameId);
     }
 
-    @Override
+    @Override///
     public TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum) {
         return null;
     }
 
-    @Override
+    @Override////
     public boolean deleteTransaction(Integer id) {
         return false;
     }

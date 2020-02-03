@@ -33,7 +33,7 @@ public class WelcomeView extends ViewConsoleHelper {
         } else if (answer.equals("нет")) {
             forUnauthorizedViewConsole.getAuthView(AuthStatus.NOT_REGISTERED);
         } else {
-            printErr("\tНекорректный ввод");
+            printErr("\tНекорректный ввод\n");
              getWelcome();
         }
     }

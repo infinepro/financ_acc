@@ -24,9 +24,9 @@ public class TransactionCategoriesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Integer id;
 
-    @Column(name = "nameCategory")
+    @Column(name = "category_name")
     private String nameCategory;
 
-    @OneToMany(mappedBy = "transactionCategory")
+    @OneToMany(mappedBy = "transactionCategory", orphanRemoval = true)
     private List<TransactionEntity> transactionsList;
 }

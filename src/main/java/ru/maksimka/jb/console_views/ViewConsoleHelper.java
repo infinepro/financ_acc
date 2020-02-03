@@ -1,6 +1,5 @@
 package ru.maksimka.jb.console_views;
 
-import ru.maksimka.jb.dao.implementations.AccountNamesDao;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionDto;

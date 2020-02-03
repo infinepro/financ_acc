@@ -1,5 +1,6 @@
 package ru.maksimka.jb.services;
 
+import com.sun.corba.se.impl.protocol.RequestCanceledException;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionDto;
@@ -33,11 +34,11 @@ public interface Services {
 
     boolean addNewAccount( Integer accNameId, BigDecimal balance) throws NotAuthorizedException;
 
-    boolean deleteAccount(Integer id);
+    void deleteAccount(Integer id) throws RecordNotFoundException;
 
-    boolean addNewAccountName(String accountName);
+    void addNewAccountName(String accountName) throws AlreadyExistsException;
 
-    boolean deleteAccountName(String accountName);
+    void deleteAccountName(Integer accountNameId) throws RecordNotFoundException;
 
 
     //transaction options

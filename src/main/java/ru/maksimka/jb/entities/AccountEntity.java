@@ -34,7 +34,7 @@ public class AccountEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<TransactionEntity> transactionsList;
 
     @Override

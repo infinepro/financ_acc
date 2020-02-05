@@ -1,6 +1,7 @@
 package ru.maksimka.jb.entities;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+@Accessors(chain = true)
 
 //hibernate
 @Entity

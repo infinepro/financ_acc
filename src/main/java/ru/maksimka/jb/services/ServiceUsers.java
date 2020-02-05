@@ -1,24 +1,26 @@
 package ru.maksimka.jb.services;
 
 import org.springframework.stereotype.Service;
+import ru.maksimka.jb.configurations.SpringContext;
 import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.TransactionCategoryToDtoConverter;
 import ru.maksimka.jb.converters.to_entity_impl.UserToEntityConverter;
 import ru.maksimka.jb.dao.implementations.*;
 import ru.maksimka.jb.dto.*;
-import ru.maksimka.jb.entities.AccountEntity;
-import ru.maksimka.jb.entities.AccountNamesEntity;
-import ru.maksimka.jb.entities.UserEntity;
-import ru.maksimka.jb.exceptions.AlreadyExistsException;
-import ru.maksimka.jb.exceptions.NotAuthorizedException;
-import ru.maksimka.jb.exceptions.RecordNotFoundException;
-import ru.maksimka.jb.exceptions.WrongUserPasswordException;
+import ru.maksimka.jb.entities.*;
+import ru.maksimka.jb.exceptions.*;
 import sun.plugin2.gluegen.runtime.StructAccessor;
 
+import javax.persistence.EntityManager;
+import javax.swing.text.html.parser.Entity;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.maksimka.jb.configurations.SpringContext.*;
 
 @Service
 public class ServiceUsers implements Services {
@@ -156,6 +158,61 @@ public class ServiceUsers implements Services {
         return false;
     }
 
+    @Override
+    public void addNewTransactionBetweenUserAccounts(Integer fromId, Integer toId, BigDecimal sum)
+            throws InvalidSummException {
+
+        List<TransactionCategoriesEntity> list = transactionCategoriesDao.findByAll();
+
+        int idCategoryBetweenTransactions = 0;
+
+        //search id where category name = "Внутренние переводы"
+        for (TransactionCategoriesEntity tce : list) {
+            if (tce.equals("Внутренние переводы")) {
+                idCategoryBetweenTransactions = tce.getId();
+                break;
+            }
+        }
+
+        if (idCategoryBetweenTransactions == 0) {
+            idCategoryBetweenTransactions = transactionCategoriesDao
+                    .insert(new TransactionCategoriesEntity()
+                            .withNameCategory("Внутренние переводы"))
+                    .getId();
+        }
+
+        TransactionCategoriesEntity transactionCategoriesEntity =
+                transactionCategoriesDao.findBy(idCategoryBetweenTransactions);
+
+        EntityManager em = getContext().getBean(EntityManager.class);
+        //add transaction
+        TransactionEntity te = new TransactionEntity()
+                .withDate(Date.valueOf(LocalDate.now()))
+                .withSum(sum)
+                .withTransactionCategory(transactionCategoriesEntity);
+
+        //setting a new balance for entities
+        AccountEntity accFrom = accountDao.findBy(fromId);
+        AccountEntity accTo = accountDao.findBy(toId);
+        accFrom.setBalance(accFrom.getBalance().subtract(sum));
+        accTo.setBalance(accTo.getBalance().add(sum));
+
+        if (accFrom.getBalance().compareTo(sum) == -1) {
+            throw new InvalidSummException();
+        }
+
+        //execute transaction
+        try {
+            em.getTransaction().begin();
+            accountDao.update(accFrom, em);
+            accountDao.update(accTo, em);
+            transactionDao.insert(te);
+
+            em.getTransaction().commit();
+        } catch (RecordNotFoundException e) {
+            em.getTransaction().rollback();
+        }
+    }
 
     @Override
     public void registration(String login, String email, String password) throws AlreadyExistsException {

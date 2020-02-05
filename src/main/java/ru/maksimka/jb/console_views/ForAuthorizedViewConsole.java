@@ -4,6 +4,7 @@ import org.hibernate.QueryException;
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
+import ru.maksimka.jb.dto.TransactionCategoryDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
@@ -52,16 +53,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 4: {
-                    printLine();
 
-                    //
-                    print("\tВыберите с какого счета нужно перевести средства\n");
-                    print("\t>>>>>  ");
-                    int respFrom = readNumberFromConsole();
-                    //
-                    print("\tВыберите счет на который следует перевести сумму\n");
-                    print("\t>>>>>  ");
-                    int respTo = readNumberFromConsole();
 
                 }
 
@@ -87,6 +79,30 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
     private void makePurchase() {
         printLine();
         print("Введите тип транзакции (покупки)");
+
+
+    }
+
+    private void makeTransactionBetweenAccounts() throws IOException, NumberFormatException{
+        printLine();
+
+        //
+        print("\tВыберите с какого счета нужно перевести средства:\n");
+        List<TransactionCategoryDto> list = serviceUsers.getAllTransactionCategory();
+        printListTransactionCategories(list);
+        print("\t>>>>>  ");
+        int respFrom = readNumberFromConsole();
+        if (respFrom >list.size() || respFrom < 0) {
+            throw new NumberFormatException();
+        }
+
+        //
+        print("\tВыберите счет на который следует перевести средства:\n");
+        print("\t>>>>>  ");
+        int respTo = readNumberFromConsole();
+        if (respFrom >list.size() || respTo < 0) {
+            throw new NumberFormatException();
+        }
 
 
     }

@@ -5,10 +5,7 @@ import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionCategoryDto;
 import ru.maksimka.jb.dto.TransactionDto;
-import ru.maksimka.jb.exceptions.AlreadyExistsException;
-import ru.maksimka.jb.exceptions.NotAuthorizedException;
-import ru.maksimka.jb.exceptions.RecordNotFoundException;
-import ru.maksimka.jb.exceptions.WrongUserPasswordException;
+import ru.maksimka.jb.exceptions.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,7 +30,7 @@ public interface Services {
 
     List<AccountNameDto> getAllAccountNames();
 
-    boolean addNewAccount( Integer accNameId, BigDecimal balance) throws NotAuthorizedException;
+    boolean addNewAccount(Integer accNameId, BigDecimal balance) throws NotAuthorizedException;
 
     void deleteAccount(Integer id) throws RecordNotFoundException;
 
@@ -45,6 +42,10 @@ public interface Services {
     List<TransactionCategoryDto> getAllTransactionCategory();
 
     TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum);
+
+    void addNewTransactionBetweenUserAccounts(Integer fromId, Integer toId, BigDecimal sum) throws InvalidSummException;
+
+
 
     boolean deleteTransaction(Integer id);
 

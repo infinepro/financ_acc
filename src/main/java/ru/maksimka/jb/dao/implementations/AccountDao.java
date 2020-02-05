@@ -6,11 +6,14 @@ import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.entities.AccountEntity;
+import ru.maksimka.jb.entities.TransactionCategoriesEntity;
+import ru.maksimka.jb.entities.TransactionEntity;
 import ru.maksimka.jb.entities.UserEntity;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -68,6 +71,16 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         return accountEntityOld;
     }
 
+    public boolean update(AccountEntity accountEntity, EntityManager em) throws RecordNotFoundException {
+        AccountEntity accountEntityOld = findBy(accountEntity.getId());
+        if (accountEntityOld == null) {
+            throw new RecordNotFoundException("счет не найден, update failed");
+        }
+        accountEntityOld.setBalance(accountEntity.getBalance());
+        em.merge(accountEntityOld);
+        return true;
+    }
+
     @Override
     public boolean delete(Integer id) throws RecordNotFoundException {
         AccountEntity accountEntityOld = em.merge(findBy(id));
@@ -80,6 +93,7 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         em.getTransaction().commit();
         return true;
     }
+
 }
 
 

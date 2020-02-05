@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import lombok.experimental.Accessors;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @With
+
 
 //spring
 @Component

@@ -8,6 +8,7 @@ import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -48,6 +49,11 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
         em.persist(transactionEntity);
         em.getTransaction().commit();
         return transactionEntity;
+    }
+
+    public boolean insert(TransactionEntity transactionEntity, EntityManager em) {
+        em.persist(transactionEntity);
+        return true;
     }
 
     @Override

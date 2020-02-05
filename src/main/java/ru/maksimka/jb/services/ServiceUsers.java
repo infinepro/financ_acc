@@ -3,14 +3,10 @@ package ru.maksimka.jb.services;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
+import ru.maksimka.jb.converters.to_dto_impl.TransactionCategoryToDtoConverter;
 import ru.maksimka.jb.converters.to_entity_impl.UserToEntityConverter;
-import ru.maksimka.jb.dao.implementations.AccountDao;
-import ru.maksimka.jb.dao.implementations.AccountNamesDao;
-import ru.maksimka.jb.dao.implementations.UserDao;
-import ru.maksimka.jb.dto.AccountDto;
-import ru.maksimka.jb.dto.AccountNameDto;
-import ru.maksimka.jb.dto.TransactionDto;
-import ru.maksimka.jb.dto.UserDto;
+import ru.maksimka.jb.dao.implementations.*;
+import ru.maksimka.jb.dto.*;
 import ru.maksimka.jb.entities.AccountEntity;
 import ru.maksimka.jb.entities.AccountNamesEntity;
 import ru.maksimka.jb.entities.UserEntity;
@@ -18,6 +14,7 @@ import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
+import sun.plugin2.gluegen.runtime.StructAccessor;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,14 +26,22 @@ public class ServiceUsers implements Services {
     private UserDao userDao;
     private AccountDao accountDao;
     private AccountNamesDao accountNamesDao;
+    private TransactionDao transactionDao;
+    private TransactionCategoriesDao transactionCategoriesDao;
 
     private UserEntity userEntity;
     private List<AccountEntity> list;
 
-    public ServiceUsers(UserDao userDao, AccountDao accountDao, AccountNamesDao accountNamesDao) {
+    public ServiceUsers(UserDao userDao, AccountDao accountDao,
+                        AccountNamesDao accountNamesDao,
+                        TransactionDao transactionDao,
+                        TransactionCategoriesDao transactionCategoriesDao) {
+
         this.userDao = userDao;
         this.accountDao = accountDao;
         this.accountNamesDao = accountNamesDao;
+        this.transactionDao = transactionDao;
+        this.transactionCategoriesDao = transactionCategoriesDao;
     }
 
     private void setUserEntity(UserEntity userEntity) {
@@ -129,7 +134,16 @@ public class ServiceUsers implements Services {
 
     @Override
     public void deleteAccountName(Integer accountNameId) throws RecordNotFoundException {
-       accountNamesDao.delete(accountNameId);
+        accountNamesDao.delete(accountNameId);
+    }
+
+    @Override
+    public List<TransactionCategoryDto> getAllTransactionCategory() {
+        List<TransactionCategoryDto> list = transactionCategoriesDao.findByAll()
+                .stream()
+                .map(new TransactionCategoryToDtoConverter()::convert)
+                .collect(Collectors.toList());
+        return list;
     }
 
     @Override///

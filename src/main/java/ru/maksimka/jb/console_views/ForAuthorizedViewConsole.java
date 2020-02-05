@@ -27,8 +27,9 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\t\t>>> (1) Настройки пользователя \n");
         print("\t\t>>> (2) Действия со счетами \n");
         print("\t\t>>> (3) Действия с транзакциями \n");
-        print("\t\t>>> (4) ПОКУПКА \n");
-        print("\t\t>>> (5) ПОПОЛНЕНИЕ \n");
+        print("\t\t>>> (4) Перевод средств со счета на счет\n");
+        print("\t\t>>> (5) ПОКУПКА \n");
+        print("\t\t>>> (6) ПОПОЛНЕНИЕ \n");
         print("\t\t>>>>> ");
 
         try {
@@ -47,10 +48,28 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 3: {
-                    break;
+                    getTransactionSettings();
                 }
 
                 case 4: {
+                    printLine();
+
+                    //
+                    print("\tВыберите с какого счета нужно перевести средства\n");
+                    print("\t>>>>>  ");
+                    int respFrom = readNumberFromConsole();
+                    //
+                    print("\tВыберите счет на который следует перевести сумму\n");
+                    print("\t>>>>>  ");
+                    int respTo = readNumberFromConsole();
+
+                }
+
+                case 5: {
+
+                }
+
+                case 6: {
 
                 }
             }
@@ -58,6 +77,61 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         } catch (IOException | NumberFormatException e) {
             printErr("\tНекорректный ввод");
             showUserOptions(this.serviceUsers);
+        }
+    }
+
+    private void replenishBalance() {
+
+    }
+
+    private void makePurchase() {
+        printLine();
+        print("Введите тип транзакции (покупки)");
+
+
+    }
+
+    //todo: добавить сначала пополнение и покупка, перевод между счетами
+    private void getTransactionSettings() {
+        printLine();
+        print("\tВыберите доступные действия: \n");
+        print("\t\t> (0) ...назад \n");
+        print("\t\t> (1) Удалить транзакцию \n");
+        print("\t\t> (2) Отменить транзакцию \n");
+        print("\t\t> (3) Добавить новый тип транзакции \n");
+        print("\t>>>>> ");
+
+        try {
+            int answer = readNumberFromConsole();
+            switch (answer) {
+                case 0: {
+                    showUserOptions(this.serviceUsers);
+                }
+
+                case 1: {
+                    printLine();
+
+                    getSettingUser();
+                    break;
+                }
+
+                case 2: {
+                    printLine();
+
+                    break;
+                }
+
+                case 3: {
+                    break;
+                }
+
+                default:
+                    throw new NumberFormatException();
+            }
+
+        } catch (IOException | NumberFormatException e) {
+            printErr("\tНекорректный ввод");
+            getSettingUser();
         }
     }
 

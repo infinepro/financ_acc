@@ -3,6 +3,7 @@ package ru.maksimka.jb.services;
 import com.sun.corba.se.impl.protocol.RequestCanceledException;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
+import ru.maksimka.jb.dto.TransactionCategoryDto;
 import ru.maksimka.jb.dto.TransactionDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
@@ -28,9 +29,9 @@ public interface Services {
 
 
     //account operations
-    public List<AccountDto> getAllAccounts() throws NotAuthorizedException;
+    List<AccountDto> getAllAccounts() throws NotAuthorizedException;
 
-    public List<AccountNameDto> getAllAccountNames();
+    List<AccountNameDto> getAllAccountNames();
 
     boolean addNewAccount( Integer accNameId, BigDecimal balance) throws NotAuthorizedException;
 
@@ -40,8 +41,9 @@ public interface Services {
 
     void deleteAccountName(Integer accountNameId) throws RecordNotFoundException;
 
-
     //transaction options
+    List<TransactionCategoryDto> getAllTransactionCategory();
+
     TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum);
 
     boolean deleteTransaction(Integer id);

@@ -39,7 +39,7 @@ public abstract class ViewConsoleHelper {
         int count = 1;
         for (AccountNameDto dto : list) {
             System.out.printf(
-                    "%-4s%-30s%n", ( "\t\t(" + count++ + ")"), dto.getAccountName());
+                    "%-4s%-30s%n", ("\t\t(" + count++ + ")"), dto.getAccountName());
         }
     }
 
@@ -51,28 +51,28 @@ public abstract class ViewConsoleHelper {
         int count = 1;
         for (TransactionCategoryDto dto : list) {
             System.out.printf(
-                    "%-4s%-30s%n", ( "\t\t(" + count++ + ")"), dto.getCategoryName());
+                    "%-4s%-30s%n", ("\t\t(" + count++ + ")"), dto.getCategoryName());
         }
     }
 
     protected int readNumberFromConsole() throws NumberFormatException, IOException {
+        //return new Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         int i = Integer.parseInt(r.readLine());
-        r.close();
         return i;
     }
 
     protected String readStringFromConsole() throws IOException {
+        //return new BufferedReader(new InputStreamReader(System.in)).readLine());
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         String str = r.readLine();
-        r.close();
         return str;
     }
 
     protected BigDecimal readSumFromConsole() throws NumberFormatException, IOException {
+        //return new BigDecimal( new BufferedReader(new InputStreamReader(System.in)).readLine());
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-        BigDecimal bd = new BigDecimal( r.readLine());
-        r.close();
+        BigDecimal bd = new BigDecimal(r.readLine());
         return bd;
     }
 

@@ -32,7 +32,6 @@ public class ServiceUsers implements Services {
     private TransactionCategoriesDao transactionCategoriesDao;
 
     private UserEntity userEntity;
-    private List<AccountEntity> list;
 
     public ServiceUsers(UserDao userDao, AccountDao accountDao,
                         AccountNamesDao accountNamesDao,
@@ -168,7 +167,7 @@ public class ServiceUsers implements Services {
 
         //search id where category name = "Внутренние переводы"
         for (TransactionCategoriesEntity tce : list) {
-            if (tce.equals("Внутренние переводы")) {
+            if (tce.getNameCategory().equals("Внутренние переводы")) {
                 idCategoryBetweenTransactions = tce.getId();
                 break;
             }

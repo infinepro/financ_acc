@@ -6,6 +6,7 @@ import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionCategoryDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
+import ru.maksimka.jb.exceptions.InvalidSummException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.services.Services;
@@ -53,8 +54,16 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 4: {
-
-
+                    try {
+                        makeTransactionBetweenAccounts();
+                    } catch (NotAuthorizedException e) {
+                        e.printStackTrace();
+                    } catch (InvalidSummException e) {
+                        printLine();
+                        printErr("Вы ввели сумму, " +
+                                "превышающую наличие средств на счете для списания");
+                        showUserOptions(this.serviceUsers);
+                    }
                 }
 
                 case 5: {
@@ -83,13 +92,14 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     }
 
-    private void makeTransactionBetweenAccounts() throws IOException, NumberFormatException{
+    private void makeTransactionBetweenAccounts() throws IOException, NumberFormatException, NotAuthorizedException, InvalidSummException {
         printLine();
 
         //
+
+        List<AccountDto> list = serviceUsers.getAllAccounts();
+        printListUserAccounts(list);
         print("\tВыберите с какого счета нужно перевести средства:\n");
-        List<TransactionCategoryDto> list = serviceUsers.getAllTransactionCategory();
-        printListTransactionCategories(list);
         print("\t>>>>>  ");
         int respFrom = readNumberFromConsole();
         if (respFrom >list.size() || respFrom < 0) {
@@ -103,7 +113,11 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         if (respFrom >list.size() || respTo < 0) {
             throw new NumberFormatException();
         }
-
+        print("\tВведите сумму:\n");
+        print("\t>>>>>  ");
+        BigDecimal sum = readSumFromConsole();
+//todo; исправить получение id
+        serviceUsers.addNewTransactionBetweenUserAccounts(respFrom-1, respTo-1, sum);
 
     }
 

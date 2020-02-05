@@ -24,7 +24,7 @@ public class TransactionCategoriesDao implements Dao<TransactionCategoriesEntity
     public TransactionCategoriesEntity findBy(Integer id) {
         try {
             return (TransactionCategoriesEntity) em.createQuery(
-                    "SELECT a FROM UserEntity a WHERE a.id = :id")
+                    "SELECT a FROM TransactionCategoriesEntity a WHERE a.id = :id")
                     .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException e) {

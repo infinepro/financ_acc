@@ -1,22 +1,24 @@
 package ru.maksimka.jb.services;
 
 import org.springframework.stereotype.Service;
-import ru.maksimka.jb.configurations.SpringContext;
 import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.TransactionCategoryToDtoConverter;
+import ru.maksimka.jb.converters.to_dto_impl.TransactionToDtoConverter;
 import ru.maksimka.jb.converters.to_entity_impl.UserToEntityConverter;
 import ru.maksimka.jb.dao.implementations.*;
 import ru.maksimka.jb.dto.*;
 import ru.maksimka.jb.entities.*;
 import ru.maksimka.jb.exceptions.*;
-import sun.plugin2.gluegen.runtime.StructAccessor;
 
 import javax.persistence.EntityManager;
-import javax.swing.text.html.parser.Entity;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,19 +32,22 @@ public class ServiceUsers implements Services {
     private AccountNamesDao accountNamesDao;
     private TransactionDao transactionDao;
     private TransactionCategoriesDao transactionCategoriesDao;
+    private DateService dateService;
 
     private UserEntity userEntity;
 
     public ServiceUsers(UserDao userDao, AccountDao accountDao,
                         AccountNamesDao accountNamesDao,
                         TransactionDao transactionDao,
-                        TransactionCategoriesDao transactionCategoriesDao) {
+                        TransactionCategoriesDao transactionCategoriesDao,
+                        DateService dateService) {
 
         this.userDao = userDao;
         this.accountDao = accountDao;
         this.accountNamesDao = accountNamesDao;
         this.transactionDao = transactionDao;
         this.transactionCategoriesDao = transactionCategoriesDao;
+        this.dateService = dateService;
     }
 
     private void setUserEntity(UserEntity userEntity) {
@@ -147,14 +152,48 @@ public class ServiceUsers implements Services {
         return list;
     }
 
-    @Override///
+    @Override
+    public List<TransactionDto> getAllTransactions() {
+        return transactionDao
+                .findByAll()
+                .stream()
+                .map(new TransactionToDtoConverter()::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum) {
         return null;
     }
 
-    @Override////
-    public boolean deleteTransaction(Integer id) {
-        return false;
+    @Override
+    public void addNewCategoryTransaction(String newNameCategory) {
+        transactionCategoriesDao.insert(new TransactionCategoriesEntity().withNameCategory(newNameCategory));
+    }
+
+    @Override
+    public boolean cancelTransaction(Integer id) {
+        EntityManager em = getContext().getBean(EntityManager.class);
+        TransactionEntity te = transactionDao.findBy(id);
+        AccountEntity ae = te.getAccount();
+        ae.setBalance(ae.getBalance().add(te.getSum().negate()));
+
+        try {
+            em.getTransaction().begin();
+            accountDao.update(ae, em);
+            transactionDao.delete(id, em);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteTransaction(Integer id) throws RecordNotFoundException{
+        transactionDao.delete(id);
+        return true;
     }
 
     @Override
@@ -223,6 +262,24 @@ public class ServiceUsers implements Services {
         } catch (Exception e) {
             em.getTransaction().rollback();
         }
+    }
+
+    @Override
+    //format date is mm.dd.yyyy
+    public List<TransactionDto> getAllTransactionsForDate(String date) throws ParseException {
+        List<TransactionDto> list = getAllTransactions();
+        java.sql.Date sqlDate = dateService.parseDateToSqlDate(date);
+        Iterator<TransactionDto> iterator = list.iterator();
+        TransactionDto dto;
+        List<TransactionDto> list2 = new ArrayList<>();
+        while (iterator.hasNext()) {
+            dto = iterator.next();
+            if (dto.getDate().getTime() == sqlDate.getTime()) {
+                list2.add(dto);
+            }
+        }
+
+        return list2;
     }
 
     @Override

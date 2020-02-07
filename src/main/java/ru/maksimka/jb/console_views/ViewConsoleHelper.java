@@ -8,7 +8,6 @@ import ru.maksimka.jb.dto.TransactionDto;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -44,7 +43,19 @@ public abstract class ViewConsoleHelper {
     }
 
     protected void printListTransactions(List<TransactionDto> list) {
+        int count = 1;
+        System.out.printf(
+                "%-4s%-30s%-30s%-15s%-15s%n", ("\t\t  "), "Категория", "Наименование счета", "Сумма", "дата");
 
+        for (TransactionDto dto : list) {
+            System.out.printf(
+                    "%-4s%-30s%-30s%-15s%-15s%n",
+                    "\t\t(" + count++ + ") ",
+                    dto.getCategoryName(),
+                    dto.getAccountName(),
+                    dto.getSum(),
+                    dto.getDate());
+        }
     }
 
     protected void printListTransactionCategories(List<TransactionCategoryDto> list) {

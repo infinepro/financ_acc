@@ -4,6 +4,7 @@ import org.hibernate.QueryException;
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
+import ru.maksimka.jb.dto.TransactionDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.InvalidSummException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
@@ -12,7 +13,10 @@ import ru.maksimka.jb.services.Services;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Component
 public class ForAuthorizedViewConsole extends ViewConsoleHelper {
@@ -120,21 +124,22 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     }
 
-    //todo: добавить сначала пополнение и покупка, перевод между счетами
     private void getTransactionSettings() {
         printLine();
         print("\tВыберите доступные действия: \n");
         print("\t\t> (0) ...назад \n");
         print("\t\t> (1) Удалить транзакцию \n");
+        //todo: реализовать отмену транзакции между счетами
         print("\t\t> (2) Отменить транзакцию \n");
         print("\t\t> (3) Добавить новый тип транзакции \n");
         print("\t\t> (4) Показать все транзакции \n");
-        print("\t\t> (4) Показать транзакции за определённую дату \n");
+        print("\t\t> (5) Показать транзакции за определённую дату \n");
 
         print("\t>>>>> ");
 
         try {
             int answer = readNumberFromConsole();
+            List<TransactionDto> list = serviceUsers.getAllTransactions();
             switch (answer) {
                 case 0: {
                     showUserOptions(this.serviceUsers);
@@ -142,35 +147,78 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
                 case 1: {
                     printLine();
+                    printListTransactions(list);
+                    print("\tКакую транзакцию хотите удалить?\n");
+                    print("\t>>>>>  ");
 
-                    getSettingUser();
+                    int resp = readNumberFromConsole();
+                    if (resp>list.size() || resp <0) {
+                        throw new NumberFormatException();
+                    }
+
+                    serviceUsers.deleteTransaction(list.get(resp-1).getId());
+                    getTransactionSettings();
                     break;
                 }
 
                 case 2: {
                     printLine();
+                    printListTransactions(list);
+                    print("\tКакую транзакцию хотите отменить?\n");
+                    print("\t>>>>>  ");
 
+                    int resp = readNumberFromConsole();
+                    if (resp>list.size() || resp <0) {
+                        throw new NumberFormatException();
+                    }
+
+                    serviceUsers.cancelTransaction(list.get(resp-1).getId());
+                    printLine();
+                    print("\tТранзакция отменена, средства вернулись на счет");
+                    getTransactionSettings();
                     break;
                 }
 
                 case 3: {
+                    printLine();
+                    print("\tВведите новое название категории транзакции\n");
+                    print("\t>>>>>  ");
+                    String newCategoryName = readStringFromConsole();
+                    serviceUsers.addNewCategoryTransaction(newCategoryName);
+                    print("\tНовое имя для категории транзакции добавлено\n");
+                    getTransactionSettings();
                     break;
                 }
 
                 case 4: {
+                    printLine();
+                    printListTransactions(list);
+                    getTransactionSettings();
 
                 }
 
                 case 5: {
-                    break;
+                    printLine();
+                    print("\tВведите дату в формате dd.mm.yyyy\n");
+                    print("\t>>>>>  ");
+                    String resp = readStringFromConsole();
+                    List<TransactionDto> listTransactionsToDate  = serviceUsers.getAllTransactionsForDate(resp);
+                    printListTransactions(listTransactionsToDate);
+                    getTransactionSettings();
                 }
 
                 default:
                     throw new NumberFormatException();
             }
 
+        } catch (ParseException e) {
+            printErr("неправильный формат даты");
         } catch (IOException | NumberFormatException e) {
             printErr("\tНекорректный ввод");
+            getSettingUser();
+        } catch (RecordNotFoundException e) {
+            e.printStackTrace();
+            printErr("Запись не найдена ошибка сервера...");
             getSettingUser();
         }
     }

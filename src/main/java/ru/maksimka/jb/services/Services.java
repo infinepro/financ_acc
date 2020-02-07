@@ -8,6 +8,7 @@ import ru.maksimka.jb.dto.TransactionDto;
 import ru.maksimka.jb.exceptions.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
 public interface Services {
@@ -41,12 +42,18 @@ public interface Services {
     //transaction options
     List<TransactionCategoryDto> getAllTransactionCategory();
 
+    List<TransactionDto> getAllTransactions();
+
+    List<TransactionDto> getAllTransactionsForDate(String date) throws ParseException;
+
     TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum);
+
+    void addNewCategoryTransaction(String newNameCategory);
 
     void addNewTransactionBetweenUserAccounts(Integer fromId, Integer toId, BigDecimal sum) throws InvalidSummException;
 
+    boolean deleteTransaction(Integer id) throws RecordNotFoundException;
 
-
-    boolean deleteTransaction(Integer id);
+    boolean cancelTransaction(Integer id) ;
 
 }

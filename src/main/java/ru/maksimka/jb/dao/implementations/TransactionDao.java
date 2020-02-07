@@ -1,5 +1,6 @@
 package ru.maksimka.jb.dao.implementations;
 
+import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
@@ -58,7 +59,7 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
 
     @Override
 
-    public TransactionEntity update(TransactionEntity transactionEntity) throws Exception {
+    public TransactionEntity update(TransactionEntity transactionEntity) throws RecordNotFoundException {
         TransactionEntity transactionEntityOld = findBy(transactionEntity.getId());
         if (transactionEntity == null) {
             throw new RecordNotFoundException("транзакция не найдена, update failed");
@@ -74,7 +75,7 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
     }
 
     @Override
-    public boolean delete(Integer id) throws Exception {
+    public boolean delete(Integer id) throws RecordNotFoundException {
         TransactionEntity transactionEntity = em.merge(findBy(id));
 
         if (transactionEntity == null) {
@@ -85,4 +86,16 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
         em.getTransaction().commit();
         return true;
     }
+
+    public boolean delete(Integer id, @NotNull EntityManager em) throws RecordNotFoundException {
+        TransactionEntity transactionEntity = em.merge(findBy(id));
+
+        if (transactionEntity == null) {
+            throw new RecordNotFoundException("транзакция не найдена, delete failed");
+        }
+
+        em.remove(transactionEntity);
+        return true;
+    }
+
 }

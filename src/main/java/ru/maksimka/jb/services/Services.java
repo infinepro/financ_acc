@@ -46,7 +46,7 @@ public interface Services {
 
     List<TransactionDto> getAllTransactionsForDate(String date) throws ParseException;
 
-    TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum);
+    TransactionDto addNewTransaction(Integer typeId, Integer accountId, BigDecimal sum);
 
     void addNewCategoryTransaction(String newNameCategory);
 

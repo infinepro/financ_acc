@@ -4,6 +4,7 @@ import org.hibernate.QueryException;
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
+import ru.maksimka.jb.dto.TransactionCategoryDto;
 import ru.maksimka.jb.dto.TransactionDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.InvalidSummException;
@@ -14,8 +15,6 @@ import ru.maksimka.jb.services.Services;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Component
@@ -88,9 +87,19 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     }
 
-    private void makePurchase() {
+    private void makePurchase() throws IOException{
         printLine();
-        print("Введите тип транзакции (покупки)");
+        List<TransactionCategoryDto> list = serviceUsers.getAllTransactionCategory();
+        printListTransactionCategories(list);
+        print("\tВыберите тип транзакции (покупки):\n");
+        print("\t>>>>>  ");
+        String resp = readStringFromConsole();
+        print("\tВведите сумму покупки:\n");
+        print("\t>>>>>  ");
+        BigDecimal sum = readSumFromConsole();
+
+
+
 
 
     }

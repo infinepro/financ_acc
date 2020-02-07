@@ -18,7 +18,6 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -162,8 +161,8 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public TransactionDto addNewTransaction(Integer typeId, Integer accountId, String sum) {
-        return null;
+    public TransactionDto addNewTransaction(Integer typeId, Integer accountId, BigDecimal sum) {
+        //todo: impl
     }
 
     @Override

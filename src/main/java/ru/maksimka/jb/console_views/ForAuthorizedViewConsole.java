@@ -4,7 +4,6 @@ import org.hibernate.QueryException;
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
-import ru.maksimka.jb.dto.TransactionCategoryDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.InvalidSummException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
@@ -62,8 +61,8 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                         printLine();
                         printErr("Вы ввели сумму, " +
                                 "превышающую наличие средств на счете для списания");
-                        showUserOptions(this.serviceUsers);
                     }
+                    showUserOptions(this.serviceUsers);
                 }
 
                 case 5: {
@@ -92,7 +91,8 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     }
 
-    private void makeTransactionBetweenAccounts() throws IOException, NumberFormatException, NotAuthorizedException, InvalidSummException {
+    private void makeTransactionBetweenAccounts()
+            throws IOException, NumberFormatException, NotAuthorizedException, InvalidSummException {
         printLine();
 
         //
@@ -116,8 +116,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\tВведите сумму:\n");
         print("\t>>>>>  ");
         BigDecimal sum = readSumFromConsole();
-//todo; исправить получение id
-        serviceUsers.addNewTransactionBetweenUserAccounts(respFrom-1, respTo-1, sum);
+        serviceUsers.addNewTransactionBetweenUserAccounts(list.get(respFrom-1).getId(), list.get(respTo-1).getId(), sum);
 
     }
 
@@ -129,6 +128,9 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\t\t> (1) Удалить транзакцию \n");
         print("\t\t> (2) Отменить транзакцию \n");
         print("\t\t> (3) Добавить новый тип транзакции \n");
+        print("\t\t> (4) Показать все транзакции \n");
+        print("\t\t> (4) Показать транзакции за определённую дату \n");
+
         print("\t>>>>> ");
 
         try {
@@ -152,6 +154,14 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 3: {
+                    break;
+                }
+
+                case 4: {
+
+                }
+
+                case 5: {
                     break;
                 }
 
@@ -240,6 +250,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\t\t> (2) Добавить новый тип счёта \n");
         print("\t\t> (3) Удалить счет \n");
         print("\t\t> (4) Удалить тип счета\n");
+        print("\t\t> (5) Показать Ваши счета\n");
         print("\t>>>>> ");
 
         try {
@@ -284,7 +295,6 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
                 case 3: {
                     printLine();
-                    //todo: not work
                     print("\tКакой счет хотите удалить?\n");
 
                     List<AccountDto> list;
@@ -328,6 +338,20 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
 
                 }
+
+                case 5: {
+                    List<AccountDto> list;
+                    try {
+                        list = serviceUsers.getAllAccounts();
+                    } catch (QueryException e) {
+                        printLine();
+                        printErr("\tУ вас нету счетов\n");
+                        getAccountOperations();
+                        break;
+                    }
+                    getAccountOperations();
+                }
+                break;
             }
 
         } catch (IOException | NumberFormatException e) {

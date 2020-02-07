@@ -173,6 +173,7 @@ public class ServiceUsers implements Services {
             }
         }
 
+        //if not then add
         if (idCategoryBetweenTransactions == 0) {
             idCategoryBetweenTransactions = transactionCategoriesDao
                     .insert(new TransactionCategoriesEntity()
@@ -184,11 +185,6 @@ public class ServiceUsers implements Services {
                 transactionCategoriesDao.findBy(idCategoryBetweenTransactions);
 
         EntityManager em = getContext().getBean(EntityManager.class);
-        //add transaction
-        TransactionEntity te = new TransactionEntity()
-                .withDate(Date.valueOf(LocalDate.now()))
-                .withSum(sum)
-                .withTransactionCategory(transactionCategoriesEntity);
 
         //setting a new balance for entities
         AccountEntity accFrom = accountDao.findBy(fromId);
@@ -196,6 +192,21 @@ public class ServiceUsers implements Services {
         accFrom.setBalance(accFrom.getBalance().subtract(sum));
         accTo.setBalance(accTo.getBalance().add(sum));
 
+        //add transaction in transaction table toTrans and From Trans
+        TransactionEntity teFrom = new TransactionEntity()
+                .withId(null)
+                .withDate(Date.valueOf(LocalDate.now()))
+                .withSum(sum.negate())
+                .withTransactionCategory(transactionCategoriesEntity)
+                .withAccount(accFrom);
+        TransactionEntity teTo = new TransactionEntity()
+                .withId(null)
+                .withDate(Date.valueOf(LocalDate.now()))
+                .withSum(sum)
+                .withTransactionCategory(transactionCategoriesEntity)
+                .withAccount(accTo);
+
+        // check balance and transfer amount
         if (accFrom.getBalance().compareTo(sum) == -1) {
             throw new InvalidSummException();
         }
@@ -205,10 +216,11 @@ public class ServiceUsers implements Services {
             em.getTransaction().begin();
             accountDao.update(accFrom, em);
             accountDao.update(accTo, em);
-            transactionDao.insert(te);
+            transactionDao.insert(teFrom, em);
+            transactionDao.insert(teTo, em);
 
             em.getTransaction().commit();
-        } catch (RecordNotFoundException e) {
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
     }

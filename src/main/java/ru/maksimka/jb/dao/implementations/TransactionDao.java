@@ -52,7 +52,7 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
     }
 
     public boolean insert(TransactionEntity transactionEntity, EntityManager em) {
-        em.persist(transactionEntity);
+        em.merge(transactionEntity);
         return true;
     }
 

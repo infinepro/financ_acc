@@ -163,6 +163,7 @@ public class ServiceUsers implements Services {
     @Override
     public TransactionDto addNewTransaction(Integer typeId, Integer accountId, BigDecimal sum) {
         //todo: impl
+        return new TransactionDto();
     }
 
     @Override

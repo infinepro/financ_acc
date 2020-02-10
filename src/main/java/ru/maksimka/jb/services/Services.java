@@ -1,6 +1,5 @@
 package ru.maksimka.jb.services;
 
-import com.sun.corba.se.impl.protocol.RequestCanceledException;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionCategoryDto;
@@ -12,11 +11,6 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface Services {
-
-    void registration(String login, String password, String email) throws AlreadyExistsException;
-
-    AuthStatus signIn(String login, String password) throws RecordNotFoundException, WrongUserPasswordException;
-
 
     //user operations
     boolean changePassword(String newPassword) throws NotAuthorizedException;
@@ -46,7 +40,7 @@ public interface Services {
 
     List<TransactionDto> getAllTransactionsForDate(String date) throws ParseException;
 
-    TransactionDto addNewTransaction(Integer typeId, Integer accountId, BigDecimal sum);
+    TransactionDto addNewTransaction(Integer typeId, BigDecimal sum);
 
     void addNewCategoryTransaction(String newNameCategory);
 

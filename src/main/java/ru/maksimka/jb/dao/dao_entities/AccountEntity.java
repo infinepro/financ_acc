@@ -1,6 +1,5 @@
-package ru.maksimka.jb.entities;
+package ru.maksimka.jb.dao.dao_entities;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.Accessors;
 

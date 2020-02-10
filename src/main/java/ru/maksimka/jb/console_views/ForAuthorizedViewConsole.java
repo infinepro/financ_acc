@@ -70,6 +70,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
                 case 5: {
 
+
                 }
 
                 case 6: {
@@ -93,10 +94,11 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         printListTransactionCategories(list);
         print("\tВыберите тип транзакции (покупки):\n");
         print("\t>>>>>  ");
-        String resp = readStringFromConsole();
+        int type = readNumberFromConsole();
         print("\tВведите сумму покупки:\n");
         print("\t>>>>>  ");
         BigDecimal sum = readSumFromConsole();
+        serviceUsers.addNewTransaction(type, sum);
 
 
 
@@ -282,7 +284,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                     }
                     printLine();
                     print("\tПользователь удалён");
-                    new WelcomeView().getWelcome();
+                    new StartViewConsole().getWelcome();
                     break;
                 }
 

@@ -4,7 +4,7 @@ import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
-import ru.maksimka.jb.entities.UserEntity;
+import ru.maksimka.jb.dao.dao_entities.UserEntity;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 

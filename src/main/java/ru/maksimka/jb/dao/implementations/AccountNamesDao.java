@@ -3,7 +3,7 @@ package ru.maksimka.jb.dao.implementations;
 import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
-import ru.maksimka.jb.entities.AccountNamesEntity;
+import ru.maksimka.jb.dao.dao_entities.AccountNamesEntity;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 

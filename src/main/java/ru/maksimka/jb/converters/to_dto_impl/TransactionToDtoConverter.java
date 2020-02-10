@@ -2,7 +2,7 @@ package ru.maksimka.jb.converters.to_dto_impl;
 
 import ru.maksimka.jb.converters.Converter;
 import ru.maksimka.jb.dto.TransactionDto;
-import ru.maksimka.jb.entities.TransactionEntity;
+import ru.maksimka.jb.dao.dao_entities.TransactionEntity;
 
 
 public class TransactionToDtoConverter implements Converter<TransactionEntity, TransactionDto> {

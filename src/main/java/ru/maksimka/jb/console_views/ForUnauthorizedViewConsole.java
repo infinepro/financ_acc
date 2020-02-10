@@ -3,14 +3,8 @@ package ru.maksimka.jb.console_views;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.implementations.UserDao;
 import ru.maksimka.jb.dto.UserDto;
-import ru.maksimka.jb.exceptions.AlreadyExistsException;
-import ru.maksimka.jb.exceptions.NotValidDataException;
-import ru.maksimka.jb.exceptions.RecordNotFoundException;
-import ru.maksimka.jb.exceptions.WrongUserPasswordException;
-import ru.maksimka.jb.services.AuthStatus;
-import ru.maksimka.jb.services.ServiceUsers;
-import ru.maksimka.jb.services.Services;
-import ru.maksimka.jb.services.ValidationData;
+import ru.maksimka.jb.exceptions.*;
+import ru.maksimka.jb.services.*;
 
 import java.io.IOException;
 
@@ -26,16 +20,14 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
 
     private UserDao userDao;
     private UserDto userDto;
-    private Services serviceUsers;
+    private Auth authService;
     private ForAuthorizedViewConsole forAuthorizedViewConsole;
 
-    //CONSTRUCTOR
-
-    protected ForUnauthorizedViewConsole(ValidationData valid, UserDao userDao, Services serviceUsers) {
+    protected ForUnauthorizedViewConsole(ValidationData valid, UserDao userDao, Auth authService) {
         this.status = AuthStatus.HAS_NO_STATUS;
         this.valid = valid;
         this.userDao = userDao;
-        this.serviceUsers = serviceUsers;
+        this.authService = authService;
     }
 
     private void setStatus(AuthStatus authStatus) {
@@ -47,22 +39,29 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
         return this.status;
     }
 
-    public void getAuthView(AuthStatus authStatus) {
+    protected void getAuthView(AuthStatus authStatus) {
         setStatus(authStatus);
 
         if (getStatus() == AuthStatus.NOT_REGISTERED) {
-            registration();
+            registrationView();
             getAuthView(getStatus());
         } else if (getStatus() == REGISTERED) {
-            signIn();
+            signInView();
             getAuthView(getStatus());
         } else if (getStatus() == AUTH) {
             forAuthorizedViewConsole = getContext().getBean(ForAuthorizedViewConsole.class);
-            forAuthorizedViewConsole.showUserOptions(this.serviceUsers);
+
+            try {
+                forAuthorizedViewConsole.showUserOptions(this.authService.getService());
+            } catch (NotAuthorizedException e) {
+                signInView();
+                getAuthView(getStatus());
+                e.printStackTrace();
+            }
         }
     }
 
-    private void registration() {
+    private void registrationView() {
         //UserDto userDto = getContext().getBean(UserDto.class);
         ValidationData valid = getContext().getBean(ValidationData.class);
         String login;
@@ -97,20 +96,20 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
             }
 
             try {
-                serviceUsers.registration(login, email, password);
+                authService.registration(login, email, password);
                 setStatus(REGISTERED);
                 printLine();
                 print("\tВы успешно зарегистрировались");
             } catch (AlreadyExistsException e) {
                 e.showMessage();
-                registration();
+                registrationView();
             }
         } catch (IOException e) {
-            registration();
+            registrationView();
         }
     }
 
-    private void signIn() {
+    private void signInView() {
         this.userDto = getContext().getBean(UserDto.class);
         String login;
         String password;
@@ -125,7 +124,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
                 print("\tВведите пароль\n");
                 print("\t>>>>>  ");
                 password = readStringFromConsole();
-                serviceUsers.signIn(login, password);
+                authService.signIn(login, password);
 
                 setStatus(AUTH);
                 printLine();
@@ -135,10 +134,10 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
 
             } catch (IOException e) {
                 printErr("\tнепредвиденная ошибка");
-                signIn();
+                signInView();
             } catch (RecordNotFoundException | WrongUserPasswordException e) {
                 printErr("\tневерный логин или пароль");
-                signIn();
+                signInView();
             }
         }
     }

@@ -1,4 +1,4 @@
-package ru.maksimka.jb.entities;
+package ru.maksimka.jb.dao.dao_entities;
 
 import lombok.*;
 

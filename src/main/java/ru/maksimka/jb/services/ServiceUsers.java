@@ -1,15 +1,19 @@
 package ru.maksimka.jb.services;
 
-import org.springframework.stereotype.Service;
 import ru.maksimka.jb.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.TransactionCategoryToDtoConverter;
 import ru.maksimka.jb.converters.to_dto_impl.TransactionToDtoConverter;
-import ru.maksimka.jb.converters.to_entity_impl.UserToEntityConverter;
+import ru.maksimka.jb.dao.dao_entities.*;
 import ru.maksimka.jb.dao.implementations.*;
-import ru.maksimka.jb.dto.*;
-import ru.maksimka.jb.entities.*;
-import ru.maksimka.jb.exceptions.*;
+import ru.maksimka.jb.dto.AccountDto;
+import ru.maksimka.jb.dto.AccountNameDto;
+import ru.maksimka.jb.dto.TransactionCategoryDto;
+import ru.maksimka.jb.dto.TransactionDto;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
+import ru.maksimka.jb.exceptions.InvalidSummException;
+import ru.maksimka.jb.exceptions.NotAuthorizedException;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -21,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.maksimka.jb.configurations.SpringContext.*;
+import static ru.maksimka.jb.configurations.SpringContext.getContext;
 
-@Service
+
 public class ServiceUsers implements Services {
 
     private UserDao userDao;
@@ -32,32 +36,25 @@ public class ServiceUsers implements Services {
     private TransactionDao transactionDao;
     private TransactionCategoriesDao transactionCategoriesDao;
     private DateService dateService;
-
     private UserEntity userEntity;
 
-    public ServiceUsers(UserDao userDao, AccountDao accountDao,
-                        AccountNamesDao accountNamesDao,
-                        TransactionDao transactionDao,
-                        TransactionCategoriesDao transactionCategoriesDao,
-                        DateService dateService) {
-
-        this.userDao = userDao;
-        this.accountDao = accountDao;
-        this.accountNamesDao = accountNamesDao;
-        this.transactionDao = transactionDao;
-        this.transactionCategoriesDao = transactionCategoriesDao;
-        this.dateService = dateService;
-    }
-
-    private void setUserEntity(UserEntity userEntity) {
+    public ServiceUsers(UserEntity userEntity) {
         this.userEntity = userEntity;
+
+        this.accountDao = getContext().getBean(AccountDao.class);
+        this.accountNamesDao = getContext().getBean(AccountNamesDao.class);
+        this.transactionDao = getContext().getBean(TransactionDao.class);
+        this.transactionCategoriesDao = getContext().getBean(TransactionCategoriesDao.class);
+        this.dateService = getContext().getBean(DateService.class);;
     }
 
+    //if not authorized
     private void checkUserEntityForNull() throws NotAuthorizedException {
         if (this.userEntity == null) {
             throw new NotAuthorizedException("пользователь неавторизован");
         }
     }
+
 
     @Override
     public boolean changePassword(String newPassword) throws NotAuthorizedException {
@@ -161,12 +158,6 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public TransactionDto addNewTransaction(Integer typeId, Integer accountId, BigDecimal sum) {
-        //todo: impl
-        return new TransactionDto();
-    }
-
-    @Override
     public void addNewCategoryTransaction(String newNameCategory) {
         transactionCategoriesDao.insert(new TransactionCategoriesEntity().withNameCategory(newNameCategory));
     }
@@ -191,9 +182,15 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public boolean deleteTransaction(Integer id) throws RecordNotFoundException{
+    public boolean deleteTransaction(Integer id) throws RecordNotFoundException {
         transactionDao.delete(id);
         return true;
+    }
+
+    @Override
+    public TransactionDto addNewTransaction(Integer typeId, BigDecimal sum) {
+        //todo: impl
+        return new TransactionDto();
     }
 
     @Override
@@ -282,25 +279,6 @@ public class ServiceUsers implements Services {
         return list2;
     }
 
-    @Override
-    public void registration(String login, String email, String password) throws AlreadyExistsException {
-        UserDto userDto = new UserDto().withName(login).withEmail(email).withPassword(password);
-        userDao.insert(new UserToEntityConverter().convert(userDto));
-    }
 
-    @Override
-    public AuthStatus signIn(String login, String password) throws RecordNotFoundException, WrongUserPasswordException {
-
-        UserEntity userEntity = userDao.findBy(login);
-        if (userEntity == null) {
-            throw new RecordNotFoundException("такого логина несуществует");
-        } else if (!userEntity.getPassword().equals(password)) {
-            throw new WrongUserPasswordException("неверный пароль или логин");
-        } else {
-            setUserEntity(userEntity);
-            return AuthStatus.AUTH;
-        }
-
-    }
 
 }

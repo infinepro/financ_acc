@@ -2,7 +2,7 @@ package ru.maksimka.jb.converters.to_dto_impl;
 
 import ru.maksimka.jb.converters.Converter;
 import ru.maksimka.jb.dto.UserDto;
-import ru.maksimka.jb.entities.UserEntity;
+import ru.maksimka.jb.dao.dao_entities.UserEntity;
 
 public class UserToDtoConverter implements Converter<UserEntity, UserDto> {
 

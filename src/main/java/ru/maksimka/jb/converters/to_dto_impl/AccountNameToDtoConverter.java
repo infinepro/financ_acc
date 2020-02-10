@@ -2,7 +2,7 @@ package ru.maksimka.jb.converters.to_dto_impl;
 
 import ru.maksimka.jb.converters.Converter;
 import ru.maksimka.jb.dto.AccountNameDto;
-import ru.maksimka.jb.entities.AccountNamesEntity;
+import ru.maksimka.jb.dao.dao_entities.AccountNamesEntity;
 
 public class AccountNameToDtoConverter implements Converter<AccountNamesEntity, AccountNameDto> {
     @Override

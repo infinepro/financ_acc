@@ -4,12 +4,11 @@ import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
-import ru.maksimka.jb.entities.TransactionEntity;
+import ru.maksimka.jb.dao.dao_entities.TransactionEntity;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.math.BigDecimal;
 import java.util.List;
 
 

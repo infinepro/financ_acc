@@ -40,7 +40,8 @@ public interface Services {
 
     List<TransactionDto> getAllTransactionsForDate(String date) throws ParseException;
 
-    TransactionDto addNewTransaction(Integer typeId, BigDecimal sum);
+    TransactionDto addNewTransaction(Integer transIdType, Integer accountId, BigDecimal sum)
+            throws InvalidSummException, RecordNotFoundException;
 
     void addNewCategoryTransaction(String newNameCategory);
 

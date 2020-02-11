@@ -69,8 +69,15 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 5: {
-
-
+                    try {
+                        makePurchase();
+                    } catch (NotAuthorizedException e) {
+                        e.printStackTrace();
+                    } catch (InvalidSummException e) {
+                        printErr("\tНе хватает средств на счёте!\n");
+                        showUserOptions(this.serviceUsers);
+                    }
+                    showUserOptions(this.serviceUsers);
                 }
 
                 case 6: {
@@ -88,22 +95,32 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     }
 
-    private void makePurchase() throws IOException{
+    private void makePurchase() throws IOException, NotAuthorizedException, InvalidSummException{
         printLine();
-        List<TransactionCategoryDto> list = serviceUsers.getAllTransactionCategory();
-        printListTransactionCategories(list);
+        List<TransactionCategoryDto> listTransCat = serviceUsers.getAllTransactionCategory();
+        printListTransactionCategories(listTransCat);
         print("\tВыберите тип транзакции (покупки):\n");
         print("\t>>>>>  ");
-        int type = readNumberFromConsole();
+        int typeTr = readNumberFromConsole() - 1;
+        List<AccountDto> listAccs = serviceUsers.getAllAccounts();
+        printListUserAccounts(listAccs);
+        print("\tВыберите с какого счета покупка:\n");
+        print("\t>>>>>  ");
+        int typeAc = readNumberFromConsole() - 1;
         print("\tВведите сумму покупки:\n");
         print("\t>>>>>  ");
         BigDecimal sum = readSumFromConsole();
-        serviceUsers.addNewTransaction(type, sum);
+        try {
+            serviceUsers.addNewTransaction(typeAc, typeTr, sum);
+        } catch (RecordNotFoundException e) {
+            printErr("\tНе найден счет для записи, идите к админу\n");
+            e.printStackTrace();
+            printLine();
+            return;
+        }
 
-
-
-
-
+        printLine();
+        print("\tСумма списана, добавлена транзакция.\n");
     }
 
     private void makeTransactionBetweenAccounts()
@@ -399,9 +416,9 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                 }
 
                 case 5: {
-                    List<AccountDto> list;
+
                     try {
-                        list = serviceUsers.getAllAccounts();
+                         printListUserAccounts(serviceUsers.getAllAccounts());
                     } catch (QueryException e) {
                         printLine();
                         printErr("\tУ вас нету счетов\n");

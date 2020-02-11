@@ -37,6 +37,7 @@ public class ServiceUsers implements Services {
     private TransactionCategoriesDao transactionCategoriesDao;
     private DateService dateService;
     private UserEntity userEntity;
+    private EntityManager em;
 
     public ServiceUsers(UserEntity userEntity) {
         this.userEntity = userEntity;
@@ -45,7 +46,8 @@ public class ServiceUsers implements Services {
         this.accountNamesDao = getContext().getBean(AccountNamesDao.class);
         this.transactionDao = getContext().getBean(TransactionDao.class);
         this.transactionCategoriesDao = getContext().getBean(TransactionCategoriesDao.class);
-        this.dateService = getContext().getBean(DateService.class);;
+        this.dateService = getContext().getBean(DateService.class);
+        this.em = getContext().getBean(EntityManager.class);
     }
 
     //if not authorized
@@ -164,7 +166,7 @@ public class ServiceUsers implements Services {
 
     @Override
     public boolean cancelTransaction(Integer id) {
-        EntityManager em = getContext().getBean(EntityManager.class);
+        EntityManager em = this.em;
         TransactionEntity te = transactionDao.findBy(id);
         AccountEntity ae = te.getAccount();
         ae.setBalance(ae.getBalance().add(te.getSum().negate()));
@@ -188,8 +190,30 @@ public class ServiceUsers implements Services {
     }
 
     @Override
-    public TransactionDto addNewTransaction(Integer typeId, BigDecimal sum) {
-        //todo: impl
+    public TransactionDto addNewTransaction(Integer transTypeId,
+                                            Integer accountId,
+                                            BigDecimal sum)
+            throws InvalidSummException, RecordNotFoundException {
+
+        EntityManager em = this.em;
+
+        AccountEntity ae = accountDao.findBy(accountId);
+        if (ae.getBalance().compareTo(sum) == -1) {
+            throw new InvalidSummException();
+        }
+
+        ae.setBalance(ae.getBalance().subtract(sum));
+
+        TransactionCategoriesEntity tce = transactionCategoriesDao.findBy(transTypeId);
+        TransactionEntity te = new TransactionEntity()
+                .withDate(Date.valueOf(LocalDate.now()))
+                .withAccount(ae)
+                .withSum(sum)
+                .withTransactionCategory(tce);
+
+        em.getTransaction().begin();
+        transactionDao.insert(te);
+        accountDao.update(ae);
         return new TransactionDto();
     }
 
@@ -220,7 +244,7 @@ public class ServiceUsers implements Services {
         TransactionCategoriesEntity transactionCategoriesEntity =
                 transactionCategoriesDao.findBy(idCategoryBetweenTransactions);
 
-        EntityManager em = getContext().getBean(EntityManager.class);
+        EntityManager em = this.em;
 
         //setting a new balance for entities
         AccountEntity accFrom = accountDao.findBy(fromId);
@@ -278,7 +302,6 @@ public class ServiceUsers implements Services {
 
         return list2;
     }
-
 
 
 }

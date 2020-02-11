@@ -11,7 +11,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource(value = "classpath:application.properties")
-public class ConfigurationSpringBeans {
+public class MailConfiguration {
 
     @Value("${spring.mail.host}")
     private String host;

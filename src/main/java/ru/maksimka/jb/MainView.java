@@ -1,11 +1,8 @@
 package ru.maksimka.jb;
 
 import ru.maksimka.jb.console_views.StartViewConsole;
-import ru.maksimka.jb.services.MailService;
 
-import static ru.maksimka.jb.configurations.SpringContext.getContext;
-
-public class Main {
+public class MainView {
 
     public static void main(String[] args) {
 

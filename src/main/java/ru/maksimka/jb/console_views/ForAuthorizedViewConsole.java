@@ -111,7 +111,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         print("\t>>>>>  ");
         BigDecimal sum = readSumFromConsole();
         try {
-            serviceUsers.addNewTransaction(typeAc, typeTr, sum);
+            serviceUsers.addNewTransaction(typeAc, typeTr, sum.negate());
         } catch (RecordNotFoundException e) {
             printErr("\tНе найден счет для записи, идите к админу\n");
             e.printStackTrace();

@@ -198,8 +198,13 @@ public class ServiceUsers implements Services {
         EntityManager em = this.em;
 
         AccountEntity ae = accountDao.findBy(accountId);
-        if (ae.getBalance().compareTo(sum) == -1) {
-            throw new InvalidSummException();
+        //если сумма отрицательная
+        if (sum.intValue() < 0) {
+            //проверяем если сумма больше средств на счете или если сумма == 0
+            if (ae.getBalance().intValue() < sum.negate().intValue() || sum.intValue() == 0) {
+                throw new InvalidSummException();
+            }
+            sum.negate();
         }
 
         ae.setBalance(ae.getBalance().subtract(sum));

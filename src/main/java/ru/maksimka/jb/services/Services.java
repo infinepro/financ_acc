@@ -43,6 +43,9 @@ public interface Services {
     TransactionDto addNewTransaction(Integer transIdType, Integer accountId, BigDecimal sum)
             throws InvalidSummException, RecordNotFoundException;
 
+    TransactionDto addNewTransaction( Integer accountId, BigDecimal sum)
+            throws RecordNotFoundException;
+
     void addNewCategoryTransaction(String newNameCategory);
 
     void addNewTransactionBetweenUserAccounts(Integer fromId, Integer toId, BigDecimal sum) throws InvalidSummException;

@@ -91,8 +91,28 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         }
     }
 
-    private void replenishBalance() {
+    //
+    private void replenishBalance() throws NotAuthorizedException, IOException {
+        printLine();
+        List<AccountDto> listAccs = serviceUsers.getAllAccounts();
+        printListUserAccounts(listAccs);
+        print("\tВыберите какой счет пополнить:\n");
+        print("\t>>>>>  ");
+        int typeAcId = listAccs.get(readNumberFromConsole() - 1).getId();
+        print("\tВведите сумму пополнение:\n");
+        print("\t>>>>>  ");
+        BigDecimal sum = readSumFromConsole();
+        try {
+            serviceUsers.addNewTransaction(typeAcId, sum);
+        } catch (RecordNotFoundException e) {
+            printErr("\tНе найден счет для пополнения, идите к админу\n");
+            e.printStackTrace();
+            printLine();
+            return;
+        }
 
+        printLine();
+        print("\tСумма списана, добавлена транзакция.\n");
     }
 
     private void makePurchase() throws IOException, NotAuthorizedException, InvalidSummException{
@@ -101,17 +121,17 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         printListTransactionCategories(listTransCat);
         print("\tВыберите тип транзакции (покупки):\n");
         print("\t>>>>>  ");
-        int typeTr = readNumberFromConsole() - 1;
+        int typeTrId = listTransCat.get(readNumberFromConsole() - 1).getId();
         List<AccountDto> listAccs = serviceUsers.getAllAccounts();
         printListUserAccounts(listAccs);
         print("\tВыберите с какого счета покупка:\n");
         print("\t>>>>>  ");
-        int typeAc = readNumberFromConsole() - 1;
+        int typeAcId = listAccs.get(readNumberFromConsole() - 1).getId();
         print("\tВведите сумму покупки:\n");
         print("\t>>>>>  ");
         BigDecimal sum = readSumFromConsole();
         try {
-            serviceUsers.addNewTransaction(typeAc, typeTr, sum.negate());
+            serviceUsers.addNewTransaction(typeTrId, typeAcId, sum.negate());
         } catch (RecordNotFoundException e) {
             printErr("\tНе найден счет для записи, идите к админу\n");
             e.printStackTrace();

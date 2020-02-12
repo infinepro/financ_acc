@@ -190,6 +190,46 @@ public class ServiceUsers implements Services {
     }
 
     @Override
+    public TransactionDto addNewTransaction(Integer accountId, BigDecimal sum) throws RecordNotFoundException {
+        EntityManager em = this.em;
+
+        AccountEntity ae = accountDao.findBy(accountId);
+        ae.setBalance(ae.getBalance().subtract(sum));
+
+        List<TransactionCategoriesEntity> list = transactionCategoriesDao.findByAll();
+
+        //проверка наличия типа "Пополнение"
+        int transTypeId = 0;
+        for (TransactionCategoriesEntity tce : list) {
+            if (tce.getNameCategory().equals("Пополнение")) {
+                transTypeId = tce.getId();
+                break;
+            }
+        }
+
+        //if not then add
+        if (transTypeId == 0) {
+            transTypeId = transactionCategoriesDao
+                    .insert(new TransactionCategoriesEntity()
+                            .withNameCategory("Пополнение"))
+                    .getId();
+        }
+
+
+        TransactionCategoriesEntity tce = transactionCategoriesDao.findBy(transTypeId);
+        TransactionEntity te = new TransactionEntity()
+                .withDate(Date.valueOf(LocalDate.now()))
+                .withAccount(ae)
+                .withSum(sum)
+                .withTransactionCategory(tce);
+
+        em.getTransaction().begin();
+        transactionDao.insert(te, em);
+        accountDao.update(ae, em);
+        return new TransactionDto();
+    }
+
+    @Override
     public TransactionDto addNewTransaction(Integer transTypeId,
                                             Integer accountId,
                                             BigDecimal sum)
@@ -204,7 +244,7 @@ public class ServiceUsers implements Services {
             if (ae.getBalance().intValue() < sum.negate().intValue() || sum.intValue() == 0) {
                 throw new InvalidSummException();
             }
-            sum.negate();
+            sum = sum.negate();
         }
 
         ae.setBalance(ae.getBalance().subtract(sum));
@@ -217,8 +257,8 @@ public class ServiceUsers implements Services {
                 .withTransactionCategory(tce);
 
         em.getTransaction().begin();
-        transactionDao.insert(te);
-        accountDao.update(ae);
+        transactionDao.insert(te, em);
+        accountDao.update(ae, em);
         return new TransactionDto();
     }
 

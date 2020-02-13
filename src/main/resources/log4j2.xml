@@ -1,0 +1,27 @@
+<Configuration status="WARN" strict="true"
+               name="XMLConfigTest" packages="org.apache.logging.log4j.test">
+    <Filter type="ThresholdFilter" level="trace" />
+
+    <Appenders>
+        <Console name="STDOUT">
+            <Layout type="PatternLayout" pattern="%p [%d{MMM-dd HH:mm:ss}] %m %n" />
+        </Console>
+        <Console name="BOTOUT">
+            <Layout type="PatternLayout" pattern="(0_0) BOT %p [%d{HH:mm:ss}] %m %n" />
+        </Console>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="WARN">
+            <AppenderRef ref="STDOUT" />
+        </Root>
+
+        <Logger name="BOT INFO" level="info" additivity="false">
+            <Appender-ref ref="BOTOUT" level="info" />
+        </Logger>
+
+    </Loggers>
+
+
+</Configuration>

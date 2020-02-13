@@ -107,5 +107,14 @@
         </loadData>
     </changeSet>
 
+    <!-- for bot users-->
+    <changeSet id="4" author="maksimka">
+        <addColumn tableName="users">
+            <column name="chat_id" type="BIGINT">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

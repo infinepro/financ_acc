@@ -1,7 +1,7 @@
 package ru.maksimka.jb.bot;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private static final Logger log = LoggerFactory.getLogger(Bot.class);
+    private static final Logger log = LogManager.getLogger("BOT INFO");
 
     private final String botName;
     private final String botToken;
@@ -23,15 +23,15 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        log.info("Receive new Update. updateID: " + update.getUpdateId());
 
         Long chatId = update.getMessage().getChatId();
+        log.info("Receive new Update. updateID: " + chatId);
         String inputText = update.getMessage().getText();
 
         if (inputText.startsWith("/start")) {
             SendMessage message = new SendMessage();
             message.setChatId(chatId);
-            message.setText("Hello. This is start message");
+            message.setText("Hello. its test bot, wait new instructions...");
             try {
                 execute(message);
             } catch (TelegramApiException e) {

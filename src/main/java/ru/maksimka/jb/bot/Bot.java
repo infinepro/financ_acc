@@ -2,6 +2,7 @@ package ru.maksimka.jb.bot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,6 +16,9 @@ public class Bot extends TelegramLongPollingBot {
     private final String botName;
     private final String botToken;
 
+    @Autowired
+    private MessageController messageController;
+
     public Bot(String botName, String botToken, DefaultBotOptions botOptions) {
         super(botOptions);
         this.botName = botName;
@@ -26,7 +30,19 @@ public class Bot extends TelegramLongPollingBot {
 
         Long chatId = update.getMessage().getChatId();
         log.info("Receive new Update. updateID: " + chatId);
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(messageController.getMessage(update.getMessage().getText()));
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+       /* Long chatId = update.getMessage().getChatId();
+        log.info("Receive new Update. updateID: " + chatId);
         String inputText = update.getMessage().getText();
+
 
         if (inputText.startsWith("/start")) {
             SendMessage message = new SendMessage();
@@ -37,7 +53,7 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override

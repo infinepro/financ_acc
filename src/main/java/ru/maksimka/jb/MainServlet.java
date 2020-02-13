@@ -1,4 +1,4 @@
-package ru.maksimka.jb.web;
+package ru.maksimka.jb;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.maksimka.jb.web.controllers.Controller;

@@ -6,7 +6,7 @@
     
     <servlet>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>ru.maksimka.jb.web.MainServlet</servlet-class>
+        <servlet-class>ru.maksimka.jb.MainServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>

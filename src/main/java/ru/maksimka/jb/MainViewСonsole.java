@@ -2,7 +2,7 @@ package ru.maksimka.jb;
 
 import ru.maksimka.jb.console_views.StartViewConsole;
 
-public class MainView {
+public class MainViewСonsole {
 
     public static void main(String[] args) {
 

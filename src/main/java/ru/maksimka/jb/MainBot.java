@@ -1,34 +1,29 @@
 package ru.maksimka.jb;
 
-import org.apache.log4j.Logger;
-import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.meta.ApiContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.maksimka.jb.bot.Bot;
+
+import static ru.maksimka.jb.configurations.SpringContext.getContext;
 
 public class MainBot {
 
-    private static final Logger log = Logger.getLogger(MainBot.class);
+    private static Logger log = LoggerFactory.getLogger(MainBot.class);;
 
     public static void main(String[] args) {
-//TODO: настроить прокси
-        String PROXY_HOST = "172.65.38.80";
-        Integer PROXY_PORT = 443;
-        //"994dc138e01718f07f39cf78f418a4770";
 
-        DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
-        botOptions.setProxyHost(PROXY_HOST);
-        botOptions.setProxyPort(PROXY_PORT);
-        botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
+        TelegramBotsApi botsApi = new TelegramBotsApi();
 
-        ApiContextInitializer.init();
-        Bot bot = new Bot(botOptions);
-        bot.botConnect();
+        try {
+            log.info("Bot init....");
+            botsApi.registerBot(getContext().getBean(Bot.class));
+            log.info("Bot is worjing...and he is waiting requests");
 
-
-//        System.getProperties().put( "proxySet", "true" );
-        //      System.getProperties().put( "socksProxyHost", "https://exp.proxydigitalresistance.dog" );
-        //    System.getProperties().put( "socksProxyPort", "443" );
-
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+            log.error("Bot doesn't working, where is problem padavan?");
+        }
     }
 }

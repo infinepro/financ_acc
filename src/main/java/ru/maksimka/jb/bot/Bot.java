@@ -37,22 +37,6 @@ public class Bot extends TelegramLongPollingBot {
             log.error("Бот повалился ищи проблему в стеке");
             e.printStackTrace();
         }
-
-       /* Long chatId = update.getMessage().getChatId();
-        log.info("Receive new Update. updateID: " + chatId);
-        String inputText = update.getMessage().getText();
-
-
-        if (inputText.startsWith("/start")) {
-            SendMessage message = new SendMessage();
-            message.setChatId(chatId);
-            message.setText("Hello. its test bot, wait new instructions...");
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
     @Override

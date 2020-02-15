@@ -38,8 +38,8 @@ public class MessageController {
                 .trim()
                 .toLowerCase());
 
-        log.info("Пришёл новый запрос боту, chatId:" + chatId + "\n" +
-                "\t\tText: " + incomeMessage );
+        log.info("Пришёл новый запрос боту, chatId:" + chatId
+                + "\n------------------------] " + "Text: " + incomeMessage);
 
         SendMessage responseMessage = new SendMessage();
         responseMessage.setChatId(chatId);

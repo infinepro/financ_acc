@@ -33,6 +33,7 @@ public class MainServlet extends HttpServlet {
             return;
         }
 
+
         try {
             Object request = om.readValue(req.getInputStream(), controller.getRequestClass());
             Object response = controller.execute(request);

@@ -7,10 +7,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.maksimka.jb.bot.Bot;
 
 import java.util.HashMap;
+
+import static ru.maksimka.jb.bot.Controller.*;
 
 @Configuration
 @PropertySource(value = "classpath:application.properties")
@@ -43,22 +44,15 @@ public class BotConfiguration {
         return new Bot(botName, botToken, botOptions);
     }
 
-    @Bean("responsesMap")
+    @Bean("simpleAnswers")
     public HashMap<String, String> getResponsesMap(){
         return new HashMap<String, String>() {{
-
+            put(EXIT, "Пока человек..");
+            put(WHY, "Для того, чтобы уметь контролировать свои расходы и доходы");
+            put()
             put("привет", "Привет друг");
             put("как дела", "Все отлично, а у тебя?))");
-
-
+            put("кто ты", "Я твой самый лучший друг! желания только не исполняю...))");
         }};
     }
-
-    @Bean
-    public SendMessage getSeandMessage(){
-        return new SendMessage();
-    }
-
-
-
 }

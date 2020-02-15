@@ -8,6 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.maksimka.jb.bot.Controller.*;
+
 @Configuration
 public class BotKeyboardsConfiguration {
 
@@ -17,19 +19,19 @@ public class BotKeyboardsConfiguration {
 
         List<InlineKeyboardButton> listExit = new ArrayList<>();
         listExit.add(new InlineKeyboardButton()
-                .setText("Выйти и попрощаться с ботом")
-                .setCallbackData("Exit"));
+                    .setText("Выйти и попрощаться с ботом")
+                    .setCallbackData(EXIT));
 
         List<InlineKeyboardButton> listButtons = new ArrayList<>();
         listButtons
                 .add(new InlineKeyboardButton()
                         .setText("Зарегестрироваться")
-                        .setCallbackData("toRegister"));
+                        .setCallbackData(REGISTER));
 
         listButtons
                 .add(new InlineKeyboardButton()
                         .setText("Зачем?")
-                        .setCallbackData("whyRegister"));
+                        .setCallbackData(WHY));
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(listButtons);

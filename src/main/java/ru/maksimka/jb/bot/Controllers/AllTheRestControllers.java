@@ -20,7 +20,7 @@ public class AllTheRestControllers implements Controller {
     private Map<String, String> mapResponses;
 
     @Qualifier("startKeyboard")
-    private InlineKeyboardMarkup startKeyboard;
+    private InlineKeyboardMarkup Keyboard;
 
     @Override
     public SendMessage execute(Update update) {
@@ -52,14 +52,14 @@ public class AllTheRestControllers implements Controller {
         if (message.equals(START)) {
             return new SendMessage()
                     .setChatId(chatId)
-                    .setText("Приветствую тебя человек!")
-                    .setReplyMarkup(startKeyboard);
+                    .setText("Приветствую тебя, человек!")
+                    .setReplyMarkup(Keyboard);
 
         } else if (!mapResponses.containsKey(message)) {
             return new SendMessage()
                     .setChatId(chatId)
                     .setText("Я не понимаю....жми давай что нибудь уже")
-                    .setReplyMarkup(startKeyboard);
+                    .setReplyMarkup(Keyboard);
         } else {
             return new SendMessage()
                     .setChatId(chatId)

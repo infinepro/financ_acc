@@ -11,16 +11,15 @@ import static ru.maksimka.jb.bot.Controller.REGISTER;
 
 @Service(REGISTER)
 public class RegisterController implements Controller {
+
+    @Qualifier("startKeyboard")
+    InlineKeyboardMarkup Keyboard;
+
     @Override
     public SendMessage execute(Update update) {
         return null;
     }
 
-    @Qualifier("startKeyboard")
-    InlineKeyboardMarkup startKeyboard;
 
-    @Override
-    public SendMessage execute(Update update, String message) {
-        return null;
-    }
+
 }

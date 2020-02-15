@@ -13,12 +13,7 @@ import static ru.maksimka.jb.bot.Controller.LOGIN;
 public class LoginController implements Controller {
 
     @Qualifier("startKeyboard")
-    InlineKeyboardMarkup startKeyboard;
-
-    @Override
-    public SendMessage execute(Update update, String message) {
-        return null;
-    }
+    InlineKeyboardMarkup Keyboard;
 
     @Override
     public SendMessage execute(Update update) {

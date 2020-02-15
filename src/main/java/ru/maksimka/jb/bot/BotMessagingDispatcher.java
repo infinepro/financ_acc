@@ -53,7 +53,7 @@ public class BotMessagingDispatcher {
             } return controller.execute(update);
         }
         return new SendMessage()
-                .setText("Человек, ты прислал мне пустое сообщения...")
+                .setText("Человек, ты прислал мне какую то ерунду...")
                 .setChatId(update.getMessage().getChatId())
                 .setReplyMarkup(startKeyboard);
 

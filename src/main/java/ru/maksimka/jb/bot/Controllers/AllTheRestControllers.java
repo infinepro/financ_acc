@@ -2,6 +2,7 @@ package ru.maksimka.jb.bot.Controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,16 +12,20 @@ import ru.maksimka.jb.bot.Controller;
 
 import java.util.Map;
 
+import static ru.maksimka.jb.configurations.SpringContext.getContext;
+
 @Service
 public class AllTheRestControllers implements Controller {
 
     private static final Logger LOGGER = LogManager.getLogger("BOT INFO");
 
+    @Autowired
     @Qualifier("simpleAnswers")
     private Map<String, String> mapResponses;
 
-    @Qualifier("startKeyboard")
-    private InlineKeyboardMarkup Keyboard;
+    @Autowired
+    @Qualifier("start")
+    private InlineKeyboardMarkup keyboard;
 
     @Override
     public SendMessage execute(Update update) {
@@ -28,21 +33,19 @@ public class AllTheRestControllers implements Controller {
         long chatId;
         String message;
         if (update.hasCallbackQuery()) {
-            message = new StringBuilder(update
+            message = update
                     .getCallbackQuery()
-                    .getMessage()
-                    .getText()
+                    .getData()
                     .trim()
-                    .toLowerCase())
-                    .toString();
+                    .toLowerCase();
+
             chatId = update.getCallbackQuery().getMessage().getChatId();
         } else {
-            message = new StringBuilder(update
+            message = update
                     .getMessage()
                     .getText()
                     .trim()
-                    .toLowerCase())
-                    .toString();
+                    .toLowerCase();
             chatId = update.getMessage().getChatId();
         }
 
@@ -50,22 +53,26 @@ public class AllTheRestControllers implements Controller {
                 + "\n------------------------] " + "Текст: " + message);
 
         if (message.equals(START)) {
+            keyboard = getContext().getBean( "startKeyboard", InlineKeyboardMarkup.class);
             return new SendMessage()
                     .setChatId(chatId)
-                    .setText("Приветствую тебя, человек!")
-                    .setReplyMarkup(Keyboard);
-
-        } else if (!mapResponses.containsKey(message)) {
+                    .setText("Окей, жмакай кнопку для дальнейших действий! 👇")
+                    .setReplyMarkup(keyboard);
+        } else if (message.equals(EXIT)){
+            return new SendMessage()
+                    .setChatId(chatId)
+                    .setText("Пока человек...ты это, заходи если что! 👋");
+        }else if (!mapResponses.containsKey(message)) {
             return new SendMessage()
                     .setChatId(chatId)
                     .setText("Я не понимаю....жми давай что нибудь уже")
-                    .setReplyMarkup(Keyboard);
+                    .setReplyMarkup(keyboard);
         } else {
             return new SendMessage()
                     .setChatId(chatId)
-                    .setText(mapResponses.get(message));
+                    .setText(mapResponses.get(message))
+                    .setReplyMarkup(keyboard);
         }
     }
-
 }
 

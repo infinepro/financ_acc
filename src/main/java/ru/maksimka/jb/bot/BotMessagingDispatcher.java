@@ -20,22 +20,17 @@ public class BotMessagingDispatcher {
 
     private static final Logger LOGGER = LogManager.getLogger("BOT INFO");
 
-    @Qualifier("simpleAnswers")
-    private final Map<String, String> mapResponses;
-
-    @Qualifier("startKeyboard")
+    @Qualifier("start")
     private final InlineKeyboardMarkup startKeyboard;
 
-    public BotMessagingDispatcher(InlineKeyboardMarkup startKeyboard, Map<String, String> mapResponses) {
+    public BotMessagingDispatcher(InlineKeyboardMarkup startKeyboard) {
         this.startKeyboard = startKeyboard;
-        this.mapResponses = mapResponses;
     }
 
     public SendMessage getSendMessageController(Update update) {
 
         String nameController;
         Controller controller;
-        String message;
 
         if (update.hasCallbackQuery()) {
             try {

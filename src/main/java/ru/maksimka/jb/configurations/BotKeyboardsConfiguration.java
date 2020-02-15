@@ -13,6 +13,21 @@ import static ru.maksimka.jb.bot.Controller.*;
 @Configuration
 public class BotKeyboardsConfiguration {
 
+    @Bean("start")
+    public InlineKeyboardMarkup getStartButton() {
+        InlineKeyboardMarkup keyButtonMarkup = new InlineKeyboardMarkup();
+
+        List<InlineKeyboardButton> listExit = new ArrayList<>();
+        listExit.add(new InlineKeyboardButton()
+                .setText("START")
+                .setCallbackData(START));
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(listExit);
+
+        return keyButtonMarkup.setKeyboard(rowList);
+    }
+
     @Bean("startKeyboard")
     public InlineKeyboardMarkup getStartKeyboard() {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();

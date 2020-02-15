@@ -29,13 +29,12 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         Long chatId = update.getMessage().getChatId();
-        log.info("Receive new Update. updateID: " + chatId);
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(messageController.getMessage(update.getMessage().getText()));
+        SendMessage message = messageController.getSendMessage(update);
         try {
             execute(message);
+            log.info("Бот ответил пользователю chatId: "+ message.getChatId());
         } catch (TelegramApiException e) {
+            log.error("Бот повалился ищи проблему в стеке");
             e.printStackTrace();
         }
 

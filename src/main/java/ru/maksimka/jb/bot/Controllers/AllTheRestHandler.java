@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import ru.maksimka.jb.bot.Controller;
+import ru.maksimka.jb.bot.Handler;
 
 import java.util.Map;
 
 import static ru.maksimka.jb.configurations.SpringContext.getContext;
 
 @Service
-public class AllTheRestControllers implements Controller {
+public class AllTheRestHandler implements Handler {
 
     private static final Logger LOGGER = LogManager.getLogger("BOT INFO");
 

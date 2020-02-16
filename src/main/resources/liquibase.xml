@@ -87,7 +87,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date" type="DATE"/>
-
         </createTable>
 
         <addPrimaryKey tableName="transaction_categories" columnNames="id"/>
@@ -102,19 +101,37 @@
     </changeSet>
 
     <changeSet id="3" author="maksimka">
+
         <loadData encoding="UTF-8" file="add_test_data_in_account_names.csv" tableName="account_names" separator=";">
             <column name="account_names" type="STRING"/>
         </loadData>
+
     </changeSet>
 
     <!-- for bot users-->
-    <changeSet id="4" author="maksimka">
-        <addColumn tableName="users">
-            <column name="chat_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-        </addColumn>
-    </changeSet>
 
+    <changeSet id="4" author="maksimka">
+
+        <createTable tableName="telegram_user">
+            <column name="id" type = "SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="chat_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(11)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="telegram_user" columnNames="id"/>
+        <addForeignKeyConstraint baseTableName="telegram_user" baseColumnNames="user_id"
+                                 constraintName="telegram_account_users"
+                                 referencedTableName="users" referencedColumnNames="id"/>
+
+    </changeSet>
 
 </databaseChangeLog>

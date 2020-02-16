@@ -11,7 +11,7 @@ import ru.maksimka.jb.bot.Bot;
 
 import java.util.HashMap;
 
-import static ru.maksimka.jb.bot.Controller.*;
+import static ru.maksimka.jb.bot.Handler.*;
 
 @Configuration
 @PropertySource(value = "classpath:application.properties")

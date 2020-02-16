@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import ru.maksimka.jb.bot.Controller;
+import ru.maksimka.jb.bot.Handler;
 
-import static ru.maksimka.jb.bot.Controller.LOGIN;
+import static ru.maksimka.jb.bot.Handler.LOGIN;
 
 @Service(LOGIN)
-public class LoginController implements Controller {
+public class LoginHandler implements Handler {
 
     @Qualifier("startKeyboard")
     InlineKeyboardMarkup Keyboard;

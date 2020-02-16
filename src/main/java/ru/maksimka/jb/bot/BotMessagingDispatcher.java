@@ -8,11 +8,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import ru.maksimka.jb.bot.Controllers.AllTheRestControllers;
+import ru.maksimka.jb.bot.Controllers.AllTheRestHandler;
 
-import java.util.Map;
-
-import static ru.maksimka.jb.bot.Controller.REGISTER;
 import static ru.maksimka.jb.configurations.SpringContext.getContext;
 
 @Service
@@ -29,23 +26,23 @@ public class BotMessagingDispatcher {
 
     public SendMessage getSendMessageController(Update update) {
 
-        String nameController;
-        Controller controller;
+        String handlerName;
+        Handler handler;
 
         if (update.hasCallbackQuery()) {
             try {
-                nameController = update.getCallbackQuery().getData();
-                controller = getContext().getBean(Controller.class, nameController);
+                handlerName = update.getCallbackQuery().getData();
+                handler = getContext().getBean(Handler.class, handlerName);
             } catch (BeansException e) {
-                controller = getContext().getBean(AllTheRestControllers.class);
-            } return controller.execute(update);
+                handler = getContext().getBean(AllTheRestHandler.class);
+            } return handler.execute(update);
         } else if (update.hasMessage()) {
             try {
-                nameController = update.getMessage().getText();
-                controller = getContext().getBean(Controller.class, nameController);
+                handlerName = update.getMessage().getText();
+                handler = getContext().getBean(Handler.class, handlerName);
             } catch (BeansException e) {
-                controller = getContext().getBean(AllTheRestControllers.class);
-            } return controller.execute(update);
+                handler = getContext().getBean(AllTheRestHandler.class);
+            } return handler.execute(update);
         }
         return new SendMessage()
                 .setText("Человек, ты прислал мне какую то ерунду...")

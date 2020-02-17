@@ -8,7 +8,7 @@ import ru.maksimka.jb.bot.Bot;
 
 import static ru.maksimka.jb.configurations.SpringContext.getContext;
 
-public class MainBot {
+public class StartTelegramBot {
 
     private static final Logger log = LogManager.getLogger("BOT INFO");
 

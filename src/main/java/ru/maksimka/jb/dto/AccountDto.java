@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @With
 
+@Component
 public class AccountDto {
     private Integer id;
     private String owner;

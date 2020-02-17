@@ -1,16 +1,21 @@
 package ru.maksimka.jb.console_views;
 
-import ru.maksimka.jb.configurations.SpringContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.maksimka.jb.services.AuthStatus;
 
 import java.io.IOException;
 
-public class StartViewConsole extends ViewConsoleHelper {
+import static ru.maksimka.jb.configurations.SpringContext.getContext;
+
+@Component
+public class MainViewConsole extends ViewConsoleHelper {
 
     private ForUnauthorizedViewConsole forUnauthorizedViewConsole;
 
-    public StartViewConsole() {
-        this.forUnauthorizedViewConsole = SpringContext.getContext().getBean(ForUnauthorizedViewConsole.class);
+    @Autowired
+    public MainViewConsole(ForUnauthorizedViewConsole forUnauthorizedViewConsole) {
+        this.forUnauthorizedViewConsole = forUnauthorizedViewConsole;
     }
 
     public void getWelcome() {

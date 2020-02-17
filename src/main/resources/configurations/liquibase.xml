@@ -102,7 +102,7 @@
 
     <changeSet id="3" author="maksimka">
 
-        <loadData encoding="UTF-8" file="add_test_data_in_account_names.csv" tableName="account_names" separator=";">
+        <loadData encoding="UTF-8" file="csv_data/add_test_data_in_account_names.csv" tableName="account_names" separator=";">
             <column name="account_names" type="STRING"/>
         </loadData>
 

@@ -1,7 +1,9 @@
 package ru.maksimka.jb.console_views;
 
 import org.hibernate.QueryException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.maksimka.jb.StartConsoleView;
 import ru.maksimka.jb.dto.AccountDto;
 import ru.maksimka.jb.dto.AccountNameDto;
 import ru.maksimka.jb.dto.TransactionCategoryDto;
@@ -21,6 +23,8 @@ import java.util.*;
 public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     private Services serviceUsers;
+    @Autowired
+    private MainViewConsole mainViewConsole;
 
     protected void showUserOptions(Services serviceUsers) {
         this.serviceUsers = serviceUsers;
@@ -321,7 +325,7 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
                     }
                     printLine();
                     print("\tПользователь удалён");
-                    new StartViewConsole().getWelcome();
+                    mainViewConsole.getWelcome();
                     break;
                 }
 

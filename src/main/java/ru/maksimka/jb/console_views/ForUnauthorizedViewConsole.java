@@ -1,18 +1,20 @@
 package ru.maksimka.jb.console_views;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.maksimka.jb.dao.implementations.UserDao;
 import ru.maksimka.jb.dto.UserDto;
 import ru.maksimka.jb.exceptions.*;
-import ru.maksimka.jb.services.*;
+import ru.maksimka.jb.services.Auth;
+import ru.maksimka.jb.services.AuthStatus;
+import ru.maksimka.jb.services.ValidationData;
 
 import java.io.IOException;
 
-import static ru.maksimka.jb.configurations.SpringContext.*;
+import static ru.maksimka.jb.configurations.SpringContext.getContext;
 import static ru.maksimka.jb.services.AuthStatus.AUTH;
 import static ru.maksimka.jb.services.AuthStatus.REGISTERED;
 
-@Service
+@Component
 public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
 
     private AuthStatus status;

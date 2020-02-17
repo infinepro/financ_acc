@@ -14,7 +14,7 @@ import java.util.HashMap;
 import static ru.maksimka.jb.bot.Handler.*;
 
 @Configuration
-@PropertySource(value = "classpath:application.properties")
+@PropertySource(value = "classpath:configurations/application.properties")
 public class BotConfiguration {
 
     @Value("${BOT_NAME}")

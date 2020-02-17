@@ -37,7 +37,7 @@ public class JPAConfiguration {
         DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
         Liquibase liquibase = new Liquibase(
-                "liquibase.xml",
+                "configurations/liquibase.xml",
                 new ClassLoaderResourceAccessor(),
                 database);
 

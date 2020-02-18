@@ -1,5 +1,5 @@
 var object = {};
-var formData = new FormData(document.forms.person);
+var formData = new FormData(document.forms.registration);
 
 formData.forEach(function(value, key){
     object[key] = value;

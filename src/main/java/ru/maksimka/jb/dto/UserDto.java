@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserDto {
 
+
     private Integer id;
     private String name;
     private String password;

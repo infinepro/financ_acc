@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("ru.maksimka.jb.web.controllers")
+@ComponentScan("ru.maksimka.jb")
 public class MvcWebConfiguration implements WebMvcConfigurer {
 
     @Bean(name = "viewResolver")

@@ -1,4 +1,4 @@
-package ru.maksimka.jb.web;
+package ru.maksimka.jb.configurations;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

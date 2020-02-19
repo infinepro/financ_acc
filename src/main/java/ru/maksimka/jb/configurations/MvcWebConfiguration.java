@@ -1,4 +1,4 @@
-package ru.maksimka.jb.web;
+package ru.maksimka.jb.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,8 +25,6 @@ public class MvcWebConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/");
-        //registry.addResourceHandler("/image/**").addResourceLocations("/sources/image/");
-        //registry.addResourceHandler("/scripts/**").addResourceLocations("/sources/scripts/");
         registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/");
     }
 
@@ -35,9 +33,5 @@ public class MvcWebConfiguration implements WebMvcConfigurer {
         configurer.enable();
     }
 
-    /*@Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/WEB-INF/views/index.html");
-    }*/
 
 }

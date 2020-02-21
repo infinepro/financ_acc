@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.maksimka.jb.bot.Handler.*;
+import static ru.maksimka.jb.ui.bot.Handler.*;
 
 @Configuration
 public class BotKeyboardsConfiguration {

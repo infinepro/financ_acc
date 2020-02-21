@@ -7,11 +7,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
-import ru.maksimka.jb.bot.Bot;
+import ru.maksimka.jb.ui.bot.Bot;
 
 import java.util.HashMap;
 
-import static ru.maksimka.jb.bot.Handler.*;
+import static ru.maksimka.jb.ui.bot.Handler.*;
 
 @Configuration
 @PropertySource(value = "classpath:configurations/application.properties")

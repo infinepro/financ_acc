@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.maksimka.jb.bot.Bot;
+import ru.maksimka.jb.ui.bot.Bot;
 
-import static ru.maksimka.jb.configurations.SpringContext.getContext;
+import static ru.maksimka.jb.configurations.SpringContextSingleton.getContext;
 
 public class StartTelegramBot {
 

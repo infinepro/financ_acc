@@ -1,8 +1,8 @@
 package ru.maksimka.jb;
 
-import ru.maksimka.jb.console_views.MainViewConsole;
+import ru.maksimka.jb.ui.console.MainViewConsole;
 
-import static ru.maksimka.jb.configurations.SpringContext.*;
+import static ru.maksimka.jb.configurations.SpringContextSingleton.*;
 
 public class StartConsoleView {
 

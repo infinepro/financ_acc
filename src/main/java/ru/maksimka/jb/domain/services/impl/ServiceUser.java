@@ -1,12 +1,10 @@
 package ru.maksimka.jb.domain.services.impl;
 
-import ru.maksimka.jb.exceptions.NotAuthorizedException;
-
 public interface ServiceUser {
 
-    boolean changePassword(String newPassword) throws NotAuthorizedException;
+    boolean changePassword(String newPassword) ;
 
-    boolean changeEmail(String email) throws NotAuthorizedException;
+    boolean changeEmail(String email) ;
 
-    void deleteUser() throws NotAuthorizedException;
+    void deleteUser() ;
 }

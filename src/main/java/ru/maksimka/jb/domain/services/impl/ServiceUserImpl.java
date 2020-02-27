@@ -3,12 +3,15 @@ package ru.maksimka.jb.domain.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.dao.entities.UserEntity;
+import ru.maksimka.jb.domain.services.assistants.PasswordEncoder;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 public class ServiceUserImpl extends AbstractService implements ServiceUser{
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private PasswordEncoder encoder;
 
     public ServiceUserImpl(UserEntity userEntity) {
         super(userEntity);
@@ -16,7 +19,7 @@ public class ServiceUserImpl extends AbstractService implements ServiceUser{
 
     @Override
     public boolean changePassword(String newPassword){
-        userEntity.setPassword(newPassword);
+        userEntity.setPassword(encoder.encript(newPassword));
         try {
             userDao.update(userEntity);
         } catch (RecordNotFoundException e) {

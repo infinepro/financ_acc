@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services;
+package ru.maksimka.jb.ui.console;
 
 public enum StatusAuthorization {
     REGISTERED,

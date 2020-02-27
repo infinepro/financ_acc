@@ -18,13 +18,11 @@ import java.util.List;
 
 public class MainServiceImpl implements MainService {
 
-    private UserEntity userEntity;
     private ServiceAccounts serviceAccounts;
     private ServiceTransactions serviceTransactions;
     private ServiceUser serviceUser;
 
     public MainServiceImpl(UserEntity userEntity) {
-        this.userEntity = userEntity;
 
         //composition
         this.serviceAccounts = new ServiceAccountsImpl(userEntity);
@@ -32,6 +30,7 @@ public class MainServiceImpl implements MainService {
         this.serviceUser = new ServiceUserImpl(userEntity);
     }
 
+    //accounts methods
     @Override
     public List<AccountDto> getAllAccounts() throws NotAuthorizedException {
         return serviceAccounts.getAllAccounts();
@@ -49,76 +48,81 @@ public class MainServiceImpl implements MainService {
 
     @Override
     public void deleteAccount(Integer id) throws RecordNotFoundException {
-
+        serviceAccounts.deleteAccount(id);
     }
 
     @Override
     public void addNewAccountName(String accountName) throws AlreadyExistsException {
-
+        serviceAccounts.addNewAccountName(accountName);
     }
 
     @Override
     public void deleteAccountName(Integer accountNameId) throws RecordNotFoundException {
-
+        serviceAccounts.deleteAccountName(accountNameId);
     }
 
+
+    //transactions methods
     @Override
     public List<TransactionCategoryDto> getAllTransactionCategory() {
-        return null;
+        return serviceTransactions.getAllTransactionCategory();
     }
 
     @Override
     public List<TransactionDto> getAllTransactions() {
-        return null;
+        return serviceTransactions.getAllTransactions();
     }
 
     @Override
+    //format date is mm.dd.yyyy
     public List<TransactionDto> getAllTransactionsForDate(String date) throws ParseException {
-        return null;
+        return serviceTransactions.getAllTransactionsForDate(date);
     }
 
     @Override
     public TransactionDto addNewTransaction(Integer transIdType, Integer accountId, BigDecimal sum) throws InvalidSummException, RecordNotFoundException {
-        return null;
+        return serviceTransactions.addNewTransaction(transIdType, accountId, sum);
     }
 
     @Override
     public TransactionDto addNewTransaction(Integer accountId, BigDecimal sum) throws RecordNotFoundException {
-        return null;
+        return serviceTransactions.addNewTransaction(accountId, sum);
     }
 
     @Override
     public void addNewCategoryTransaction(String newNameCategory) {
-
+        serviceTransactions.addNewCategoryTransaction(newNameCategory);
     }
 
     @Override
     public void addNewTransactionBetweenUserAccounts(Integer fromId, Integer toId, BigDecimal sum) throws InvalidSummException {
-
+        serviceTransactions.addNewTransactionBetweenUserAccounts(fromId, toId, sum);
     }
 
     @Override
     public boolean deleteTransaction(Integer id) throws RecordNotFoundException {
-        return false;
+        return serviceTransactions.deleteTransaction(id);
     }
 
     @Override
     public boolean cancelTransaction(Integer id) {
-        return false;
+        return serviceTransactions.cancelTransaction(id);
+    }
+
+
+    //user methods
+    @Override
+    public boolean changePassword(String newPassword) {
+        return serviceUser.changePassword(newPassword);
     }
 
     @Override
-    public boolean changePassword(String newPassword) throws NotAuthorizedException {
-        return false;
+    public boolean changeEmail(String email) {
+        return serviceUser.changeEmail(email);
     }
 
     @Override
-    public boolean changeEmail(String email) throws NotAuthorizedException {
-        return false;
-    }
-
-    @Override
-    public void deleteUser() throws NotAuthorizedException {
-
+    public void deleteUser() {
+        serviceUser.deleteUser();
     }
 }

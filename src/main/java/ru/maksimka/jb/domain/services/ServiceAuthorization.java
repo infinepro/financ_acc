@@ -1,7 +1,6 @@
 package ru.maksimka.jb.domain.services;
 
 import ru.maksimka.jb.domain.dto.UserDto;
-import ru.maksimka.jb.domain.services.MainService;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;

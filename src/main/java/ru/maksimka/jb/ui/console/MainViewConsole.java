@@ -2,7 +2,6 @@ package ru.maksimka.jb.ui.console;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.maksimka.jb.domain.services.StatusAuthorization;
 
 import java.io.IOException;
 

@@ -15,15 +15,9 @@ import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 @Service
 public class ServiceAuthorizationImpl implements ServiceAuthorization {
 
-    private UserDao userDao;
     private UserEntity userEntity;
+    private UserDao userDao;
     private PasswordEncoder encoder;
-
-    @Autowired
-    public ServiceAuthorizationImpl(UserDao userDao, PasswordEncoder encoder) {
-        this.userDao = userDao;
-        this.encoder = encoder;
-    }
 
     private void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;

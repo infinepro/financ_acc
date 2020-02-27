@@ -5,14 +5,13 @@ import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.exceptions.*;
 import ru.maksimka.jb.domain.services.ServiceAuthorization;
-import ru.maksimka.jb.domain.services.StatusAuthorization;
 import ru.maksimka.jb.domain.services.assistants.ValidationData;
 
 import java.io.IOException;
 
 import static ru.maksimka.jb.configurations.SpringContextSingleton.getContext;
-import static ru.maksimka.jb.domain.services.StatusAuthorization.AUTH;
-import static ru.maksimka.jb.domain.services.StatusAuthorization.REGISTERED;
+import static ru.maksimka.jb.ui.console.StatusAuthorization.AUTH;
+import static ru.maksimka.jb.ui.console.StatusAuthorization.REGISTERED;
 
 @Component
 public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
@@ -98,7 +97,11 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
             }
 
             try {
-                serviceAuthorizationService.registration(login, email, password);
+
+                serviceAuthorizationService.registration(new UserDto()
+                        .withName(login)
+                        .withEmail(email)
+                        .withPassword(password));
                 setStatus(REGISTERED);
                 printLine();
                 print("\tВы успешно зарегистрировались");
@@ -126,7 +129,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
                 print("\tВведите пароль\n");
                 print("\t>>>>>  ");
                 password = readStringFromConsole();
-                serviceAuthorizationService.signIn(login, password);
+                serviceAuthorizationService.checkUser(new UserDto().withName(login).withPassword(password));
 
                 setStatus(AUTH);
                 printLine();

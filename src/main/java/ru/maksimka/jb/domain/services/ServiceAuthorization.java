@@ -1,5 +1,7 @@
 package ru.maksimka.jb.domain.services;
 
+import ru.maksimka.jb.domain.dto.UserDto;
+import ru.maksimka.jb.domain.services.MainService;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
@@ -7,9 +9,9 @@ import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 public interface ServiceAuthorization {
 
-    void registration(String login, String password, String email) throws AlreadyExistsException;
+    void registration(UserDto userDto) throws AlreadyExistsException;
 
-    StatusAuthorization signIn(String login, String password) throws RecordNotFoundException, WrongUserPasswordException;
+    void checkUser(UserDto userDto) throws RecordNotFoundException, WrongUserPasswordException;
 
     MainService getService () throws NotAuthorizedException;
 }

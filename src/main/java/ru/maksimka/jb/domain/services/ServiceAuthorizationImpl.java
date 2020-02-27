@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services.impl;
+package ru.maksimka.jb.domain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,8 +6,7 @@ import ru.maksimka.jb.domain.converters.to_entity_impl.UserToEntityConverter;
 import ru.maksimka.jb.dao.entities.UserEntity;
 import ru.maksimka.jb.dao.daoimpl.*;
 import ru.maksimka.jb.domain.dto.UserDto;
-import ru.maksimka.jb.domain.services.*;
-import ru.maksimka.jb.domain.services.helpers.PasswordEncoder;
+import ru.maksimka.jb.domain.services.assistants.PasswordEncoder;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
@@ -26,37 +25,36 @@ public class ServiceAuthorizationImpl implements ServiceAuthorization {
         this.encoder = encoder;
     }
 
+    private void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
     @Override
     public MainService getService() throws NotAuthorizedException {
         if (userEntity == null) {
             throw new NotAuthorizedException();
         }
 
-        return new ServiceUserImpl(userEntity);
-    }
-
-    private void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+        return new MainServiceImpl(userEntity);
     }
 
     @Override
-    public void registration(String login, String email, String password) throws AlreadyExistsException {
-        UserDto userDto = new UserDto().withName(login).withEmail(email).withPassword(password);
+    public void registration(UserDto userDto) throws AlreadyExistsException {
+        userDto.setPassword(encoder.encript(userDto.getPassword()));
         userDao.insert(new UserToEntityConverter().convert(userDto));
     }
 
     @Override
-    public StatusAuthorization signIn(String login, String password)
+    public void checkUser(UserDto userDto)
             throws RecordNotFoundException, WrongUserPasswordException {
-
-        UserEntity userEntity = userDao.findBy(login);
+        userDto.setPassword(encoder.encript(userDto.getPassword()));
+        UserEntity userEntity = userDao.findBy(userDto.getName());
         if (userEntity == null) {
             throw new RecordNotFoundException("такого логина несуществует");
-        } else if (!userEntity.getPassword().equals(password)) {
+        } else if (!userEntity.getPassword().equals(userDto.getPassword())) {
             throw new WrongUserPasswordException("неверный пароль или логин");
         } else {
             setUserEntity(userEntity);
-            return StatusAuthorization.AUTH;
         }
 
     }

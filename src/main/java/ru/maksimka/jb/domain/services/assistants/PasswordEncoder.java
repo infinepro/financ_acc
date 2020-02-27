@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services.helpers;
+package ru.maksimka.jb.domain.services.assistants;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

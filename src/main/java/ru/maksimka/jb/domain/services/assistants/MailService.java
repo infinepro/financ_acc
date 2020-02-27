@@ -1,17 +1,17 @@
-package ru.maksimka.jb.domain.services.helpers;
+package ru.maksimka.jb.domain.services.assistants;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class MailService {
 
 
     @Autowired
-    public JavaMailSender emailSender;
+    private JavaMailSender emailSender;
 
     @Value("${spring.mail.username}")
     private String username;

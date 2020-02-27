@@ -1,11 +1,11 @@
-package ru.maksimka.jb.domain.services.helpers;
+package ru.maksimka.jb.domain.services.assistants;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-@Component
+@Service
 public class DateService {
 
     public java.sql.Date parseDateToSqlDate(String textDate) throws ParseException {

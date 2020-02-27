@@ -9,6 +9,9 @@
         <Console name="BOTOUT">
             <Layout type="PatternLayout" pattern="(0_0) BOT %p [%d{HH:mm:ss}] %m %n" />
         </Console>
+        <Console name="WEB">
+            <Layout type="PatternLayout" pattern="%p [%d{MMM-dd HH:mm:ss}] %m %n" />
+        </Console>
 
     </Appenders>
 
@@ -21,6 +24,9 @@
             <Appender-ref ref="BOTOUT" level="info" />
         </Logger>
 
+        <Logger name="WEB-INFO" level="info" additivity="false">
+            <Appender-ref ref="WEB" level="info" />
+        </Logger>
     </Loggers>
 
 

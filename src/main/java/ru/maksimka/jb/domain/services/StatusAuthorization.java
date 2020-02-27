@@ -1,6 +1,6 @@
 package ru.maksimka.jb.domain.services;
 
-public enum AuthStatus {
+public enum StatusAuthorization {
     REGISTERED,
     NOT_REGISTERED,
     AUTH,

@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services;
+package ru.maksimka.jb.domain.services.helpers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

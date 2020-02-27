@@ -7,31 +7,32 @@ import ru.maksimka.jb.dao.entities.UserEntity;
 import ru.maksimka.jb.dao.daoimpl.*;
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.domain.services.*;
+import ru.maksimka.jb.domain.services.helpers.PasswordEncoder;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 @Service
-public class AuthService implements Auth {
+public class ServiceAuthorizationImpl implements ServiceAuthorization {
 
     private UserDao userDao;
     private UserEntity userEntity;
     private PasswordEncoder encoder;
 
     @Autowired
-    public AuthService(UserDao userDao, PasswordEncoder encoder) {
+    public ServiceAuthorizationImpl(UserDao userDao, PasswordEncoder encoder) {
         this.userDao = userDao;
         this.encoder = encoder;
     }
 
     @Override
-    public Services getService() throws NotAuthorizedException {
+    public MainService getService() throws NotAuthorizedException {
         if (userEntity == null) {
             throw new NotAuthorizedException();
         }
 
-        return new ServiceUsers(userEntity);
+        return new ServiceUserImpl(userEntity);
     }
 
     private void setUserEntity(UserEntity userEntity) {
@@ -45,7 +46,7 @@ public class AuthService implements Auth {
     }
 
     @Override
-    public AuthStatus signIn(String login, String password)
+    public StatusAuthorization signIn(String login, String password)
             throws RecordNotFoundException, WrongUserPasswordException {
 
         UserEntity userEntity = userDao.findBy(login);
@@ -55,7 +56,7 @@ public class AuthService implements Auth {
             throw new WrongUserPasswordException("неверный пароль или логин");
         } else {
             setUserEntity(userEntity);
-            return AuthStatus.AUTH;
+            return StatusAuthorization.AUTH;
         }
 
     }

@@ -1,24 +1,22 @@
 package ru.maksimka.jb.ui.web.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
-import ru.maksimka.jb.exceptions.RecordNotFoundException;
-import ru.maksimka.jb.exceptions.WrongUserPasswordException;
-import ru.maksimka.jb.domain.services.Auth;
-import ru.maksimka.jb.domain.services.AuthStatus;
-
-import static ru.maksimka.jb.domain.services.AuthStatus.AUTH;
+import ru.maksimka.jb.domain.services.ServiceAuthorization;
 
 @RestController
 public class AuthController {
 
+    private static final Logger log = LogManager.getLogger("WEB-INFO");
+
     @Autowired
-    private Auth authService;
+    private ServiceAuthorization serviceAuthorizationService;
 
     @GetMapping("/")
     public ModelAndView index() {
@@ -45,7 +43,8 @@ public class AuthController {
     @PostMapping(value = "/reg")
     public ModelAndView signUp(UserDto user) {
         try {
-            authService.registration(user.getName(), user.getEmail(), user.getPassword());
+            System.out.println(user.toString());
+            serviceAuthorizationService.registration(user.getName(), user.getEmail(), user.getPassword());
             ModelAndView modelAndView = new ModelAndView("registration-ok");
             modelAndView.setStatus(HttpStatus.OK);
             return modelAndView;

@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services;
+package ru.maksimka.jb.domain.services.helpers;
 
 import org.springframework.stereotype.Component;
 

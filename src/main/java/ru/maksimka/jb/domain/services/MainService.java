@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 
-public interface Services {
+public interface MainService {
 
     //user operations
     boolean changePassword(String newPassword) throws NotAuthorizedException;

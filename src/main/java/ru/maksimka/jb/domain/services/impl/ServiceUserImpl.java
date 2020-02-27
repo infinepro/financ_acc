@@ -10,8 +10,8 @@ import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
 import ru.maksimka.jb.domain.dto.TransactionCategoryDto;
 import ru.maksimka.jb.domain.dto.TransactionDto;
-import ru.maksimka.jb.domain.services.DateService;
-import ru.maksimka.jb.domain.services.Services;
+import ru.maksimka.jb.domain.services.helpers.DateService;
+import ru.maksimka.jb.domain.services.MainService;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.InvalidSummException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import static ru.maksimka.jb.configurations.SpringContextSingleton.getContext;
 
 
-public class ServiceUsers implements Services {
+public class ServiceUserImpl implements MainService {
 
     private UserDao userDao;
     private AccountDao accountDao;
@@ -41,7 +41,7 @@ public class ServiceUsers implements Services {
     private UserEntity userEntity;
     private EntityManager em;
 
-    public ServiceUsers(UserEntity userEntity) {
+    public ServiceUserImpl(UserEntity userEntity) {
         this.userEntity = userEntity;
 
         this.accountDao = getContext().getBean(AccountDao.class);

@@ -27,19 +27,23 @@ public class AuthController {
         return modelAndView;
     }
 
-    @GetMapping("/app")
-    public ModelAndView app(@RequestParam(name = "action") String action) {
-        if (action.equals("reg")) {
-            return new ModelAndView("registration-form");
-        } else if (action.equals("auth")) {
-            return new ModelAndView("sign-in-form");
-        }
-        return new ModelAndView("404");
+    @GetMapping("/app/hello")
+    public ModelAndView hello() {
+        return new ModelAndView("hello");
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ModelAndView signUp(UserDto user) {
+    @GetMapping("/reg")
+    public ModelAndView reg() {
+        return new ModelAndView("registration-form");
+    }
 
+    @GetMapping("/auth")
+    public ModelAndView auth() {
+        return new ModelAndView("sign-in-form");
+    }
+
+    @PostMapping(value = "/reg")
+    public ModelAndView signUp(UserDto user) {
         try {
             authService.registration(user.getName(), user.getEmail(), user.getPassword());
             ModelAndView modelAndView = new ModelAndView("registration-ok");
@@ -50,7 +54,7 @@ public class AuthController {
         }
     }
 
-    @RequestMapping("/auth")
+   /* @PostMapping("/auth")
     public ModelAndView signIn(UserDto user) {
         ModelAndView modelAndView = new ModelAndView("sign-in-ok");
         modelAndView.setStatus(HttpStatus.OK);
@@ -60,15 +64,13 @@ public class AuthController {
             if (authStatus == AUTH) {
                 return modelAndView;
             }
-
         } catch (RecordNotFoundException e) {
             return new ModelAndView("not-found");
         } catch (WrongUserPasswordException e) {
             return new ModelAndView("wrong-pass");
         }
-
         return modelAndView;
-    }
+    }*/
 
 
 }

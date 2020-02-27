@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services;
+package ru.maksimka.jb.domain.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import ru.maksimka.jb.domain.converters.to_entity_impl.UserToEntityConverter;
 import ru.maksimka.jb.dao.entities.UserEntity;
 import ru.maksimka.jb.dao.daoimpl.*;
 import ru.maksimka.jb.domain.dto.UserDto;
+import ru.maksimka.jb.domain.services.*;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
@@ -16,10 +17,12 @@ public class AuthService implements Auth {
 
     private UserDao userDao;
     private UserEntity userEntity;
+    private PasswordEncoder encoder;
 
     @Autowired
-    public AuthService(UserDao userDao) {
+    public AuthService(UserDao userDao, PasswordEncoder encoder) {
         this.userDao = userDao;
+        this.encoder = encoder;
     }
 
     @Override

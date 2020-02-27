@@ -12,7 +12,7 @@ public class StartTelegramBot {
 
     private static final Logger log = LogManager.getLogger("BOT INFO");
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
@@ -25,5 +25,5 @@ public class StartTelegramBot {
             e.printStackTrace();
             log.error("Bot doesn't working, where is problem padavan?");
         }
-    }
+    }*/
 }

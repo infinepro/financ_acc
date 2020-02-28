@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.UserDto;
-import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.domain.services.ServiceAuthorization;
 
 @RestController
@@ -18,12 +17,22 @@ public class AuthController {
     @Autowired
     private ServiceAuthorization serviceAuthorizationService;
 
+
     @GetMapping("/")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
     }
+
+    @GetMapping("/login-error")
+    public ModelAndView loginError() {
+        ModelAndView modelAndView = new ModelAndView("wrong-login-or-pass");
+        modelAndView.setStatus(HttpStatus.FORBIDDEN);
+        return modelAndView;
+    }
+
+
 
     @GetMapping("/app/hello")
     public ModelAndView hello() {

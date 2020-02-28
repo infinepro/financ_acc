@@ -20,18 +20,13 @@ public class MvcWebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                    .authorizeRequests()
-                    .antMatchers("/reg", "/auth","/resources/**").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                    .formLogin().loginPage("/auth").permitAll()
-                .and()
-                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-                .and()
-                    .csrf().disable();
-
-
-
+                .authorizeRequests()
+                .antMatchers("/reg", "/auth", "/resources/**", "/").permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin().loginPage("/auth").permitAll()
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+                .and().exceptionHandling().accessDeniedPage("/login-error")
+                .and().csrf().disable();
 
     }
 
@@ -44,7 +39,7 @@ public class MvcWebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         //PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }

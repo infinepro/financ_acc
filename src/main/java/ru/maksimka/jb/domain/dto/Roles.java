@@ -1,10 +1,12 @@
-package ru.maksimka.jb.domain.dto.roles;
+package ru.maksimka.jb.domain.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class Roles implements GrantedAuthority {
+public enum Roles implements GrantedAuthority {
+    USER;
+
     @Override
     public String getAuthority() {
-        return "USER";
+        return name();
     }
 }

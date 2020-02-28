@@ -1,6 +1,5 @@
 package ru.maksimka.jb.domain.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.domain.converters.to_entity_impl.UserToEntityConverter;
 import ru.maksimka.jb.dao.entities.UserEntity;
@@ -42,7 +41,7 @@ public class ServiceAuthorizationImpl implements ServiceAuthorization {
     public void checkUser(UserDto userDto)
             throws RecordNotFoundException, WrongUserPasswordException {
         userDto.setPassword(encoder.encript(userDto.getPassword()));
-        UserEntity userEntity = userDao.findBy(userDto.getName());
+        UserEntity userEntity = userDao.findBy(userDto.getUsername());
         if (userEntity == null) {
             throw new RecordNotFoundException("такого логина несуществует");
         } else if (!userEntity.getPassword().equals(userDto.getPassword())) {

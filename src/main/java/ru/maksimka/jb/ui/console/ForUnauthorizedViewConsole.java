@@ -1,6 +1,5 @@
 package ru.maksimka.jb.ui.console;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.domain.dto.UserDto;
@@ -93,7 +92,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
             try {
 
                 serviceAuthorizationService.registration(new UserDto()
-                        .withName(login)
+                        .withUsername(login)
                         .withEmail(email)
                         .withPassword(password));
                 setStatus(REGISTERED);
@@ -123,7 +122,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
                 print("\tВведите пароль\n");
                 print("\t>>>>>  ");
                 password = readStringFromConsole();
-                serviceAuthorizationService.checkUser(new UserDto().withName(login).withPassword(password));
+                serviceAuthorizationService.checkUser(new UserDto().withUsername(login).withPassword(password));
 
                 setStatus(AUTH);
                 printLine();

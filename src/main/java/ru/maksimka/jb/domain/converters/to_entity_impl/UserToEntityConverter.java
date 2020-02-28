@@ -9,7 +9,7 @@ public class UserToEntityConverter implements Converter<UserDto, UserEntity> {
     public UserEntity convert(UserDto userDto) {
         return new UserEntity()
                 .withId(null)
-                .withName(userDto.getName())
+                .withName(userDto.getUsername())
                 .withEmail(userDto.getEmail())
                 .withPassword(userDto.getPassword());
     }

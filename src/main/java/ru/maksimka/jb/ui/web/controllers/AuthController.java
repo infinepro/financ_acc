@@ -42,15 +42,18 @@ public class AuthController {
 
     @PostMapping(value = "/reg")
     public ModelAndView signUp(UserDto user) {
-        try {
+      /*  try {
             System.out.println(user.toString());
-            serviceAuthorizationService.registration(user.getName(), user.getEmail(), user.getPassword());
+            serviceAuthorizationService.registration(user);
             ModelAndView modelAndView = new ModelAndView("registration-ok");
             modelAndView.setStatus(HttpStatus.OK);
             return modelAndView;
         } catch (AlreadyExistsException e) {
             return new ModelAndView("exist_redirect");
-        }
+        }*/
+        ModelAndView modelAndView = new ModelAndView("registration-ok");
+        modelAndView.setStatus(HttpStatus.OK);
+        return modelAndView;
     }
 
    /* @PostMapping("/auth")

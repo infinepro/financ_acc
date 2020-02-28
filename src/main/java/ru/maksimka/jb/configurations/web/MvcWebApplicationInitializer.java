@@ -1,7 +1,6 @@
-package ru.maksimka.jb.ui.web;
+package ru.maksimka.jb.configurations.web;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import ru.maksimka.jb.configurations.MvcWebConfiguration;
 
 public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override

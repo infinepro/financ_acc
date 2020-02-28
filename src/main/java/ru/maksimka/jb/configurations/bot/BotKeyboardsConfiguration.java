@@ -1,4 +1,4 @@
-package ru.maksimka.jb.configurations;
+package ru.maksimka.jb.configurations.bot;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

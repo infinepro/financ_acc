@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.maksimka.jb.configurations.SpringContextSingleton;
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.domain.services.ServiceAuthorization;
+import ru.maksimka.jb.domain.services.ServiceAuthorizationImpl;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
+
+import static ru.maksimka.jb.configurations.SpringContextSingleton.*;
 
 @RestController
 public class AuthController {
@@ -16,12 +20,11 @@ public class AuthController {
     private static final Logger log = LogManager.getLogger("WEB-INFO");
 
     @Autowired
-    private ServiceAuthorization serviceAuthorizationService;
-
+    private ServiceAuthorization serviceAuthorization;
 
     @GetMapping("/")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("hello");
         modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
     }
@@ -53,8 +56,8 @@ public class AuthController {
     @PostMapping(value = "/reg")
     public ModelAndView signUp(UserDto user) {
         try {
-            System.out.println(user.toString());
-            serviceAuthorizationService.registration(user);
+                System.out.println(user.toString());
+            serviceAuthorization.registration(user);
             ModelAndView modelAndView = new ModelAndView("registration-ok");
             modelAndView.setStatus(HttpStatus.OK);
             return modelAndView;

@@ -3,28 +3,39 @@ package ru.maksimka.jb.domain.services.websecurity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.domain.dto.UserDto;
+import ru.maksimka.jb.domain.services.ServiceAuthorization;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    PasswordEncoder encoder = new BCryptPasswordEncoder();
+    //private PasswordEncoder encoder;
+    private ServiceAuthorization serviceAuthorization;
+
+    public UserService(ServiceAuthorization serviceAuthorization) {
+        this.serviceAuthorization = serviceAuthorization;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        //User.UserBuilder userBuilder = User.builder().passwordEncoder(encoder::encode);
+        UserDto userDto;
 
-        return new UserDto()
-                .withUsername("admin")
-                .withPassword(encoder.encode("admin"))
-                .withAccountNonExpired(true)
-                .withAccountNonLocked(true)
-                .withCredentialsNonExpired(true)
-                .withEnabled(true);
+        try {
+            userDto = serviceAuthorization.checkUser(username);
+        } catch (RecordNotFoundException e) {
+            throw new UsernameNotFoundException("User with name:" + username + "not found!");
+        }
 
+        System.out.println(userDto);
+
+        userDto.setAccountNonExpired(true);
+        userDto.setAccountNonLocked(true);
+        userDto.setCredentialsNonExpired(true);
+        userDto.setEnabled(true);
+        return userDto;
     }
 }

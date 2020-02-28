@@ -12,5 +12,7 @@ public interface ServiceAuthorization {
 
     void checkUser(UserDto userDto) throws RecordNotFoundException, WrongUserPasswordException;
 
+    UserDto checkUser(String username) throws RecordNotFoundException;
+
     MainService getService () throws NotAuthorizedException;
 }

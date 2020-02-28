@@ -1,19 +1,19 @@
 package ru.maksimka.jb.ui.console;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.domain.dto.UserDto;
-import ru.maksimka.jb.exceptions.*;
 import ru.maksimka.jb.domain.services.ServiceAuthorization;
 import ru.maksimka.jb.domain.services.assistants.ValidationData;
+import ru.maksimka.jb.exceptions.*;
 
 import java.io.IOException;
 
-import static ru.maksimka.jb.configurations.SpringContextSingleton.getContext;
 import static ru.maksimka.jb.ui.console.StatusAuthorization.AUTH;
 import static ru.maksimka.jb.ui.console.StatusAuthorization.REGISTERED;
 
-@Component
+@Service
 public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
 
     private StatusAuthorization status;
@@ -24,11 +24,8 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
     private ServiceAuthorization serviceAuthorizationService;
     private ForAuthorizedViewConsole forAuthorizedViewConsole;
 
-    protected ForUnauthorizedViewConsole(ValidationData valid, UserDao userDao, ServiceAuthorization serviceAuthorizationService) {
+    protected ForUnauthorizedViewConsole() {
         this.status = StatusAuthorization.HAS_NO_STATUS;
-        this.valid = valid;
-        this.userDao = userDao;
-        this.serviceAuthorizationService = serviceAuthorizationService;
     }
 
     private void setStatus(StatusAuthorization statusAuthorization) {
@@ -50,8 +47,6 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
             signInView();
             getAuthView(getStatus());
         } else if (getStatus() == AUTH) {
-            forAuthorizedViewConsole = getContext().getBean(ForAuthorizedViewConsole.class);
-
             try {
                 forAuthorizedViewConsole.showUserOptions(this.serviceAuthorizationService.getService());
             } catch (NotAuthorizedException e) {
@@ -64,7 +59,6 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
 
     private void registrationView() {
         //UserDto userDto = getContext().getBean(UserDto.class);
-        ValidationData valid = getContext().getBean(ValidationData.class);
         String login;
         String email;
         String password;
@@ -115,7 +109,7 @@ public class ForUnauthorizedViewConsole extends ViewConsoleHelper {
     }
 
     private void signInView() {
-        this.userDto = getContext().getBean(UserDto.class);
+
         String login;
         String password;
 

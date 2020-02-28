@@ -22,7 +22,6 @@ import java.util.*;
 public class ForAuthorizedViewConsole extends ViewConsoleHelper {
 
     private MainService serviceUsers;
-    @Autowired
     private MainViewConsole mainViewConsole;
 
     protected void showUserOptions(MainService serviceUsers) {
@@ -335,8 +334,6 @@ public class ForAuthorizedViewConsole extends ViewConsoleHelper {
         } catch (IOException | NumberFormatException e) {
             printErr("\tНекорректный ввод");
             getSettingUser();
-        } catch (NotAuthorizedException e) {
-            printErr("\tПользователь не авторизован");
         }
     }
 

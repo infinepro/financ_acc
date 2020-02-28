@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.domain.services.ServiceAuthorization;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
 
 @RestController
 public class AuthController {
@@ -51,7 +52,7 @@ public class AuthController {
 
     @PostMapping(value = "/reg")
     public ModelAndView signUp(UserDto user) {
-      /*  try {
+        try {
             System.out.println(user.toString());
             serviceAuthorizationService.registration(user);
             ModelAndView modelAndView = new ModelAndView("registration-ok");
@@ -59,10 +60,7 @@ public class AuthController {
             return modelAndView;
         } catch (AlreadyExistsException e) {
             return new ModelAndView("exist_redirect");
-        }*/
-        ModelAndView modelAndView = new ModelAndView("registration-ok");
-        modelAndView.setStatus(HttpStatus.OK);
-        return modelAndView;
+        }
     }
 
    /* @PostMapping("/auth")

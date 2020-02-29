@@ -6,13 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.maksimka.jb.configurations.SpringContextSingleton;
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.domain.services.ServiceAuthorization;
-import ru.maksimka.jb.domain.services.ServiceAuthorizationImpl;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
-
-import static ru.maksimka.jb.configurations.SpringContextSingleton.*;
 
 @RestController
 public class AuthController {
@@ -24,33 +20,31 @@ public class AuthController {
 
     @GetMapping("/")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("hello");
+        ModelAndView modelAndView = new ModelAndView("hello.html");
         modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
     }
 
     @GetMapping("/login-error")
     public ModelAndView loginError() {
-        ModelAndView modelAndView = new ModelAndView("wrong-login-or-pass");
+        ModelAndView modelAndView = new ModelAndView("wrong-login-or-pass.html");
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         return modelAndView;
     }
 
-
-
     @GetMapping("/app/hello")
     public ModelAndView hello() {
-        return new ModelAndView("hello");
+        return new ModelAndView("hello.html");
     }
 
     @GetMapping("/reg")
     public ModelAndView reg() {
-        return new ModelAndView("registration-form");
+        return new ModelAndView("registration-form.html");
     }
 
     @GetMapping("/auth")
     public ModelAndView auth() {
-        return new ModelAndView("sign-in-form");
+        return new ModelAndView("sign-in-form.jsp");
     }
 
     @PostMapping(value = "/reg")
@@ -58,11 +52,11 @@ public class AuthController {
         try {
                 System.out.println(user.toString());
             serviceAuthorization.registration(user);
-            ModelAndView modelAndView = new ModelAndView("registration-ok");
+            ModelAndView modelAndView = new ModelAndView("registration-ok.html");
             modelAndView.setStatus(HttpStatus.OK);
             return modelAndView;
         } catch (AlreadyExistsException e) {
-            return new ModelAndView("exist_redirect");
+            return new ModelAndView("exist_redirect.html");
         }
     }
 

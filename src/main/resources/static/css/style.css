@@ -11,3 +11,7 @@
 .register-me {
     float:right;
 }
+
+table {
+    margin: 20px auto;
+}

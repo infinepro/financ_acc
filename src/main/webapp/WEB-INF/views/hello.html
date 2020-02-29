@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <script src="/resources/js/angular.min.js"></script>
-    <script src="/resources/js/display-name-accounts.js"></script>
-
     <link rel="stylesheet" href="/resources/css/style.css"/>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -14,7 +11,7 @@
 
     <title>Welcome!</title>
 </head>
-<body>
+<body ng-app="hello page">
 
 
 <div class="central-table">
@@ -32,15 +29,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
+        <tr ng-repeat="user in users">
             <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.email}}</td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript" src="/resources/js/angular.min.js"></script>
+<script type="text/javascript" src="/resources/js/display-name-accounts.js"></script>
 
 </body>
 </html>

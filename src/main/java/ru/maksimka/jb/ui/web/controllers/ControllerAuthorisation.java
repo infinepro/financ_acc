@@ -11,7 +11,7 @@ import ru.maksimka.jb.domain.services.ServiceAuthorization;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 
 @RestController
-public class AuthController {
+public class ControllerAuthorisation {
 
     private static final Logger log = LogManager.getLogger("WEB-INFO");
 

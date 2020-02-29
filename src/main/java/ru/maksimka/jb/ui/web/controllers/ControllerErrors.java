@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.exceptions.ResourceNotFoundException;
 
 @Controller
-public class ErrorsController  {
+public class ControllerErrors {
 
 
     //todo: подумать как грамотно организовать ошибки...

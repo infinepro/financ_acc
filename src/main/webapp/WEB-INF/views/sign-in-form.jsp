@@ -13,7 +13,38 @@
 
 </head>
 <body>
+<script type="text/javascript">
+    function hide(id) {
+            document.getElementById(id).style.display = "none";
+    }
+
+    function whenLoadHide() {
+        let strGET = window.location.search;
+        console.log(strGET);
+        if (strGET === "?error") {
+            hide("suc");
+        } else if (strGET === "?logout") {
+            hide("wro");
+        } else {
+            hide("suc");
+            hide("wro");
+        }
+    }
+</script>
 <div class="alert alert-secondary central-form" role="alert">
+
+    <div class="alert alert-success" role="alert" id="suc">
+        You successfully logged out of the system!
+    </div>
+
+    <div class="alert alert-danger" role="alert" id="wro">
+        Wrong login or password! please, try again!
+    </div>
+
+    <script>
+        whenLoadHide();
+    </script>
+
     <form method="post" name="auth-form" action="/auth">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="form-group">

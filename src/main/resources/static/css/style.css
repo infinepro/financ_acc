@@ -3,6 +3,11 @@
     margin: 20px auto;
 }
 
+.central-table {
+    width: 500px;
+    margin: 20px auto;
+}
+
 .register-me {
     float:right;
 }

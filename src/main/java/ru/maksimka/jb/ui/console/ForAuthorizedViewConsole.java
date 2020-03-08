@@ -1,7 +1,6 @@
 package ru.maksimka.jb.ui.console;
 
 import org.hibernate.QueryException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
@@ -11,7 +10,7 @@ import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.InvalidSummException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
-import ru.maksimka.jb.domain.services.MainService;
+import ru.maksimka.jb.domain.services.console_services.MainService;
 
 import java.io.IOException;
 import java.math.BigDecimal;

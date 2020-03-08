@@ -3,7 +3,7 @@ package ru.maksimka.jb.ui.console;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.domain.dto.UserDto;
-import ru.maksimka.jb.domain.services.ServiceAuthorization;
+import ru.maksimka.jb.domain.services.console_services.ServiceAuthorization;
 import ru.maksimka.jb.domain.services.assistants.ValidationData;
 import ru.maksimka.jb.exceptions.*;
 

@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.maksimka.jb.domain.dto.UserDto;
-import ru.maksimka.jb.domain.services.impl.ServiceAdminImpl;
+import ru.maksimka.jb.domain.services.console_services.ServiceAdminImpl;
 
 import java.util.List;
 
 @RestController
-public class ControllerOperations {
+public class ControllerAdminOperations {
 
     @Autowired
     private ServiceAdminImpl serviceAdmin;

@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.maksimka.jb.domain.services.websecurity.UserService;
+import ru.maksimka.jb.domain.services.webservices.websecurity.UserService;
 
 @Configuration
 @EnableWebSecurity

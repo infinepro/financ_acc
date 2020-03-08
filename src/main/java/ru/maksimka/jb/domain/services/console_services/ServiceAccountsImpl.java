@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services.impl;
+package ru.maksimka.jb.domain.services.console_services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.maksimka.jb.dao.daoimpl.AccountDao;
@@ -11,7 +11,6 @@ import ru.maksimka.jb.domain.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
-import ru.maksimka.jb.exceptions.NotAuthorizedException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import java.math.BigDecimal;

@@ -1,6 +1,5 @@
-package ru.maksimka.jb.domain.services.impl;
+package ru.maksimka.jb.domain.services.console_services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.domain.converters.to_dto_impl.UserToDtoConverter;

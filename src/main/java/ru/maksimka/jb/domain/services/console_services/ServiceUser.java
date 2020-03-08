@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services.impl;
+package ru.maksimka.jb.domain.services.console_services;
 
 public interface ServiceUser {
 

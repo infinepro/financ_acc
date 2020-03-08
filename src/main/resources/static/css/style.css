@@ -1,3 +1,7 @@
+.hide-panel {
+    display: none;
+}
+
 .central-form {
     width: 330px;
     margin: 20px auto;
@@ -9,9 +13,31 @@
 }
 
 .register-me {
-    float:right;
+    float: right;
 }
 
 table {
     margin: 20px auto;
+}
+
+.container-fluid {
+    width: 25% !important;
+    min-width: 300px !important;
+}
+
+button.mybtn {
+    width: 240px !important;
+    margin: 3px 0 3px 0 !important;
+}
+
+a.mybtn {
+    width: 110px !important;
+}
+
+.mybtn-split {
+    margin: 3px 0 3px -1px;
+}
+
+.btn-logout {
+    margin: 3px 0 3px 163px;
 }

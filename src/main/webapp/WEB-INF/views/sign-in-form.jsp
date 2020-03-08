@@ -11,38 +11,23 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <script src="/resources/js/show-hide-messages.js"></script>
+
 </head>
 <body>
-<script type="text/javascript">
-    function hide(id) {
-            document.getElementById(id).style.display = "none";
-    }
-
-    function whenLoadHide() {
-        let strGET = window.location.search;
-        console.log(strGET);
-        if (strGET === "?error") {
-            hide("suc");
-        } else if (strGET === "?logout") {
-            hide("wro");
-        } else {
-            hide("suc");
-            hide("wro");
-        }
-    }
-</script>
 <div class="alert alert-secondary central-form" role="alert">
 
-    <div class="alert alert-success" role="alert" id="suc">
+    <div class="alert alert-success hide-panel" role="alert" id="suc">
         You successfully logged out of the system!
     </div>
 
-    <div class="alert alert-danger" role="alert" id="wro">
+    <div class="alert alert-danger hide-panel" role="alert" id="wro">
         Wrong login or password! please, try again!
     </div>
 
     <script>
-        whenLoadHide();
+        ifAttributeThenShowElement("logout", "suc");
+        ifAttributeThenShowElement("error","wro");
     </script>
 
     <form method="post" name="auth-form" action="/auth">

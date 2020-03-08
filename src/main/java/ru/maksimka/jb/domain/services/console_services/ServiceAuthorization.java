@@ -1,4 +1,4 @@
-package ru.maksimka.jb.domain.services;
+package ru.maksimka.jb.domain.services.console_services;
 
 import ru.maksimka.jb.domain.dto.UserDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;

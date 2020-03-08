@@ -1,8 +1,7 @@
-package ru.maksimka.jb.domain.services;
+package ru.maksimka.jb.domain.services.console_services;
 
 import ru.maksimka.jb.dao.entities.UserEntity;
 import ru.maksimka.jb.domain.dto.*;
-import ru.maksimka.jb.domain.services.impl.*;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.InvalidSummException;
 import ru.maksimka.jb.exceptions.NotAuthorizedException;
@@ -10,7 +9,6 @@ import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 

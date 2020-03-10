@@ -17,7 +17,9 @@
 </head>
 <body>
 <div class="alert alert-secondary central-form" role="alert">
+    <h5 class="title form-header">Registration</h5>
     <form method="post" name="registration" action="/reg">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="form-group">
             <label for="InputLogin">Login</label>
             <input name="username" type="text" class="form-control" id="InputLogin" aria-describedby="loginHelp"

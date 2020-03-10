@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <script src="/resources/js/show-hide-messages.js"></script>
+    <script src="/resources/js/main-js.js"></script>
 
 </head>
 <body>
@@ -29,7 +29,7 @@
         ifAttributeThenShowElement("logout", "suc");
         ifAttributeThenShowElement("error","wro");
     </script>
-
+    <h5 class="title form-header">Please log in!</h5>
     <form method="post" name="auth-form" action="/auth">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="form-group">

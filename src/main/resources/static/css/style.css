@@ -2,6 +2,11 @@
     display: none;
 }
 
+h5.form-header {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
 .central-form {
     width: 330px;
     margin: 20px auto;

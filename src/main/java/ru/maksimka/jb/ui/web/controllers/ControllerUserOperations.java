@@ -15,24 +15,53 @@ public class ControllerUserOperations {
     @Autowired
     private WebServiceUser webServiceUser;
 
-    @RequestMapping(value = "/app/change-password", method = RequestMethod.GET)
-    public String changeUserPassword() {
-        return "change-user-password.jsp";
-    }
-
     @RequestMapping(value = "/app/change-password", method = RequestMethod.POST)
     public String changeUserPassword(String newPassword,
                                      String oldPassword, Model model) {
 
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        String username = getAuthUserName();
         try {
-            webServiceUser.changePassword(userName, newPassword, oldPassword);
+            webServiceUser.changePassword(username, newPassword, oldPassword);
             model.addAttribute("change-password", "true");
             return "redirect:/";
         } catch (WrongUserPasswordException e) {
             model.addAttribute("change-password", "false");
-            return "redirect:/app/change-password";
+            return "redirect:/";
         }
+    }
 
+    @RequestMapping(value = "/app/change-email", method = RequestMethod.POST)
+    public String changeUserEmail(String newEmail,
+                                  String password, Model model) {
+
+        String username = getAuthUserName();
+        try {
+            webServiceUser.changeEmail(username, password, newEmail);
+            model.addAttribute("change-email", "true");
+            return "redirect:/";
+        } catch (WrongUserPasswordException e) {
+            model.addAttribute("change-email", "false");
+            return "redirect:/";
+        }
+    }
+
+    @RequestMapping(value = "/app/delete-profile", method = RequestMethod.POST)
+    public String deleteProfile(String checkbox, String password, Model model) {
+
+        if (checkbox != null) {
+            String username = getAuthUserName();
+            try {
+                webServiceUser.deleteUser(username, password);
+                return "redirect:/logout";
+            } catch (WrongUserPasswordException e) {
+                model.addAttribute("delete-profile", "false");
+                return "redirect:/";
+            }
+        } else return "redirect:/";
+    }
+
+
+    private String getAuthUserName() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

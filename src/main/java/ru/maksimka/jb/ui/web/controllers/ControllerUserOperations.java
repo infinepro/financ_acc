@@ -6,8 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.services.webservices.WebServiceUser;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
+
+import java.util.List;
 
 @Controller
 public class ControllerUserOperations {
@@ -58,6 +63,20 @@ public class ControllerUserOperations {
                 return "redirect:/";
             }
         } else return "redirect:/";
+    }
+
+    @RequestMapping(value = "/app/user-accounts/get")
+    @ResponseBody
+    public List<AccountDto> getUserAccountsData() {
+        String username = getAuthUserName();
+        List<AccountDto> list = webServiceUser.getAllAccountByNameUser(username);
+        System.out.println(list);
+        return list;
+    }
+
+    @RequestMapping(value = "/app/user-accounts", method = RequestMethod.GET)
+    public String getUserAccounts() {
+        return "user-accounts.html";
     }
 
 

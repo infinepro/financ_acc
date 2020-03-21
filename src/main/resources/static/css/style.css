@@ -31,7 +31,7 @@ table {
 }
 
 button.mybtn {
-    width: 240px !important;
+    min-width: 256px !important;
     margin: 3px 0 3px 0 !important;
 }
 

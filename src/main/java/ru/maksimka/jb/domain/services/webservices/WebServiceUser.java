@@ -4,11 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
+import ru.maksimka.jb.dao.entities.AccountEntity;
 import ru.maksimka.jb.dao.entities.UserEntity;
+import ru.maksimka.jb.domain.converters.to_dto_impl.AccountToDtoConverter;
+import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WebServiceUser {
@@ -19,7 +24,8 @@ public class WebServiceUser {
     @Autowired
     private PasswordEncoder encoder;
 
-    private @Nullable UserEntity findUserByName(String username) {
+    private @Nullable
+    UserEntity findUserByName(String username) {
         return userDao.findBy(username);
     }
 
@@ -51,7 +57,7 @@ public class WebServiceUser {
         }
     }
 
-    public void deleteUser (String username, String password) throws WrongUserPasswordException {
+    public void deleteUser(String username, String password) throws WrongUserPasswordException {
         UserEntity userEntity = findUserByName(username);
         if (userEntity != null) {
             if (encoder.matches(password, userEntity.getPassword())) {
@@ -63,4 +69,14 @@ public class WebServiceUser {
             } else throw new WrongUserPasswordException("wrong password");
         }
     }
+
+    public List<AccountDto> getAllAccountByNameUser(String username) {
+        UserEntity userEntity = findUserByName("user"); //username);
+        return userEntity.getAccountsList()
+                .stream()
+                .map(new AccountToDtoConverter()::convert)
+                .collect(Collectors.toList());
+    }
+
+
 }

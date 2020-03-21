@@ -44,7 +44,7 @@ public class ControllerAuthorisation {
         return modelAndView;
     }
 
-    @GetMapping("/app/hello")
+    @GetMapping("/app/admin-settings")
     public ModelAndView hello() {
         return new ModelAndView("admin-settings.html");
     }

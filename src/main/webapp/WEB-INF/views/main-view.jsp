@@ -165,18 +165,21 @@
     </div>
 
     <div class="btn-group dropright">
-        <button type="button" class="mybtn btn btn-secondary">
-            Transaction settings
+        <button type="button" class="mybtn btn btn-secondary" onClick="document.location = '/app/user-accounts'">
+            Accounts and operations with them...
         </button>
-        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split mybtn-split"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="sr-only">Toggle Dropright</span>
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Change password</a>
-            <a class="dropdown-item" href="#">Change email</a>
-            <a class="dropdown-item" href="#">Delete my profile</a>
-        </div>
+        <%-- <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split mybtn-split"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             <span class="sr-only">Toggle Dropright</span>
+         </button>--%>
+        <%--<div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Add new account</a>
+            <a class="dropdown-item" href="#">Add new account type</a>
+            <a class="dropdown-item" href="#">Delete account</a>
+            <a class="dropdown-item" href="#">Delete account type</a>
+            <a class="dropdown-item" href="#">Delete account</a>
+
+        </div>--%>
     </div>
 
     <div class="btn-group dropright">

@@ -39,6 +39,11 @@ a.mybtn {
     width: 110px !important;
 }
 
+.edit-btn {
+    padding: 0 7px 0 5px !important;
+    background-color: #7b98b3 !important;
+}
+
 .mybtn-split {
     margin: 3px 0 3px -1px;
 }

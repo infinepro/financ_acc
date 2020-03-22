@@ -30,7 +30,7 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true )
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AccountEntity> accountsList;
 
     @Override

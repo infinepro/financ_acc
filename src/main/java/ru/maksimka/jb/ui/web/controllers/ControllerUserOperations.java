@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.services.webservices.WebServiceUser;
+import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.util.List;
@@ -79,6 +80,18 @@ public class ControllerUserOperations {
         return "user-accounts.html";
     }
 
+    @RequestMapping(value = "/app/delete-user-account", method = RequestMethod.POST)
+    public String deleteUserAAccount(String checkbox, Integer accountId, Model model) {
+        System.out.println(checkbox + "  " + accountId);
+
+        if (checkbox != null) {
+            try {
+                webServiceUser.deleteUserAccountById(accountId);
+            } catch (RecordNotFoundException e) {
+                model.addAttribute("delete-account", "false");
+            }
+        } return "redirect:/app/user-accounts";
+    }
 
     private String getAuthUserName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();

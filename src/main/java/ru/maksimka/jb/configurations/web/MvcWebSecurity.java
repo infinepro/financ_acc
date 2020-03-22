@@ -21,8 +21,8 @@ public class MvcWebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reg", "/auth", "/resources/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/auth").permitAll()
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
-                //.and().csrf().disable();
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+                .and().csrf().ignoringAntMatchers("/app/**");
     }
 
     @Autowired

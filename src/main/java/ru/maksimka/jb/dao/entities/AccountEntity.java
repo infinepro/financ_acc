@@ -35,11 +35,17 @@ public class AccountEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "account")
     private List<TransactionEntity> transactionsList;
 
     @Override
     public String toString() {
-        return "\t" + balance;
+        return "AccountEntity{" +
+                "id=" + id +
+                ", accountName=" + accountName +
+                ", balance=" + balance +
+                ", owner=" + owner +
+                ", transactionsList=" + transactionsList +
+                '}';
     }
 }

@@ -3,6 +3,7 @@ package ru.maksimka.jb.domain.services.webservices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.maksimka.jb.dao.daoimpl.AccountDao;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.dao.entities.AccountEntity;
 import ru.maksimka.jb.dao.entities.UserEntity;
@@ -20,6 +21,8 @@ public class WebServiceUser {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private AccountDao accountDao;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -71,11 +74,15 @@ public class WebServiceUser {
     }
 
     public List<AccountDto> getAllAccountByNameUser(String username) {
-        UserEntity userEntity = findUserByName("user"); //username);
+        UserEntity userEntity = findUserByName(username);
         return userEntity.getAccountsList()
                 .stream()
                 .map(new AccountToDtoConverter()::convert)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteUserAccountById(Integer id) throws RecordNotFoundException {
+        accountDao.delete(id);
     }
 
 

@@ -13,6 +13,42 @@
 </head>
 <body>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+                <form method="post" name="deleteProfile" action="/app/delete-user-account" id="delete-account">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete account</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input id="hiddenInput" type="hidden" name="accountId" value=""/>
+                    <div class="form-group">
+                        <br/>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="checkbox" value="Yes" class="custom-control-input"
+                                   id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">Delete this account? Are you
+                                sure!?</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Yea! just do it!</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+
+                </form>•••••
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="central-table">
     <div class="btn-group" role="group" aria-label="Basic example">
@@ -25,6 +61,7 @@
             <th scope="col">#</th>
             <th scope="col">AccountType</th>
             <th scope="col">Balance</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody id="ajax-user-accounts">
@@ -33,10 +70,21 @@
     </table>
 </div>
 
+<!-- Scripts -->
 <script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="/resources/js/main-ajax.js"></script>
 <script>ajaxQueryForUserAccountsList()</script>
 
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>

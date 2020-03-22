@@ -41,7 +41,6 @@
 
                 <div class="modal-body">
 
-                    <%--for change password--%>
                     <form method="post" name="changePassword" action="/app/change-password" id="change-password">
                         <div class="modal-header">
                             <h5 class="modal-title">Change password</h5>
@@ -50,7 +49,6 @@
                             </button>
                         </div>
 
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="form-group">
                             <label for="InputOldPassword">Old password</label>
                             <input name="oldPassword" type="password" class="form-control" id="InputOldPassword"
@@ -70,15 +68,13 @@
 
                     </form>
 
-                    <%--for change email--%>
-                    <form method="post" name="changePassword" action="/app/change-email" id="change-email">
+                    <form method="post" name="changeEmail" action="/app/change-email" id="change-email">
                         <div class="modal-header">
                             <h5 class="modal-title">Change email</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="form-group">
                             <label for="InputNewEmail">New Email</label>
                             <input name="newEmail" type="email" class="form-control" id="InputNewEmail"
@@ -98,14 +94,13 @@
 
                     </form>
 
-                    <form method="post" name="changePassword" action="/app/delete-profile" id="delete-profile">
+                    <form method="post" name="deleteProfile" action="/app/delete-profile" id="delete-profile">
                         <div class="modal-header">
                             <h5 class="modal-title">Delete profile</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="form-group">
                             <br/>
                             <label for="InPassword">Password</label>
@@ -168,18 +163,6 @@
         <button type="button" class="mybtn btn btn-secondary" onClick="document.location = '/app/user-accounts'">
             Accounts and operations with them...
         </button>
-        <%-- <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split mybtn-split"
-                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             <span class="sr-only">Toggle Dropright</span>
-         </button>--%>
-        <%--<div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Add new account</a>
-            <a class="dropdown-item" href="#">Add new account type</a>
-            <a class="dropdown-item" href="#">Delete account</a>
-            <a class="dropdown-item" href="#">Delete account type</a>
-            <a class="dropdown-item" href="#">Delete account</a>
-
-        </div>--%>
     </div>
 
     <div class="btn-group dropright">

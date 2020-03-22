@@ -29,7 +29,7 @@ public class ControllerAuthorisation {
 
     @GetMapping("/")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("main-view.jsp");
+        ModelAndView modelAndView = new ModelAndView("main-view.html");
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 
         modelAndView.addObject("username", userName);

@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.services.webservices.WebServiceUser;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
@@ -18,8 +17,12 @@ import java.util.List;
 @Controller
 public class ControllerUserOperations {
 
-    @Autowired
     private WebServiceUser webServiceUser;
+
+    @Autowired
+    public ControllerUserOperations(WebServiceUser webServiceUser) {
+        this.webServiceUser = webServiceUser;
+    }
 
     @RequestMapping(value = "/app/change-password", method = RequestMethod.POST)
     public String changeUserPassword(String newPassword,
@@ -90,7 +93,8 @@ public class ControllerUserOperations {
             } catch (RecordNotFoundException e) {
                 model.addAttribute("delete-account", "false");
             }
-        } return "redirect:/app/user-accounts";
+        }
+        return "redirect:/app/user-accounts";
     }
 
     private String getAuthUserName() {

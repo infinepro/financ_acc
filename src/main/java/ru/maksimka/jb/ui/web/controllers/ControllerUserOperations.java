@@ -106,18 +106,14 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/user-accounts/add-new-account")
     public String addNewAccount(AccountDto accountDto) {
-        System.out.println(accountDto.getId() + "" + accountDto.getBalance());
         String username = getAuthUserName();
         webServiceUser.addNewAccount(username, accountDto.getBalance(), accountDto.getId());
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + username + "\n" + accountDto  );
         return "redirect:/app/user-accounts";
     }
 
     @RequestMapping(value = "/app/user-account/add-new-type-account")
     @ResponseBody
     public ResponseEntity addNewTypeAccount(AccountNameDto type, ModelAndView modelAndView) {
-
-        System.out.println(type.getAccountName());
         try {
             webServiceUser.addNewTypeAccount(type.getAccountName());
             return new ResponseEntity(HttpStatus.OK);

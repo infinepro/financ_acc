@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @With
 @Accessors(chain = true)
+@EqualsAndHashCode
 
 //hibernate
 @Entity

@@ -16,6 +16,7 @@ import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,7 +98,7 @@ public class WebServiceUser {
                 .collect(Collectors.toList());
     }
 
-    public void addNewAccount(String username, Integer balance, Integer id) {
+    public void addNewAccount(String username, BigDecimal balance, Integer id) {
         accountDao.addNewAccountForUser(username, balance, id);
     }
 

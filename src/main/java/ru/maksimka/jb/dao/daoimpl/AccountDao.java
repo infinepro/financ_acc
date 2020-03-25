@@ -2,7 +2,6 @@ package ru.maksimka.jb.dao.daoimpl;
 
 import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
-import org.checkerframework.checker.units.qual.A;
 import org.hibernate.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,16 +31,13 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         this.em = em;
     }
 
-    public void addNewAccountForUser(String username, Integer balance, Integer id) {
+    public void addNewAccountForUser(String username, BigDecimal balance, Integer typeid) {
         UserEntity userEntity = userDao.findBy(username);
-        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(id);
-
+        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(typeid);
         AccountEntity accountEntity = new AccountEntity()
-                .setBalance(new BigDecimal(balance))
+                .setBalance(balance)
                 .setAccountName(accountNamesEntity)
                 .setOwner(userEntity);
-
-        em.clear();
         insert(accountEntity);
     }
 
@@ -70,7 +66,7 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
     @Override
     public AccountEntity insert(@NotNull AccountEntity accountEntity) {
         em.getTransaction().begin();
-        em.persist(accountEntity);
+        em.merge(accountEntity);
         em.getTransaction().commit();
         return accountEntity;
     }

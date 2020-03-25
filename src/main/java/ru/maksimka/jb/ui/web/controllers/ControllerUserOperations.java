@@ -76,7 +76,6 @@ public class ControllerUserOperations {
     public List<AccountDto> getUserAccountsData() {
         String username = getAuthUserName();
         List<AccountDto> list = webServiceUser.getAllAccountByNameUser(username);
-        System.out.println(list);
         return list;
     }
 
@@ -104,11 +103,11 @@ public class ControllerUserOperations {
     }
 
     @RequestMapping(value = "/app/user-accounts/add-new-account")
-    public String addNewAccount(Integer id, Integer balance) {
-        System.out.println(id + "" + balance);
+    public String addNewAccount(AccountDto accountDto) {
+        System.out.println(accountDto.getId() + "" + accountDto.getBalance());
         String username = getAuthUserName();
-        webServiceUser.addNewAccount(username, balance, id);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + username + "  " + balance + "   " + id);
+        webServiceUser.addNewAccount(username, accountDto.getBalance(), accountDto.getId());
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + username + "\n" + accountDto  );
         return "redirect:/app/user-accounts";
     }
 }

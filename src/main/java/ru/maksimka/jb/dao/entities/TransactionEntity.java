@@ -13,11 +13,13 @@ import java.sql.Date;
 @AllArgsConstructor
 @With
 @Accessors(chain = true)
+@EqualsAndHashCode
 
 //hibernate
 @Entity
 @Table(name = "transactions")
-public class TransactionEntity {
+public class
+TransactionEntity {
 
     @Id
     @Column(name = "id")

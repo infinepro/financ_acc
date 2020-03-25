@@ -36,19 +36,13 @@ function setDataForHiddenInput(id) {
     $("#hiddenInput").val(id);
 }
 
-
-
-
 function addNewAccount() {
     let typeId = $("#account-type-name").val();
     let balance = $("#balance").val();
-    console.log(typeId + "  " + balance );
-    $.getJSON(  '/app/user-accounts/add-new-account',
-                {
-                    "id": typeId,
-                    "balance": balance
-                },
-        parseUserAccountsToTableRows);
+    $.post('/app/user-accounts/add-new-account', {
+        "id": typeId,
+        "balance": balance
+    } );
 }
 
 function getTypesAccountsList() {

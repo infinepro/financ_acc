@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+@EqualsAndHashCode
 
 //hibernate
 @Entity

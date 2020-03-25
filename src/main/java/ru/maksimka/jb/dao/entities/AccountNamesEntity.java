@@ -1,9 +1,6 @@
 package ru.maksimka.jb.dao.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+@EqualsAndHashCode
 
 //hibernate
 @Entity

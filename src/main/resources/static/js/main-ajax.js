@@ -3,15 +3,15 @@ function ajaxQueryForUserAccountsList() {
 }
 
 function parseUserAccountsToTableRows(data) {
-    var count = 1;
+    var count = data.length;
     $.each(data, function (index, json) {
         $('#ajax-user-accounts')
-            .append('<tr>')
-            .append('<td scope = "row">' + count++ + '</td>')
-            .append('<td>' + json.nameAccount + '</td>')
-            .append('<td>' + json.balance + ' руб.' + '</td>')
-            .append('<td>' + setIdAccountForLinkButton(json.id) + '</td>')
-            .append('</tr>')
+            .prepend('<tr class="ajax-rows">' +
+            '<td scope = "row">' + count-- + '</td>' +
+            '<td>' + json.nameAccount + '</td>' +
+            '<td>' + json.balance + ' руб.' + '</td>' +
+            '<td>' + setIdAccountForLinkButton(json.id) + '</td>' +
+            '</tr>')
     });
 }
 
@@ -36,13 +36,27 @@ function setDataForHiddenInput(id) {
     $("#hiddenInput").val(id);
 }
 
+function addNewTypeAccount() {
+    const type = String($('#type-input').val());
+    console.log(type);
+
+    $.post('/app/user-account/add-new-type-account', { "accountName" : type}, function(){getTypesAccountsList();});
+
+}
+
 function addNewAccount() {
     let typeId = $("#account-type-name").val();
     let balance = $("#balance").val();
-    $.post('/app/user-accounts/add-new-account', {
-        "id": typeId,
-        "balance": balance
-    } );
+    $.post('/app/user-accounts/add-new-account',
+        {
+            "id": typeId,
+            "balance": balance
+        } ,
+        function() {
+            clearAjaxTable();
+            ajaxQueryForUserAccountsList();
+        }
+    );
 }
 
 function getTypesAccountsList() {
@@ -50,7 +64,12 @@ function getTypesAccountsList() {
 }
 
 function parseTypesAccountsIntoSelect(data) {
+    $('.type').detach();
     $.each(data, function (index, json) {
-        $('#account-type-name').append('<option value="' + json.id + '">' + json.accountName + '</option>');
+        $('#account-type-name').append('<option class="type" value="' + json.id + '">' + json.accountName + '</option>');
     });
+}
+
+function clearAjaxTable() {
+    $("tr.ajax-rows").detach();
 }

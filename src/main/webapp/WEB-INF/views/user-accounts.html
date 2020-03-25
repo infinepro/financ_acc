@@ -58,6 +58,12 @@
         <button type="button" class="btn btn-secondary" onClick="document.location = '/'">Come back!
         </button>
     </div>
+    <div class="add-new-type btn-group" role="group" aria-label="Basic example">
+        <input type="text" id="type-input" name="new-account-type-name"/>
+        <button type="button" class="btn btn-secondary" onClick="addNewTypeAccount()">
+            Create a type with this name
+        </button>
+    </div>
     <table class="table">
         <thead class="thead-dark">
         <tr>
@@ -70,7 +76,7 @@
         <tbody id="ajax-user-accounts">
         <!--add table rows from list accounts -->
         <script>ajaxQueryForUserAccountsList()</script>
-        <tr>
+        <tr id="addNewAcc">
             <td scope="col"></td>
             <td scope="col">
                 <select id="account-type-name">
@@ -78,11 +84,13 @@
                 </select>
             </td>
             <td scope="col">
-                <input id="balance" type="text" name="account-type-name"/>
+
+                <input id="balance" type="text" name="account-type-name" oninput="Ftest (this)"
+                       onpropertychange="if ('v' == '\v' && parseFloat (navigator.userAgent.split ('MSIE ') [1].split (';') [0]) <= 9) Ftest (this)"/>
             </td>
             <td scope="col">
                 <button type='button' class='edit-btn btn btn-secondary' onClick="addNewAccount()">
-                    Add
+                    Add new account
                 </button>
             </td>
         </tr>
@@ -94,6 +102,7 @@
 </div>
 
 <!-- Bootstrap scripts -->
+<script src="/resources/js/validate-input.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>

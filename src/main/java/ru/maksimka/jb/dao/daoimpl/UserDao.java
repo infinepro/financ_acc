@@ -30,6 +30,7 @@ public class UserDao implements Dao<UserEntity, String> {
     @Override
     @Nullable
     public UserEntity findBy(String login) {
+        em.clear();
         try {
             return (UserEntity) em.createQuery(
                     "SELECT a FROM UserEntity a WHERE a.name = :name")

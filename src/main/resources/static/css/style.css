@@ -12,8 +12,12 @@ h5.form-header {
     margin: 20px auto;
 }
 
+.add-new-type {
+    float: right;
+}
+
 .central-table {
-    width: 500px;
+    width: 700px;
     margin: 20px auto;
 }
 

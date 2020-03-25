@@ -1,5 +1,6 @@
 package ru.maksimka.jb.domain.services.webservices;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,11 +8,13 @@ import ru.maksimka.jb.dao.daoimpl.AccountDao;
 import ru.maksimka.jb.dao.daoimpl.AccountNamesDao;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.dao.entities.AccountEntity;
+import ru.maksimka.jb.dao.entities.AccountNamesEntity;
 import ru.maksimka.jb.dao.entities.UserEntity;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
@@ -100,6 +103,11 @@ public class WebServiceUser {
 
     public void addNewAccount(String username, BigDecimal balance, Integer id) {
         accountDao.addNewAccountForUser(username, balance, id);
+    }
+
+    public void addNewTypeAccount(String type) throws AlreadyExistsException {
+        AccountNamesEntity accountNamesEntity = new AccountNamesEntity().withAccountName(type);
+        accountNamesDao.insert(accountNamesEntity);
     }
 
 }

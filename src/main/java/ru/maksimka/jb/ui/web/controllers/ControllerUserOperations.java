@@ -1,20 +1,22 @@
 package ru.maksimka.jb.ui.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ru.maksimka.jb.dao.entities.AccountEntity;
+import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
 import ru.maksimka.jb.domain.services.webservices.WebServiceUser;
+import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -109,5 +111,19 @@ public class ControllerUserOperations {
         webServiceUser.addNewAccount(username, accountDto.getBalance(), accountDto.getId());
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + username + "\n" + accountDto  );
         return "redirect:/app/user-accounts";
+    }
+
+    @RequestMapping(value = "/app/user-account/add-new-type-account")
+    @ResponseBody
+    public ResponseEntity addNewTypeAccount(AccountNameDto type, ModelAndView modelAndView) {
+
+        System.out.println(type.getAccountName());
+        try {
+            webServiceUser.addNewTypeAccount(type.getAccountName());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (AlreadyExistsException e) {
+            //ignore
+            return new ResponseEntity("type already exist", HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 }

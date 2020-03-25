@@ -55,7 +55,10 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
     }
 
     public List<AccountEntity> findByAllOnePerson(UserEntity owner) throws QueryException {
-        return em.createQuery("SELECT a FROM AccountEntity a WHERE a.owner = :owner").setParameter("owner", owner).getResultList();
+        em.clear();
+        return em.createQuery("SELECT a FROM AccountEntity a WHERE a.owner = :owner")
+                .setParameter("owner", owner)
+                .getResultList();
     }
 
     @Override

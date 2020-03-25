@@ -49,7 +49,7 @@ public class AccountNamesDao implements Dao<AccountNamesEntity, Integer> {
                 throw new AlreadyExistsException("счет с таким названием уже имеется в базе, insert failed");
             }
         }
-
+        System.out.println(accountNamesEntity.getAccountName());
         em.getTransaction().begin();
         em.persist(accountNamesEntity);
         em.getTransaction().commit();

@@ -21,8 +21,9 @@ h5.form-header {
     float: right;
 }
 
-table {
-    margin: 20px auto;
+.table {
+    margin: 20px auto !important;
+    width: auto !important;
 }
 
 .container-fluid {

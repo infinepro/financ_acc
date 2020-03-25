@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 @Component
 public class AccountDto {
     private Integer id;
+    private Integer typeId;
     private String owner;
     private String nameAccount;
     private BigDecimal balance;

@@ -1,5 +1,18 @@
-function setDataForHiddenInput(id) {
-    $("#hiddenInput").val(id);
+function ajaxQueryForUserAccountsList() {
+    $.getJSON('/app/user-accounts/get', {}, parseUserAccountsToTableRows);
+}
+
+function parseUserAccountsToTableRows(data) {
+    var count = 1;
+    $.each(data, function (index, json) {
+        $('#ajax-user-accounts')
+            .append('<tr>')
+            .append('<td scope = "row">' + count++ + '</td>')
+            .append('<td>' + json.nameAccount + '</td>')
+            .append('<td>' + json.balance + ' руб.' + '</td>')
+            .append('<td>' + setIdAccountForLinkButton(json.id) + '</td>')
+            .append('</tr>')
+    });
 }
 
 function setIdAccountForLinkButton(id) {
@@ -19,22 +32,31 @@ function setIdAccountForLinkButton(id) {
             "</div>";
 }
 
-function ajaxQueryForUserAccountsList() {
-    $.getJSON('/app/user-accounts/get', {}, parseUserAccountsToTableRows);
-};
+function setDataForHiddenInput(id) {
+    $("#hiddenInput").val(id);
+}
 
-function parseUserAccountsToTableRows(data) {
-    var count = 1;
+
+
+
+function addNewAccount() {
+    let typeId = $("#account-type-name").val();
+    let balance = $("#balance").val();
+    console.log(typeId + "  " + balance );
+    $.getJSON(  '/app/user-accounts/add-new-account',
+                {
+                    "id": typeId,
+                    "balance": balance
+                },
+        parseUserAccountsToTableRows);
+}
+
+function getTypesAccountsList() {
+    $.getJSON('/app/user-accounts/get-types-accounts', {}, parseTypesAccountsIntoSelect);
+}
+
+function parseTypesAccountsIntoSelect(data) {
     $.each(data, function (index, json) {
-        $('#ajax-user-accounts')
-            .append('<tr>')
-            .append('<th scope = "row">' + count++ + '</th>')
-            .append('<td>' + json.nameAccount + '</td>')
-            .append('<td>' + json.balance + ' руб.' + '</td>')
-            .append('<td>' + setIdAccountForLinkButton(json.id) + '</td>')
-            .append('</tr>')
+        $('#account-type-name').append('<option value="' + json.id + '">' + json.accountName + '</option>');
     });
-};
-
-
-
+}

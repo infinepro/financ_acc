@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+    <script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/resources/js/main-ajax.js"></script>
+
     <title>Welcome!</title>
 </head>
 <body>
@@ -43,7 +46,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
 
-                </form>•••••
+                </form>
             </div>
         </div>
     </div>
@@ -56,25 +59,47 @@
         </button>
     </div>
     <table class="table">
-        <thead>
+        <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">AccountType</th>
+            <th scope="col">Account type</th>
             <th scope="col">Balance</th>
             <th scope="col"></th>
         </tr>
         </thead>
         <tbody id="ajax-user-accounts">
+        <!--add table rows from list accounts -->
+        <script>ajaxQueryForUserAccountsList()</script>
+        <tr>
+            <td scope="col"></td>
+            <td scope="col">
+                <select id="account-type-name">
+                    <script>getTypesAccountsList()</script>
+                </select>
+            </td>
+            <td scope="col">
+                <input id="balance" type="text" name="account-type-name"/>
+            </td>
+            <td scope="col">
+                <form class="hidden-form">
+                    <button type='button' class='edit-btn btn btn-secondary' onClick="addNewAccount()">
+                        Add
+                    </button>
+                </form>
+
+                <button type="button" class="btn btn-success" onClick="document.location = '/app/add-new-account'">
+                    Add new account
+                </button>
+            </td>
+        </tr>
+
 
         </tbody>
     </table>
+
 </div>
 
-<!-- Scripts -->
-<script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="/resources/js/main-ajax.js"></script>
-<script>ajaxQueryForUserAccountsList()</script>
-
+<!-- Bootstrap scripts -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

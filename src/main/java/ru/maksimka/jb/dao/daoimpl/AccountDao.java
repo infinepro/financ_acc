@@ -2,29 +2,47 @@ package ru.maksimka.jb.dao.daoimpl;
 
 import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
+import org.checkerframework.checker.units.qual.A;
 import org.hibernate.QueryException;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.dao.entities.AccountEntity;
+import ru.maksimka.jb.dao.entities.AccountNamesEntity;
 import ru.maksimka.jb.dao.entities.UserEntity;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class AccountDao implements Dao<AccountEntity, Integer> {
 
     private EntityManager em;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private AccountNamesDao accountNamesDao;
 
     @Autowired
     public AccountDao(@Qualifier("createEntityManager") EntityManager em) {
         this.em = em;
+    }
+
+    public void addNewAccountForUser(String username, Integer balance, Integer id) {
+        UserEntity userEntity = userDao.findBy(username);
+        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(id);
+
+        AccountEntity accountEntity = new AccountEntity()
+                .setBalance(new BigDecimal(balance))
+                .setAccountName(accountNamesEntity)
+                .setOwner(userEntity);
+
+        em.clear();
+        insert(accountEntity);
     }
 
     @Override

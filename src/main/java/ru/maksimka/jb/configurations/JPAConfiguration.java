@@ -73,7 +73,7 @@ public class JPAConfiguration {
 
         //If the value of this property is true, Hibernate writes all SQL
         //statements to the console.
-        jpaProperties.put("hibernate.show_sql", "true");
+        jpaProperties.put("hibernate.show_sql", "false");
 
         //If the value of this property is true, Hibernate will format the SQL
         //that is written to the console.

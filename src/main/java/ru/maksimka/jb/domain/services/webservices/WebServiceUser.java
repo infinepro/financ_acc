@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.daoimpl.AccountDao;
+import ru.maksimka.jb.dao.daoimpl.AccountNamesDao;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
 import ru.maksimka.jb.dao.entities.AccountEntity;
 import ru.maksimka.jb.dao.entities.UserEntity;
+import ru.maksimka.jb.domain.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.domain.dto.AccountDto;
+import ru.maksimka.jb.domain.dto.AccountNameDto;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
@@ -23,6 +26,8 @@ public class WebServiceUser {
     private UserDao userDao;
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private AccountNamesDao accountNamesDao;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -85,5 +90,15 @@ public class WebServiceUser {
         accountDao.delete(id);
     }
 
+    public List<AccountNameDto> getAllTypeAccounts() {
+        return accountNamesDao.findByAll()
+                .stream()
+                .map(new AccountNameToDtoConverter()::convert)
+                .collect(Collectors.toList());
+    }
+
+    public void addNewAccount(String username, Integer balance, Integer id) {
+        accountDao.addNewAccountForUser(username, balance, id);
+    }
 
 }

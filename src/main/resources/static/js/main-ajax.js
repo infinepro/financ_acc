@@ -26,14 +26,27 @@ function setIdAccountForLinkButton(id) {
                 "</button>" +
                 "<div class='dropdown-menu'>" +
                     "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#exampleModal' " +
-                        "onclick='setDataForHiddenInput(" + id.toString() + ")'>Delete this account</a>" +
-                    "<a class='dropdown-item' href='#' >Change data</a>" +
+                        "onclick='clickOnDeleteAccount(" + id.toString() + ")'>Delete this account</a>" +
+                    "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#exampleModal'" +
+                        "onclick='clickOnChangeAccount(" + id.toString() + ")'>Change data</a>" +
                 "</div>" +
             "</div>";
 }
 
+function clickOnChangeAccount(id) {
+    setDataForHiddenInput(id);
+    $("#delete-account").css( "display", "none" );
+    $("#change-account").css( "display", "block" );
+}
+
+function clickOnDeleteAccount(id) {
+    setDataForHiddenInput(id);
+    $("#change-account").css( "display", "none" );
+    $("#delete-account").css( "display", "block" );
+}
+
 function setDataForHiddenInput(id) {
-    $("#hiddenInput").val(id);
+    $(".hiddenInput").val(id);
 }
 
 function addNewTypeAccount() {
@@ -45,7 +58,7 @@ function addNewTypeAccount() {
 }
 
 function addNewAccount() {
-    let typeId = $("#account-type-name").val();
+    let typeId = $(".account-type-name").val();
     let balance = $("#balance").val();
     $.post('/app/user-accounts/add-new-account',
         {
@@ -66,7 +79,7 @@ function getTypesAccountsList() {
 function parseTypesAccountsIntoSelect(data) {
     $('.type').detach();
     $.each(data, function (index, json) {
-        $('#account-type-name').append('<option class="type" value="' + json.id + '">' + json.accountName + '</option>');
+        $('.account-type-name').append('<option class="type" value="' + json.id + '">' + json.accountName + '</option>');
     });
 }
 

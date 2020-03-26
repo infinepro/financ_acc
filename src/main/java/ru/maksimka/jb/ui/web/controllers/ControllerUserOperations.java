@@ -17,6 +17,7 @@ import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -120,6 +121,27 @@ public class ControllerUserOperations {
         } catch (AlreadyExistsException e) {
             //ignore
             return new ResponseEntity("type already exist", HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @RequestMapping(value = "/app/change-user-account")
+    public String changeUserAccount(Integer id, Integer typeId, BigDecimal balance) {
+        //String username = getAuthUserName();
+        AccountDto accountDto = new AccountDto()
+                .withTypeId(typeId)
+                .withId(id)
+                .withBalance(balance);
+
+        System.out.println(accountDto);
+
+        try {
+            webServiceUser.changeAccount(accountDto);
+        } catch (RecordNotFoundException e) {
+            //
+            System.err.println(accountDto);
+            e.printStackTrace();
+        } finally {
+            return "redirect:/app/user-accounts";
         }
     }
 }

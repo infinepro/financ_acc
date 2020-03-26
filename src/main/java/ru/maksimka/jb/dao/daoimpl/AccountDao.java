@@ -31,12 +31,12 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         this.em = em;
     }
 
-    public void addNewAccountForUser(String username, BigDecimal balance, Integer typeid) {
-        UserEntity userEntity = userDao.findBy(username);
-        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(typeid);
+    public void addNewAccountForUser(UserEntity userEntity, BigDecimal balance, AccountNamesEntity accName) {
+
+
         AccountEntity accountEntity = new AccountEntity()
                 .setBalance(balance)
-                .setAccountName(accountNamesEntity)
+                .setAccountName(accName)
                 .setOwner(userEntity);
         insert(accountEntity);
     }
@@ -80,8 +80,9 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         if (accountEntityOld == null) {
             throw new RecordNotFoundException("счет не найден, update failed");
         }
-        accountEntityOld.withAccountName(accountEntity.getAccountName())
-                .withBalance(accountEntity.getBalance());
+        accountEntityOld
+                .setAccountName(accountEntity.getAccountName())
+                .setBalance(accountEntity.getBalance());
 
         em.getTransaction().begin();
         em.merge(accountEntityOld);

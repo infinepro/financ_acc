@@ -20,6 +20,7 @@ import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,12 +103,25 @@ public class WebServiceUser {
     }
 
     public void addNewAccount(String username, BigDecimal balance, Integer id) {
-        accountDao.addNewAccountForUser(username, balance, id);
+        UserEntity userEntity = userDao.findBy(username);
+        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(id);
+        accountDao.addNewAccountForUser(userEntity, balance, accountNamesEntity);
     }
 
     public void addNewTypeAccount(String type) throws AlreadyExistsException {
         AccountNamesEntity accountNamesEntity = new AccountNamesEntity().withAccountName(type);
         accountNamesDao.insert(accountNamesEntity);
+    }
+
+    public void changeAccount(AccountDto accountDto) throws RecordNotFoundException {
+        //UserEntity userEntity = userDao.findBy(accountDto.getOwner());
+        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(accountDto.getTypeId());
+        AccountEntity accountEntity = new AccountEntity()
+                .setAccountName(accountNamesEntity)
+                .setBalance(accountDto.getBalance())
+                .setId(accountDto.getId());
+
+        accountDao.update(accountEntity);
     }
 
 }

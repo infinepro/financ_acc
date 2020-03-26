@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 //lombok
 @Data
@@ -48,5 +49,13 @@ public class AccountEntity {
                 ", owner=" + owner +
                 ", transactionsList=" + transactionsList +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountEntity)) return false;
+        AccountEntity that = (AccountEntity) o;
+        return getId().equals(that.getId());
     }
 }

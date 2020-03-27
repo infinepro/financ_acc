@@ -5,4 +5,4 @@
   Spring(core), Spring mvc, Spring security, Hikari, JUnit, Mockito, Liquibase, H2, Postgresql, Hibernate, Lombok
   </br></br>
  Frontend:</br>
-  HTML, CSS, Bootstrap, JS(jQuery)
+  HTML, CSS, JS (Bootstrap, jQuery)

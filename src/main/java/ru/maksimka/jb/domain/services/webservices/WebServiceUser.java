@@ -1,26 +1,24 @@
 package ru.maksimka.jb.domain.services.webservices;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.maksimka.jb.dao.daoimpl.AccountDao;
-import ru.maksimka.jb.dao.daoimpl.AccountNamesDao;
-import ru.maksimka.jb.dao.daoimpl.UserDao;
-import ru.maksimka.jb.dao.entities.AccountEntity;
-import ru.maksimka.jb.dao.entities.AccountNamesEntity;
-import ru.maksimka.jb.dao.entities.UserEntity;
+import ru.maksimka.jb.dao.daoimpl.*;
+import ru.maksimka.jb.dao.entities.*;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountToDtoConverter;
+import ru.maksimka.jb.domain.converters.to_dto_impl.TransactionCategoryToDtoConverter;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
+import ru.maksimka.jb.domain.dto.TransactionCategoryDto;
+import ru.maksimka.jb.domain.dto.TransactionDto;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
-import java.util.Iterator;
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +31,10 @@ public class WebServiceUser {
     private AccountDao accountDao;
     @Autowired
     private AccountNamesDao accountNamesDao;
-
+    @Autowired
+    private TransactionDao transactionDao;
+    @Autowired
+    private TransactionCategoriesDao transactionCategoriesDao;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -102,10 +103,15 @@ public class WebServiceUser {
                 .collect(Collectors.toList());
     }
 
-    public void addNewAccount(String username, BigDecimal balance, Integer id) {
+    public void addNewAccount(String username, BigDecimal balance, Integer typeId) {
         UserEntity userEntity = userDao.findBy(username);
-        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(id);
-        accountDao.addNewAccountForUser(userEntity, balance, accountNamesEntity);
+        AccountNamesEntity accountNamesEntity = accountNamesDao.findBy(typeId);
+        AccountEntity accountEntity = new AccountEntity()
+                .withAccountName(accountNamesEntity)
+                .withOwner(userEntity)
+                .withBalance(balance);
+
+        accountDao.insert(accountEntity);
     }
 
     public void addNewTypeAccount(String type) throws AlreadyExistsException {
@@ -124,4 +130,30 @@ public class WebServiceUser {
         accountDao.update(accountEntity);
     }
 
+    public void addNewTransaction(TransactionDto transactionDto) {
+        TransactionCategoriesEntity transactionCategoriesEntity = transactionCategoriesDao
+                .findBy(transactionDto.getTransactionCategoryId());
+        AccountEntity accountEntity = accountDao.findBy(transactionDto.getAccountId());
+
+        //change account balance
+        accountEntity.setBalance(accountEntity.getBalance().subtract(transactionDto.getSum()));
+
+        //setup current date
+        java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+
+        TransactionEntity transactionEntity = new TransactionEntity()
+                .withTransactionCategory(transactionCategoriesEntity)
+                .withAccount(accountEntity)
+                .withSum(transactionDto.getSum())
+                .withDate(sqlDate);
+
+
+        transactionDao.insert(transactionEntity);
+    }
+
+    public List<TransactionCategoryDto> getAllCategoryTransactions() {
+        return transactionCategoriesDao.findByAll().stream()
+                .map(new TransactionCategoryToDtoConverter()::convert)
+                .collect(Collectors.toList());
+    }
 }

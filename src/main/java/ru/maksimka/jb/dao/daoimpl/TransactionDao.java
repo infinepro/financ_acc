@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
+import ru.maksimka.jb.dao.entities.AccountEntity;
 import ru.maksimka.jb.dao.entities.TransactionEntity;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
@@ -45,7 +46,10 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
 
     @Override
     public TransactionEntity insert(TransactionEntity transactionEntity) {
+
+
         em.getTransaction().begin();
+
         em.persist(transactionEntity);
         em.getTransaction().commit();
         return transactionEntity;

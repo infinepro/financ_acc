@@ -1,17 +1,21 @@
 package ru.maksimka.jb.ui.web.controllers;
 
+import com.google.inject.internal.cglib.transform.$ClassTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
+import ru.maksimka.jb.domain.dto.TransactionCategoryDto;
+import ru.maksimka.jb.domain.dto.TransactionDto;
 import ru.maksimka.jb.domain.services.webservices.WebServiceUser;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
@@ -88,7 +92,7 @@ public class ControllerUserOperations {
     }
 
     @RequestMapping(value = "/app/delete-user-account", method = RequestMethod.POST)
-    public String deleteUserAAccount(String checkbox, Integer accountId, Model model) {
+    public String deleteUserAccount(String checkbox, Integer accountId, Model model) {
         if (checkbox != null) {
             try {
                 webServiceUser.deleteUserAccountById(accountId);
@@ -107,8 +111,10 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/user-accounts/add-new-account")
     public String addNewAccount(AccountDto accountDto) {
+
+        System.out.println(accountDto);
         String username = getAuthUserName();
-        webServiceUser.addNewAccount(username, accountDto.getBalance(), accountDto.getId());
+        webServiceUser.addNewAccount(username, accountDto.getBalance(), accountDto.getTypeId());
         return "redirect:/app/user-accounts";
     }
 
@@ -126,14 +132,10 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/change-user-account")
     public String changeUserAccount(Integer id, Integer typeId, BigDecimal balance) {
-        //String username = getAuthUserName();
         AccountDto accountDto = new AccountDto()
                 .withTypeId(typeId)
                 .withId(id)
                 .withBalance(balance);
-
-        System.out.println(accountDto);
-
         try {
             webServiceUser.changeAccount(accountDto);
         } catch (RecordNotFoundException e) {
@@ -144,4 +146,42 @@ public class ControllerUserOperations {
             return "redirect:/app/user-accounts";
         }
     }
+
+    @RequestMapping(value = "/app/add-new-transaction")
+    public String addNewTransaction
+            (Integer accountId, BigDecimal sum, Integer transactionCategoryId) {
+        TransactionDto transactionDto = new TransactionDto()
+                .withSum(sum)
+                .withAccountId(accountId)
+                .withTransactionCategoryId(transactionCategoryId);
+
+        webServiceUser.addNewTransaction(transactionDto);
+        return "redirect:/app/user-accounts";
+    }
+
+    @RequestMapping(value = "/app/user-accounts/get-category-transactions")
+    @ResponseBody
+    public List<TransactionCategoryDto> getCategoryTransactions() {
+        return webServiceUser.getAllCategoryTransactions();
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

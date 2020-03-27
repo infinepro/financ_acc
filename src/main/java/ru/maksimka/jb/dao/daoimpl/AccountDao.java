@@ -31,16 +31,6 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
         this.em = em;
     }
 
-    public void addNewAccountForUser(UserEntity userEntity, BigDecimal balance, AccountNamesEntity accName) {
-
-
-        AccountEntity accountEntity = new AccountEntity()
-                .setBalance(balance)
-                .setAccountName(accName)
-                .setOwner(userEntity);
-        insert(accountEntity);
-    }
-
     @Override
     @Nullable
     public AccountEntity findBy(Integer id) {
@@ -69,7 +59,7 @@ public class AccountDao implements Dao<AccountEntity, Integer> {
     @Override
     public AccountEntity insert(@NotNull AccountEntity accountEntity) {
         em.getTransaction().begin();
-        em.merge(accountEntity);
+        em.persist(accountEntity);
         em.getTransaction().commit();
         return accountEntity;
     }

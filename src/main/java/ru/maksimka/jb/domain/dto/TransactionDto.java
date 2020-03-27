@@ -18,6 +18,8 @@ import java.sql.Date;
 @Component
 public class TransactionDto {
     private Integer id;
+    private Integer accountId;
+    private Integer transactionCategoryId;
     private String accountName;
     private String categoryName;
     private BigDecimal sum;
@@ -26,10 +28,13 @@ public class TransactionDto {
     @Override
     public String toString() {
         return "TransactionDto{" +
-                "accountName='" + accountName + '\'' +
-                ", categoryName='" + categoryName + '\'' +
-                ", sum=" + sum +
-                ", date=" + date +
+                "\t\nid=" + id +
+                ",\t\naccountId=" + accountId +
+                ",\t\ntransactionCategoryId=" + transactionCategoryId +
+                ",\t\naccountName='" + accountName + '\'' +
+                ",\t\ncategoryName='" + categoryName + '\'' +
+                ",\t\nsum=" + sum +
+                ",\t\ndate=" + date +
                 '}';
     }
 }

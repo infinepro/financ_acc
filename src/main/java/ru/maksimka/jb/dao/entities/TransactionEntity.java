@@ -18,8 +18,7 @@ import java.sql.Date;
 //hibernate
 @Entity
 @Table(name = "transactions")
-public class
-TransactionEntity {
+public class TransactionEntity {
 
     @Id
     @Column(name = "id")
@@ -30,6 +29,7 @@ TransactionEntity {
     private BigDecimal sum;
 
     @Column(name = "date")
+    //@Temporal(TemporalType.DATE)
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)

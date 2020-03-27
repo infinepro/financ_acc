@@ -134,4 +134,12 @@
 
     </changeSet>
 
+    <changeSet id="5" author="maksimka">
+
+        <loadData encoding="UTF-8" file="csv_data/add_test_data_in_transaction_categories.csv" tableName="transaction_categories" separator=";">
+            <column name="category_name" type="STRING"/>
+        </loadData>
+
+    </changeSet>
+
 </databaseChangeLog>

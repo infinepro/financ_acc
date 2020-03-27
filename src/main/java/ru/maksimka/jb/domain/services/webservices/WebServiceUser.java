@@ -8,6 +8,7 @@ import ru.maksimka.jb.dao.entities.*;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountNameToDtoConverter;
 import ru.maksimka.jb.domain.converters.to_dto_impl.AccountToDtoConverter;
 import ru.maksimka.jb.domain.converters.to_dto_impl.TransactionCategoryToDtoConverter;
+import ru.maksimka.jb.domain.converters.to_dto_impl.TransactionToDtoConverter;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
 import ru.maksimka.jb.domain.dto.TransactionCategoryDto;
@@ -152,8 +153,23 @@ public class WebServiceUser {
     }
 
     public List<TransactionCategoryDto> getAllCategoryTransactions() {
-        return transactionCategoriesDao.findByAll().stream()
+        return transactionCategoriesDao.findByAll()
+                .stream()
                 .map(new TransactionCategoryToDtoConverter()::convert)
+                .collect(Collectors.toList());
+    }
+
+    public void addNewCategoryTransaction(TransactionCategoryDto transactionCategoryDto) {
+        TransactionCategoriesEntity transactionCategoriesEntity = new TransactionCategoriesEntity()
+                .withNameCategory(transactionCategoryDto.getCategoryName());
+        transactionCategoriesDao.insert(transactionCategoriesEntity);
+    }
+
+    public List<TransactionDto> getAllTransactionsOnThisAccount(AccountDto accountDto) {
+        AccountEntity accountEntity = accountDao.findBy(accountDto.getId());
+        return accountEntity.getTransactionsList()
+                .stream()
+                .map(new TransactionToDtoConverter()::convert)
                 .collect(Collectors.toList());
     }
 }

@@ -1,16 +1,12 @@
 package ru.maksimka.jb.ui.web.controllers;
 
-import com.google.inject.internal.cglib.transform.$ClassTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
@@ -22,7 +18,9 @@ import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ControllerUserOperations {
@@ -80,19 +78,19 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/user-accounts/get")
     @ResponseBody
-    public List<AccountDto> getUserAccountsData() {
+    public List<AccountDto> getUserAccountsList() {
         String username = getAuthUserName();
         List<AccountDto> list = webServiceUser.getAllAccountByNameUser(username);
         return list;
     }
 
     @RequestMapping(value = "/app/user-accounts", method = RequestMethod.GET)
-    public String getUserAccounts() {
+    public String getUserAccountsPage() {
         return "user-accounts.html";
     }
 
     @RequestMapping(value = "/app/delete-user-account", method = RequestMethod.POST)
-    public String deleteUserAccount(String checkbox, Integer accountId, Model model) {
+    public String deleteUserAccoun(String checkbox, Integer accountId, Model model) {
         if (checkbox != null) {
             try {
                 webServiceUser.deleteUserAccountById(accountId);
@@ -105,7 +103,7 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/user-accounts/get-types-accounts")
     @ResponseBody
-    public List<AccountNameDto> getTypesAccounts() {
+    public List<AccountNameDto> getAccountTypesList() {
         return webServiceUser.getAllTypeAccounts();
     }
 
@@ -120,7 +118,7 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/user-account/add-new-type-account")
     @ResponseBody
-    public ResponseEntity addNewTypeAccount(AccountNameDto type, ModelAndView modelAndView) {
+    public ResponseEntity addNewAccountType(AccountNameDto type, ModelAndView modelAndView) {
         try {
             webServiceUser.addNewTypeAccount(type.getAccountName());
             return new ResponseEntity(HttpStatus.OK);
@@ -165,7 +163,28 @@ public class ControllerUserOperations {
         return webServiceUser.getAllCategoryTransactions();
     }
 
+    @RequestMapping(value = "/app/user-account/add-new-category-transaction")
+    public void addNewCategoryTransaction(TransactionCategoryDto transactionCategoryDto) {
+        System.out.println(transactionCategoryDto);
+        webServiceUser.addNewCategoryTransaction(transactionCategoryDto);
+    }
 
+    @RequestMapping(value = "/app/transactions/{accountId}")
+    public ModelAndView viewAccountTransactions(@PathVariable String accountId, ModelAndView modelAndView) {
+        //Map<String, Object> modelMap = new HashMap<>();
+
+        //transfer account_id to current page
+        //modelMap.put("accountId", accountId);
+        modelAndView.addObject("accountId", accountId);
+        modelAndView.setViewName("user-transactions.html");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/app/transactions/get")
+    @ResponseBody
+    public List<TransactionDto> getTransactionsByAccountId(AccountDto accountDto) {
+        return webServiceUser.getAllTransactionsOnThisAccount(accountDto);
+    }
 }
 
 

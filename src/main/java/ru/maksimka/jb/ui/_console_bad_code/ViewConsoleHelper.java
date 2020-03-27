@@ -1,4 +1,4 @@
-package ru.maksimka.jb.ui.console;
+package ru.maksimka.jb.ui._console_bad_code;
 
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;

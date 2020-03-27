@@ -1,4 +1,4 @@
-package ru.maksimka.jb.ui.console;
+package ru.maksimka.jb.ui._console_bad_code;
 
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.daoimpl.UserDao;
@@ -9,8 +9,8 @@ import ru.maksimka.jb.exceptions.*;
 
 import java.io.IOException;
 
-import static ru.maksimka.jb.ui.console.StatusAuthorization.AUTH;
-import static ru.maksimka.jb.ui.console.StatusAuthorization.REGISTERED;
+import static ru.maksimka.jb.ui._console_bad_code.StatusAuthorization.AUTH;
+import static ru.maksimka.jb.ui._console_bad_code.StatusAuthorization.REGISTERED;
 
 @Service
 public class ForUnauthorizedViewConsole extends ViewConsoleHelper {

@@ -76,7 +76,7 @@
 
 <div class="central-table">
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" onClick="document.location = '/'">Come back!
+        <button type="button" class="btn btn-secondary" onClick="document.location = '/app/user-accounts'">Come back on your accounts!
         </button>
     </div>
     <div class="add-new-type btn-group" role="group" aria-label="Basic example">
@@ -85,37 +85,19 @@
             add new category transaction
         </button>
     </div>
-    <table class="table">
+    <table class="table table-sm">
         <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Account type</th>
-            <th scope="col">Balance</th>
+            <th scope="col">Category</th>
+            <th scope="col">Sum</th>
+            <th scope="col">Date</th>
             <th scope="col"></th>
         </tr>
         </thead>
-        <tbody id="ajax-user-accounts">
-        <!--add table rows from list accounts -->
-        <script>ajaxQueryForUserAccountsList()</script>
-        <tr id="addNewAcc">
-            <td scope="col"></td>
-            <td scope="col">
-                <select class="account-type-name">
-                    <script>getTypesAccountsList()</script>
-                </select>
-            </td>
-            <td scope="col">
-
-                <input id="balance" type="text" name="account-type-name" oninput="Ftest (this)"
-                       onpropertychange="if ('v' == '\v' && parseFloat (navigator.userAgent.split ('MSIE ') [1].split (';') [0]) <= 9) Ftest (this)"/>
-            </td>
-            <td scope="col">
-                <button type='button' class='edit-btn btn btn-secondary' onClick="addNewAccount()">
-                    Add new account
-                </button>
-            </td>
-        </tr>
-
+        <tbody id="ajax-account-transactions">
+        <!--add table rows from list transactions -->
+        <script>ajaxQueryForTransactionsAccountList()</script>
 
         </tbody>
     </table>

@@ -46,15 +46,15 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
 
     @Override
     public TransactionEntity insert(TransactionEntity transactionEntity) {
-
-
         em.getTransaction().begin();
-
         em.persist(transactionEntity);
         em.getTransaction().commit();
         return transactionEntity;
     }
 
+
+    //for console, depricated
+    @Deprecated
     public boolean insert(TransactionEntity transactionEntity, EntityManager em) {
         em.merge(transactionEntity);
         return true;

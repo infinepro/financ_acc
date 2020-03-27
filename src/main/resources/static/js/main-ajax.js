@@ -3,7 +3,7 @@ function ajaxQueryForUserAccountsList() {
 }
 
 function parseUserAccountsToTableRows(data) {
-    var count = data.length;
+    let count = data.length;
     $.each(data, function (index, json) {
         $('#ajax-user-accounts')
             .prepend('<tr class="ajax-rows">' +
@@ -31,6 +31,8 @@ function setIdAccountForLinkButton(id) {
                         "onclick='clickOnChangeAccount(" + id.toString() + ")'>Change data</a>" +
                     "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#exampleModal'" +
                         "onclick='clickAddNewTransaction(" + id.toString() + ")'>Add new transaction</a>" +
+                    "<a class='dropdown-item' href='/app/transactions/" + id.toString() +"'>" +
+                        "Show all transactions on this account</a>" +
                 "</div>" +
             "</div>";
 }
@@ -125,5 +127,37 @@ function addNewCategoryTransaction() {
     const category = String($('#type-input').val());
     $.post('/app/user-account/add-new-category-transaction',
             { "categoryName" : category},
-            function(){/*getCategoryTransactionsList();*/});
+            parseCategoryTransactionsIntoSelect);
+}
+
+
+function ajaxQueryForTransactionsAccountList() {
+    let url = window.location.pathname;
+    let accountId = url.split("/")[3];
+
+    $.getJSON('/app/transactions/get', { "id": accountId}, parseAccountTransactionsToTableRows);
+}
+
+function parseAccountTransactionsToTableRows(data) {
+    let count = data.length;
+    //var x = new Date(миллисекунды);
+    $.each(data, function (index, json) {
+        $('#ajax-account-transactions')
+            .prepend('<tr class="ajax-rows">' +
+                '<td scope = "row">' + count-- + '</td>' +
+                '<td>' + json.categoryName + '</td>' +
+                '<td>' + json.sum + ' руб.' + '</td>' +
+                '<td>' + parseDate(json.date) + '</td>' +
+                '<td></td>' +
+                '</tr>')
+    });
+}
+
+function parseDate(date) {
+    let locDate = new Date(Number(date));
+    let formatDate = "" +
+        locDate.getDate() + "." +
+        ((locDate.getMonth()+1)<10 ? "0"+locDate.getMonth() : locDate.getMonth() ) + "." +
+        locDate.getFullYear();
+    return formatDate;
 }

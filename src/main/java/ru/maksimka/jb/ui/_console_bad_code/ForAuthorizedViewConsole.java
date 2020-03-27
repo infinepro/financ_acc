@@ -1,4 +1,4 @@
-package ru.maksimka.jb.ui.console;
+package ru.maksimka.jb.ui._console_bad_code;
 
 import org.hibernate.QueryException;
 import org.springframework.stereotype.Component;

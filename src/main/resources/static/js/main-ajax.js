@@ -96,8 +96,7 @@ function ajaxQueryForTransactionsAccountList() {
 //вставка полученных значенией JSON (транзакций по счёту) таблицу
 function parseAccountTransactionsToTableRows(data) {
     let count = data.length;
-    //var x = new Date(миллисекунды);
-    clearAjaxTable()
+    clearAjaxTable();
     $.each(data, function (index, json) {
         $('#ajax-account-transactions')
             .prepend('<tr class="ajax-rows">' +
@@ -105,28 +104,56 @@ function parseAccountTransactionsToTableRows(data) {
                 '<td>' + json.categoryName + '</td>' +
                 '<td>' + json.sum + ' руб.' + '</td>' +
                 '<td>' + parseDate(json.date) + '</td>' +
-                '<td>' + deleteTransactionButton() + '</td>' +
+                '<td>' + addButtondeleteTransaction(json.id) + '</td>' +
                 '</tr>')
     });
 }
 
 //создание кнопки по удалению каждой транзакции в таблице
-function deleteTransactionButton(transactionId) {
-    return '<button onclick="deleteTransaction('+ transactionId +')"></button>';
+function addButtondeleteTransaction(transactionId) {
+    return '<button onclick="deleteTransaction('+ transactionId +')">delete</button>';
+}
+//добавление ajax функции с короткой записью для метода delete
+$.delete = function(url, data, callback, type){
+    if ($.isFunction(data) ){
+        type = type || callback,
+            callback = data,
+            data = {}
+    }
+    return $.ajax({
+        url: url,
+        type: 'DELETE',
+        success: callback,
+        data: data,
+        contentType: type
+    });
 }
 
-//get запрос на удаление транзакции по id
+//delete запрос на удаление транзакции по id
 function deleteTransaction(transactionId) {
     let url = "/app/transaction/" + transactionId + '/delete';
-    $.get(url, { "id": transactionId}, ajaxQueryForTransactionsAccountList() )
+
+    /*$.ajax({ url: url, method: "DELETE" })
+        .then(function () {
+
+        })
+        .catch(function (err) {
+            console.log("ошибка сервера, запись не найдена или уже удалена")
+        });*/
+
+   $.delete(url, { "id": transactionId}, ajaxQueryForTransactionsAccountList);
+
 }
+
+
+
 
 //вывод даты в нужном формате, перевод из миллисекунд с 1970 г в dd.mm.yyyy
 function parseDate(date) {
     let locDate = new Date(Number(date));
     let formatDate = "" +
         locDate.getDate() + "." +
-        ((locDate.getMonth()+1)<10 ? "0"+locDate.getMonth() : locDate.getMonth() ) + "." +
+        ((locDate.getMonth()+1)<10 ? "0"+(locDate.getMonth()+1) : locDate.getMonth()+1 ) + "." +
         locDate.getFullYear();
     return formatDate;
 }

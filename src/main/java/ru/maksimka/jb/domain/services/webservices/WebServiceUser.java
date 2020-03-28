@@ -165,11 +165,19 @@ public class WebServiceUser {
         transactionCategoriesDao.insert(transactionCategoriesEntity);
     }
 
-    public List<TransactionDto> getAllTransactionsOnThisAccount(AccountDto accountDto) {
+    public List<TransactionDto> getAllTransactionsOnThisAccount(AccountDto accountDto) throws RecordNotFoundException {
         AccountEntity accountEntity = accountDao.findBy(accountDto.getId());
+        if (accountEntity == null) {
+            throw new RecordNotFoundException(
+                    "транзакции не найдены, т.к. отсутствует счёт по данному ID = " + accountDto.getId());
+        }
         return accountEntity.getTransactionsList()
                 .stream()
                 .map(new TransactionToDtoConverter()::convert)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteTransaction(Integer transactionId) throws RecordNotFoundException {
+        transactionDao.delete(transactionId);
     }
 }

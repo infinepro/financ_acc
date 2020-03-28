@@ -1,15 +1,20 @@
 package ru.maksimka.jb.dao.daoimpl;
 
 import com.sun.istack.NotNull;
-import com.sun.istack.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.maksimka.jb.dao.Dao;
 import ru.maksimka.jb.dao.entities.AccountEntity;
 import ru.maksimka.jb.dao.entities.TransactionEntity;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -17,8 +22,10 @@ import java.util.List;
 public class TransactionDao implements Dao<TransactionEntity, Integer> {
 
     private EntityManager em;
+    @Autowired
+    private TransactionDao transactionDao;
 
-    public TransactionDao(EntityManager em) {
+    public TransactionDao(@Qualifier("createEntityManager") EntityManager em) {
         this.em = em;
     }
 
@@ -34,7 +41,7 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
                     "SELECT a FROM TransactionEntity a WHERE a.id = :id")
                     .setParameter("id", id)
                     .getSingleResult();
-        } catch (NoResultException e) {
+        } catch (PersistenceException e) {
             return null;
         }
     }
@@ -61,7 +68,6 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
     }
 
     @Override
-
     public TransactionEntity update(TransactionEntity transactionEntity) throws RecordNotFoundException {
         TransactionEntity transactionEntityOld = findBy(transactionEntity.getId());
         if (transactionEntity == null) {
@@ -77,20 +83,27 @@ public class TransactionDao implements Dao<TransactionEntity, Integer> {
         return transactionEntityOld;
     }
 
-    @Override
-    public boolean delete(Integer id) throws RecordNotFoundException {
-        TransactionEntity transactionEntity = em.merge(findBy(id));
 
+    @Override
+    public boolean delete(Integer transactionId) throws RecordNotFoundException {
+        em.clear();
+        TransactionEntity transactionEntity = transactionDao.findBy(transactionId);
+        //возвращаем сумму транзакции на баланс счёта
+        BigDecimal oldBalance = transactionEntity.getAccount().getBalance();
+        BigDecimal newBalance = oldBalance.add(transactionEntity.getSum());
+        transactionEntity.getAccount().setBalance(newBalance);
         if (transactionEntity == null) {
-            throw new RecordNotFoundException("транзакция не найдена, delete failed");
+            throw new RecordNotFoundException("транзакция с id = " + transactionEntity.getId() + " не найдена");
         }
+
         em.getTransaction().begin();
+        em.merge(transactionEntity);
         em.remove(transactionEntity);
         em.getTransaction().commit();
         return true;
     }
 
-    public boolean delete(Integer id, @NotNull EntityManager em) throws RecordNotFoundException {
+    public boolean delete(Integer id, @Nonnull EntityManager em) throws RecordNotFoundException {
         TransactionEntity transactionEntity = em.merge(findBy(id));
 
         if (transactionEntity == null) {

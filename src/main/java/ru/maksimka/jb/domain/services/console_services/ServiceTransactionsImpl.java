@@ -87,7 +87,7 @@ public class ServiceTransactionsImpl extends AbstractService implements ServiceT
 
     @Override
     public boolean deleteTransaction(Integer id) throws RecordNotFoundException {
-        transactionDao.delete(id);
+       // transactionDao.delete(id);
         return true;
     }
 

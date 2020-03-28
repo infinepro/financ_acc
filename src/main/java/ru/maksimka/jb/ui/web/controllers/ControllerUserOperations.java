@@ -8,16 +8,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import ru.maksimka.jb.domain.dto.AccountDto;
 import ru.maksimka.jb.domain.dto.AccountNameDto;
 import ru.maksimka.jb.domain.dto.TransactionCategoryDto;
 import ru.maksimka.jb.domain.dto.TransactionDto;
 import ru.maksimka.jb.domain.services.webservices.WebServiceUser;
 import ru.maksimka.jb.exceptions.AlreadyExistsException;
+import ru.maksimka.jb.exceptions.NullParameterFromClientException;
 import ru.maksimka.jb.exceptions.RecordNotFoundException;
 import ru.maksimka.jb.exceptions.WrongUserPasswordException;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,13 +121,13 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/user-account/add-new-type-account")
     @ResponseBody
-    public ResponseEntity addNewAccountType(AccountNameDto type, ModelAndView modelAndView) {
+    public ResponseEntity<Object> addNewAccountType(AccountNameDto type, ModelAndView modelAndView) {
         try {
             webServiceUser.addNewTypeAccount(type.getAccountName());
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (AlreadyExistsException e) {
             //ignore
-            return new ResponseEntity("type already exist", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("type already exist", HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -171,19 +174,33 @@ public class ControllerUserOperations {
 
     @RequestMapping(value = "/app/transactions/{accountId}")
     public ModelAndView viewAccountTransactions(@PathVariable String accountId, ModelAndView modelAndView) {
-        //Map<String, Object> modelMap = new HashMap<>();
-
-        //transfer account_id to current page
-        //modelMap.put("accountId", accountId);
         modelAndView.addObject("accountId", accountId);
         modelAndView.setViewName("user-transactions.html");
+        modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
     }
 
     @RequestMapping(value = "/app/transactions/get")
     @ResponseBody
-    public List<TransactionDto> getTransactionsByAccountId(AccountDto accountDto) {
-        return webServiceUser.getAllTransactionsOnThisAccount(accountDto);
+    public ResponseEntity<List<TransactionDto>> getTransactionsByAccountId(AccountDto accountDto) {
+        try {
+            List<TransactionDto> list = webServiceUser.getAllTransactionsOnThisAccount(accountDto);
+            return new ResponseEntity<>(list,HttpStatus.OK);
+        } catch (RecordNotFoundException e) {
+            e.showMessage();
+            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/app/transaction/{id}/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<Object> deleteTransactionByTransactionId(TransactionDto transactionDto) {
+        try {
+            webServiceUser.deleteTransaction(transactionDto.getId());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RecordNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 

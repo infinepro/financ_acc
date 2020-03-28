@@ -11,6 +11,10 @@ function setDataForHiddenInput(id) {
 
 //добавление нового типа счёта, значение берётся из поля
 function addNewTypeAccount() {
+    if ($("#type-input").val() === "") {
+        alert("пустое поле!");
+        return;
+    }
     const type = String($('#type-input').val());
     $.post('/app/user-account/add-new-type-account', { "accountName" : type}, function(){getTypesAccountsList();});
 
@@ -18,6 +22,10 @@ function addNewTypeAccount() {
 
 //post запрос на добавление нового счёта, значения беруться из полей
 function addNewAccount() {
+    if ($("#balance").val() === "") {
+        alert("пустое поле!");
+        return;
+    }
     let typeId = $("#account-type-name").val();
     let balance = $("#balance").val();
 
@@ -79,6 +87,10 @@ function clearAjaxTable() {
 
 //post запрос на добавление новой транзакции, обновление списка транзакций обьекта <select>
 function addNewCategoryTransaction() {
+    if ($("#type-input").val() === "") {
+        alert("пустое поле!");
+        return;
+    }
     const category = String($('#type-input').val());
     $.post('/app/user-account/add-new-category-transaction',
             { "categoryName" : category},

@@ -34,7 +34,7 @@
                             <script>getTypesAccountsList("from-form")</script>
                         </select>
                         <input class="hiddenInput" type="hidden" name="id" value=""/>
-                        <input class="balance" type="text" name="balance" oninput="Ftest (this)"
+                        <input required placeholder="Current balance" class="balance" type="text" name="balance" oninput="Ftest (this)"
                                onpropertychange="if ('v' == '\v' && parseFloat (navigator.userAgent.split ('MSIE ') [1].split (';') [0]) <= 9) Ftest (this)"/>
                         <b>руб.</b>
                     </div>
@@ -57,7 +57,7 @@
                             <script>getCategoryTransactionsList()</script>
                         </select>
                         <input class="hiddenInput" type="hidden" name="accountId" value=""/>
-                        <input class="sum" type="text" name="sum" oninput="Ftest (this)"
+                        <input required  placeholder="Transaction sum" class="sum" type="text" name="sum" oninput="Ftest (this)"
                                onpropertychange="if ('v' == '\v' && parseFloat (navigator.userAgent.split ('MSIE ') [1].split (';') [0]) <= 9) Ftest (this)"/>
                         <b>руб.</b>
                     </div>

@@ -23,16 +23,16 @@
         <div class="form-group">
             <label for="InputLogin">Login</label>
             <input name="username" type="text" class="form-control" id="InputLogin" aria-describedby="loginHelp"
-                   placeholder="Enter login" size="50">
+                   required placeholder="Enter login" size="50">
         </div>
         <div class="form-group">
             <label for="InputEmail">Email address</label>
             <input name="email" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
-                   placeholder="Enter email" size="50">
+                   required placeholder="Enter email" size="50">
         </div>
         <div class="form-group">
             <label for="InputPassword">Password</label>
-            <input name="password" type="password" class="form-control" id="InputPassword" placeholder="Password" size="50">
+            <input name="password" type="password" class="form-control" id="InputPassword" required placeholder="Password" size="50">
         </div>
         <button type="submit" class="btn btn-primary">Sign up!</button>
     </form>

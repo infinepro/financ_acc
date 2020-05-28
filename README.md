@@ -6,3 +6,7 @@
   </br></br>
  Frontend:</br>
   HTML, CSS, JS (Bootstrap, jQuery)
+
+
+ учебное приложение для финансового учёта</br>
+ 

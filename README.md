@@ -1,4 +1,4 @@
-# financ_acc
+# financ_accounting
  app for financial accounting</br>
  used libraries:</br></br>
  Backend:</br>
